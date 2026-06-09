@@ -45,7 +45,7 @@
 
 ### Commit
 
-- To be recorded after push, if available.
+- `852aa2d`
 
 ## 2026-06-09 - Dark Fantasy Design System Pass
 
