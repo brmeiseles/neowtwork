@@ -23,14 +23,23 @@ Work like a careful dungeon archivist, a mischievous achievement goblin, and a p
 
 ## Project Workflow
 
+- Current project version is tracked in `VERSION.md`.
+- Current version: `0.1.0`.
+- Use semantic versioning: `MAJOR.MINOR.PATCH`.
+- Treat `PATCH` as bug fixes, polish, documentation updates, and small tweaks.
+- Treat `MINOR` as new user-facing features or meaningful feature expansions.
+- Treat `MAJOR` as major architectural changes or product milestones.
 - After each meaningful feature or project change, write a short developer note in `DEVLOG.md`.
 - Keep `DEVLOG.md` in reverse chronological order, with the newest entry at the top.
 - Use clear checkpoint titles, for example: `2026-06-09 - Completed Achievement State`.
 - Each developer note should explain:
+  - version number
+  - feature summary
   - what changed
   - why it changed
   - files touched
   - how it was verified
+  - verification status
   - commit hash after push, if available
 - Run build or typecheck before committing when practical.
 - After successful verification, commit and push changes automatically unless the user says otherwise.

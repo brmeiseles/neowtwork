@@ -1,6 +1,49 @@
 # DEVLOG.md
 
+## 2026-06-09 - Added Semantic Versioning
+
+### Version
+
+- `0.1.0`
+
+### Feature Summary
+
+- Added semantic version tracking instructions for Neowtwork.
+
+### What Changed
+
+- Added `VERSION.md` with the current version and versioning philosophy.
+- Updated `AGENTS.md` with current version tracking and future developer note requirements.
+- Added version and feature summary fields to existing `DEVLOG.md` entries.
+
+### Why It Changed
+
+- Future checkpoints now have a consistent way to describe project progress with semantic versions.
+
+### Files Touched
+
+- `AGENTS.md`
+- `DEVLOG.md`
+- `VERSION.md`
+
+### Verification Status
+
+- Ran `npm run typecheck`.
+- Typecheck completed successfully.
+
+### Commit
+
+- To be recorded after push, if available.
+
 ## 2026-06-09 - Added Agent Soul
+
+### Version
+
+- `0.1.0`
+
+### Feature Summary
+
+- Defined the project personality and working style for Neowtwork coding agents.
 
 ### What Changed
 
@@ -16,7 +59,7 @@
 - `AGENTS.md`
 - `DEVLOG.md`
 
-### Verification
+### Verification Status
 
 - Ran `npm run typecheck`.
 - Typecheck completed successfully.
@@ -26,6 +69,14 @@
 - To be recorded after push, if available.
 
 ## 2026-06-09 - Test Codex Git Workflow
+
+### Version
+
+- `0.1.0`
+
+### Feature Summary
+
+- Confirmed Codex could make, verify, commit, and push a small visible homepage change.
 
 ### What Changed
 
@@ -39,7 +90,7 @@
 
 - `app/page.tsx`
 
-### Verification
+### Verification Status
 
 - Ran `npm run typecheck`.
 - Typecheck completed successfully.
@@ -49,6 +100,14 @@
 - `db86267`
 
 ## 2026-06-09 - Initial Neowtwork MVP
+
+### Version
+
+- `0.1.0`
+
+### Feature Summary
+
+- Created the first working static achievement board MVP.
 
 ### What Changed
 
@@ -77,7 +136,7 @@
 - `data/achievements.ts`
 - `types/achievement.ts`
 
-### Verification
+### Verification Status
 
 - Project was set up as a working Next.js, TypeScript, and Tailwind CSS app.
 - No specific verification command was recorded for this historical checkpoint.
