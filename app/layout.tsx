@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { appConfig } from "@/config/app";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Neowtwork Achievements",
-  description: "A dark fantasy achievement board for Neowtwork.",
+  title: `${appConfig.name} Achievements`,
+  description: appConfig.description,
 };
 
 export default function RootLayout({

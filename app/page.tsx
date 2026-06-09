@@ -1,13 +1,14 @@
 import { AchievementBoard } from "@/components/AchievementBoard";
+import { AppShell } from "@/components/AppShell";
 import { achievements } from "@/data/achievements";
 
 export default function Home() {
   return (
-    <main className="min-h-screen px-5 py-8 sm:px-8 lg:px-12">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
+    <AppShell>
+      <div className="flex flex-col gap-section">
         <header className="border-b border-brass/25 pb-7">
           <div className="mb-4 h-1 w-28 bg-gradient-to-r from-ember via-brass to-transparent shadow-ember" />
-          <p className="mb-3 text-xs font-bold uppercase tracking-[0.34em] text-ember">
+          <p className="mb-3 text-xs font-bold uppercase tracking-ritual text-ember">
             Neowtwork
           </p>
           <h1 className="max-w-4xl text-4xl font-black uppercase leading-none tracking-wide text-parchment sm:text-6xl">
@@ -20,6 +21,6 @@ export default function Home() {
 
         <AchievementBoard achievements={achievements} />
       </div>
-    </main>
+    </AppShell>
   );
 }

@@ -6,13 +6,17 @@ type AchievementBoardProps = {
 };
 
 export function AchievementBoard({ achievements }: AchievementBoardProps) {
+  const sortedAchievements = [...achievements].sort(
+    (first, second) => first.sortOrder - second.sortOrder,
+  );
+
   return (
     <section
       aria-label="Achievement board"
       className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:gap-5"
     >
-      {achievements.map((achievement) => (
-        <AchievementCard key={achievement.title} achievement={achievement} />
+      {sortedAchievements.map((achievement) => (
+        <AchievementCard key={achievement.slug} achievement={achievement} />
       ))}
     </section>
   );

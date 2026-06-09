@@ -1,5 +1,53 @@
 # DEVLOG.md
 
+## 2026-06-09 - Foundation Architecture Pass
+
+### Version
+
+- `0.1.0`
+
+### Feature Summary
+
+- Strengthened the Neowtwork foundation without changing the core achievement-board experience.
+
+### What Changed
+
+- Added lightweight design-system tokens for colors, typography, spacing, shadows, glows, and border radii.
+- Added a reusable application shell with future slots for navigation/profile areas and a visible version footer.
+- Added `.env.example` scaffolding for future Supabase configuration without integrating Supabase.
+- Expanded achievement data with stable ids, slugs, sort order, rarity, and category fields.
+- Kept the current achievement card rendering focused on title and description.
+
+### Why It Changed
+
+- The project is now easier to extend for profile, friends, proof upload, seed sharing, and future social features while staying readable for a non-engineer owner.
+
+### Files Touched
+
+- `.env.example`
+- `app/globals.css`
+- `app/layout.tsx`
+- `app/page.tsx`
+- `components/AppShell.tsx`
+- `components/AchievementBoard.tsx`
+- `components/AchievementCard.tsx`
+- `config/app.ts`
+- `data/achievements.ts`
+- `lib/design-system.ts`
+- `tailwind.config.ts`
+- `types/achievement.ts`
+- `DEVLOG.md`
+
+### Verification Status
+
+- Ran `npm run typecheck`.
+- Ran `npm run build`.
+- Confirmed the rendered homepage contains the title, subtitle, and visible `Neowtwork v0.1.0` footer.
+
+### Commit
+
+- To be recorded after push, if available.
+
 ## 2026-06-09 - Added Semantic Versioning
 
 ### Version
