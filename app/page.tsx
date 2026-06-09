@@ -13,6 +13,9 @@ export default function Home() {
           <h1 className="max-w-4xl text-4xl font-black uppercase leading-none tracking-wide text-parchment sm:text-6xl">
             Neowtwork Achievements
           </h1>
+          <p className="mt-4 max-w-2xl text-base font-semibold text-bone sm:text-lg">
+            Track impossible runs. Share proof. Steal seeds.
+          </p>
         </header>
 
         <AchievementBoard achievements={achievements} />
