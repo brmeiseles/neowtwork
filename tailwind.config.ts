@@ -17,6 +17,12 @@ const config: Config = {
       boxShadow: {
         ...designSystem.shadows,
       },
+      backgroundImage: {
+        "card-parchment":
+          "linear-gradient(145deg, rgba(42, 33, 24, 0.96), rgba(23, 17, 15, 0.96) 44%, rgba(42, 13, 16, 0.72))",
+        "badge-relic":
+          "radial-gradient(circle at 32% 24%, rgba(244, 223, 184, 0.2), transparent 30%), linear-gradient(145deg, #2a2118, #070504 68%)",
+      },
       borderRadius: {
         ...designSystem.radii,
       },

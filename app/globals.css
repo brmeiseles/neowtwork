@@ -8,6 +8,7 @@
   --color-ash: #100d0b;
   --color-blood: #5c1112;
   --color-ember: #d8732c;
+  --color-brass: #caa25a;
   --color-parchment: #f4dfb8;
   background: var(--color-pitch);
 }
@@ -24,9 +25,10 @@ body {
   min-height: 100vh;
   margin: 0;
   background:
-    radial-gradient(circle at 18% 10%, rgb(216 115 44 / 18%), transparent 30rem),
-    radial-gradient(circle at 82% 18%, rgb(92 17 18 / 34%), transparent 26rem),
-    linear-gradient(135deg, var(--color-pitch) 0%, var(--color-ash) 46%, var(--color-blood) 100%);
+    radial-gradient(circle at 18% 8%, rgb(216 115 44 / 20%), transparent 24rem),
+    radial-gradient(circle at 82% 12%, rgb(202 162 90 / 11%), transparent 22rem),
+    radial-gradient(circle at 50% 120%, rgb(92 17 18 / 42%), transparent 34rem),
+    linear-gradient(135deg, #030201 0%, var(--color-pitch) 28%, var(--color-ash) 58%, #1d0708 100%);
   color: var(--color-parchment);
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
 }
@@ -38,10 +40,29 @@ body::before {
   pointer-events: none;
   content: "";
   background-image:
-    linear-gradient(rgb(244 223 184 / 3.5%) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(244 223 184 / 2.5%) 1px, transparent 1px);
-  background-size: 44px 44px;
-  mask-image: linear-gradient(to bottom, rgb(0 0 0 / 75%), transparent 82%);
+    radial-gradient(circle at 24% 18%, rgb(244 223 184 / 6%), transparent 0.18rem),
+    linear-gradient(90deg, rgb(202 162 90 / 3.5%) 1px, transparent 1px),
+    linear-gradient(rgb(244 223 184 / 2.5%) 1px, transparent 1px);
+  background-position:
+    0 0,
+    0 0,
+    0 0;
+  background-size:
+    23px 29px,
+    52px 52px,
+    52px 52px;
+  mask-image: radial-gradient(circle at center, rgb(0 0 0 / 82%), transparent 86%);
+}
+
+body::after {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  content: "";
+  background:
+    radial-gradient(circle at center, transparent 38%, rgb(0 0 0 / 52%) 100%),
+    linear-gradient(180deg, rgb(0 0 0 / 24%), transparent 22%, rgb(0 0 0 / 34%));
 }
 
 ::selection {

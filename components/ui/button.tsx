@@ -13,7 +13,7 @@ const buttonVariants = cva(
           "border border-brass/35 bg-soot text-parchment shadow-card hover:border-ember/70 hover:bg-cardHover",
         ghost: "text-brass/70 hover:text-parchment",
         version:
-          "h-auto rounded-none border-0 bg-transparent p-0 text-xs text-brass/70 shadow-none hover:text-parchment",
+          "h-auto rounded-none border-0 bg-transparent p-0 text-xs text-brass/75 shadow-none hover:text-parchment",
       },
       size: {
         default: "h-10 px-4 py-2",

@@ -1,5 +1,52 @@
 # DEVLOG.md
 
+## 2026-06-09 - Dark Fantasy Design System Pass
+
+### Version
+
+- `0.1.2`
+
+### Feature Summary
+
+- Tuned the visual language toward a cursed achievement board and dungeon codex.
+
+### What Changed
+
+- Expanded design tokens for darker parchment, burgundy, antique gold, ember glow, scorched borders, and deeper card shadows.
+- Updated the layered page background with richer radial glows, subtle texture, and vignette treatment.
+- Strengthened achievement card frames, title hierarchy, badge depth, and hover animation while preserving the existing layout and text.
+- Bumped the app version to `0.1.2` as a PATCH visual-polish checkpoint.
+
+### Why It Changed
+
+- The app should feel more like a roguelike relic screen and less like a generic web dashboard, without adding new functionality yet.
+
+### Files Touched
+
+- `AGENTS.md`
+- `DEVLOG.md`
+- `VERSION.md`
+- `app/globals.css`
+- `app/page.tsx`
+- `components/AchievementCard.tsx`
+- `components/AppShell.tsx`
+- `components/ui/button.tsx`
+- `config/app.ts`
+- `lib/design-system.ts`
+- `package.json`
+- `package-lock.json`
+- `tailwind.config.ts`
+
+### Verification Status
+
+- Ran `npm run typecheck`.
+- Ran `npm run build`.
+- Confirmed the rendered homepage keeps 12 achievement cards, unchanged text content, and the visible `Neowtwork v0.1.2` footer.
+
+### Commit
+
+- To be recorded after push, if available.
+
 ## 2026-06-09 - Added Frontend Support Packages
 
 ### Version

@@ -32,7 +32,7 @@ export function AppShell({
         <main className="flex-1">{children}</main>
 
         {footer ?? (
-          <footer className="border-t border-brass/20 pt-4 text-xs font-bold uppercase tracking-ritual text-brass/70">
+          <footer className="border-t border-brass/25 pt-4 text-xs font-bold uppercase tracking-ritual text-brass/75">
             <Button
               asChild
               aria-label={`${brandConfig.shortName} version ${appConfig.version}`}
