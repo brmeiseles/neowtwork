@@ -1,5 +1,52 @@
 # DEVLOG.md
 
+## 2026-06-09 - Applied Visible Game Board Styling
+
+### Version
+
+- `0.1.3`
+
+### Feature Summary
+
+- Made the achievement board visibly more like a dark fantasy game artifact.
+
+### What Changed
+
+- Added a prominent parchment/stone codex frame directly around the achievement grid.
+- Added dedicated global component styling for the hero slab, board frame, ornate achievement cards, and locked emblems.
+- Replaced the subtle question-mark badge with a dramatic locked relic emblem.
+- Strengthened background texture, card borders, gold accents, ember glows, title treatment, and depth shadows.
+- Kept the same achievement text, same responsive layout, and same app behavior.
+
+### Why It Changed
+
+- The previous design-system patch changed tokens but did not visibly change the local page enough. This pass applies the fantasy styling directly to the rendered achievement board UI.
+
+### Files Touched
+
+- `AGENTS.md`
+- `DEVLOG.md`
+- `VERSION.md`
+- `app/globals.css`
+- `app/page.tsx`
+- `components/AchievementBoard.tsx`
+- `components/AchievementCard.tsx`
+- `config/app.ts`
+- `lib/design-system.ts`
+- `package.json`
+- `package-lock.json`
+
+### Verification Status
+
+- Ran `npm run typecheck`.
+- Ran `npm run build`.
+- Confirmed `localhost:3000` renders 12 achievement cards, the visible `Neowtwork v0.1.3` footer, the codex board frame, ornate achievement cards, and locked emblem styling.
+- Captured and reviewed a local screenshot of the updated board.
+
+### Commit
+
+- To be recorded after push, if available.
+
 ## 2026-06-09 - Dark Fantasy Design System Pass
 
 ### Version

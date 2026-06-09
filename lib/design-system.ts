@@ -30,9 +30,9 @@ export const designSystem = {
   },
   spacing: {
     pageX: "1.25rem",
-    pageY: "2rem",
+    pageY: "2.5rem",
     shellMax: "72rem",
-    sectionGap: "2rem",
+    sectionGap: "2.25rem",
     cardPadding: "1.35rem",
   },
   shadows: {

@@ -4,12 +4,16 @@
 
 :root {
   color-scheme: dark;
-  --color-pitch: #080605;
-  --color-ash: #100d0b;
+  --color-pitch: #050302;
+  --color-ash: #100b09;
   --color-blood: #5c1112;
+  --color-burgundy: #23090d;
   --color-ember: #d8732c;
+  --color-ember-bright: #f29a45;
   --color-brass: #caa25a;
+  --color-antique-gold: #d7b56d;
   --color-parchment: #f4dfb8;
+  --color-bone: #dbc89d;
   background: var(--color-pitch);
 }
 
@@ -25,10 +29,11 @@ body {
   min-height: 100vh;
   margin: 0;
   background:
-    radial-gradient(circle at 18% 8%, rgb(216 115 44 / 20%), transparent 24rem),
-    radial-gradient(circle at 82% 12%, rgb(202 162 90 / 11%), transparent 22rem),
-    radial-gradient(circle at 50% 120%, rgb(92 17 18 / 42%), transparent 34rem),
-    linear-gradient(135deg, #030201 0%, var(--color-pitch) 28%, var(--color-ash) 58%, #1d0708 100%);
+    radial-gradient(circle at 16% 8%, rgb(242 154 69 / 22%), transparent 18rem),
+    radial-gradient(circle at 84% 10%, rgb(202 162 90 / 16%), transparent 22rem),
+    radial-gradient(circle at 50% 118%, rgb(92 17 18 / 58%), transparent 38rem),
+    repeating-linear-gradient(108deg, rgb(244 223 184 / 2.7%) 0 1px, transparent 1px 13px),
+    linear-gradient(135deg, #030201 0%, var(--color-pitch) 24%, #120807 52%, #23090d 100%);
   color: var(--color-parchment);
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
 }
@@ -40,18 +45,20 @@ body::before {
   pointer-events: none;
   content: "";
   background-image:
-    radial-gradient(circle at 24% 18%, rgb(244 223 184 / 6%), transparent 0.18rem),
-    linear-gradient(90deg, rgb(202 162 90 / 3.5%) 1px, transparent 1px),
-    linear-gradient(rgb(244 223 184 / 2.5%) 1px, transparent 1px);
+    radial-gradient(circle at 24% 18%, rgb(244 223 184 / 8%), transparent 0.18rem),
+    radial-gradient(circle at 62% 78%, rgb(216 115 44 / 6%), transparent 0.22rem),
+    linear-gradient(90deg, rgb(202 162 90 / 4%) 1px, transparent 1px),
+    linear-gradient(rgb(244 223 184 / 3%) 1px, transparent 1px);
   background-position:
     0 0,
     0 0,
     0 0;
   background-size:
     23px 29px,
+    31px 37px,
     52px 52px,
     52px 52px;
-  mask-image: radial-gradient(circle at center, rgb(0 0 0 / 82%), transparent 86%);
+  mask-image: radial-gradient(circle at center, rgb(0 0 0 / 88%), transparent 88%);
 }
 
 body::after {
@@ -61,11 +68,139 @@ body::after {
   pointer-events: none;
   content: "";
   background:
-    radial-gradient(circle at center, transparent 38%, rgb(0 0 0 / 52%) 100%),
-    linear-gradient(180deg, rgb(0 0 0 / 24%), transparent 22%, rgb(0 0 0 / 34%));
+    radial-gradient(circle at center, transparent 30%, rgb(0 0 0 / 68%) 100%),
+    linear-gradient(180deg, rgb(0 0 0 / 36%), transparent 20%, rgb(0 0 0 / 48%));
 }
 
 ::selection {
   color: var(--color-pitch);
   background: var(--color-ember);
+}
+
+@layer components {
+  .codex-hero {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgb(202 162 90 / 34%);
+    border-radius: 0.85rem;
+    padding: 1.25rem;
+    background:
+      linear-gradient(90deg, rgb(202 162 90 / 42%), transparent 24%, transparent 76%, rgb(202 162 90 / 34%)) top / 100% 1px no-repeat,
+      radial-gradient(circle at 12% 0%, rgb(242 154 69 / 18%), transparent 20rem),
+      linear-gradient(135deg, rgb(42 33 24 / 78%), rgb(18 11 9 / 88%) 50%, rgb(35 9 13 / 82%));
+    box-shadow:
+      0 24px 80px rgb(0 0 0 / 52%),
+      inset 0 0 48px rgb(0 0 0 / 34%),
+      inset 0 1px 0 rgb(244 223 184 / 10%);
+  }
+
+  .codex-board {
+    position: relative;
+    overflow: hidden;
+    border: 2px solid rgb(122 91 43 / 82%);
+    border-radius: 1rem;
+    padding: 1rem;
+    background:
+      linear-gradient(90deg, transparent, rgb(215 181 109 / 65%), transparent) top / 100% 2px no-repeat,
+      linear-gradient(90deg, transparent, rgb(13 7 6 / 90%), transparent) bottom / 100% 2px no-repeat,
+      radial-gradient(circle at 50% -10%, rgb(216 115 44 / 22%), transparent 22rem),
+      repeating-linear-gradient(135deg, rgb(244 223 184 / 3%) 0 1px, transparent 1px 12px),
+      linear-gradient(135deg, rgb(42 33 24 / 86%), rgb(13 7 6 / 95%) 48%, rgb(35 9 13 / 90%));
+    box-shadow:
+      0 34px 100px rgb(0 0 0 / 68%),
+      0 0 0 1px rgb(244 223 184 / 8%),
+      inset 0 0 0 1px rgb(215 181 109 / 20%),
+      inset 0 0 72px rgb(0 0 0 / 54%);
+  }
+
+  .codex-board::before,
+  .codex-board::after {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    content: "";
+  }
+
+  .codex-board::before {
+    background:
+      radial-gradient(circle at 0% 0%, rgb(216 115 44 / 22%), transparent 12rem),
+      radial-gradient(circle at 100% 100%, rgb(0 0 0 / 55%), transparent 18rem);
+    mix-blend-mode: screen;
+    opacity: 0.55;
+  }
+
+  .codex-board::after {
+    border: 1px solid rgb(215 181 109 / 30%);
+    border-radius: 0.72rem;
+    inset: 0.45rem;
+  }
+
+  .achievement-card {
+    position: relative;
+    overflow: hidden;
+    border: 2px solid rgb(122 91 43 / 86%);
+    border-radius: 0.8rem;
+    padding: 1.25rem;
+    background:
+      linear-gradient(90deg, rgb(215 181 109 / 64%), transparent 28%, transparent 72%, rgb(215 181 109 / 44%)) top / 100% 2px no-repeat,
+      radial-gradient(circle at 12% 0%, rgb(242 154 69 / 20%), transparent 10rem),
+      radial-gradient(circle at 100% 100%, rgb(92 17 18 / 34%), transparent 12rem),
+      repeating-linear-gradient(104deg, rgb(244 223 184 / 4%) 0 1px, transparent 1px 10px),
+      linear-gradient(145deg, #3a2a1d 0%, #201512 44%, #120806 100%);
+    box-shadow:
+      0 18px 0 -10px rgb(7 5 4 / 90%),
+      0 28px 58px rgb(0 0 0 / 66%),
+      inset 0 0 0 1px rgb(244 223 184 / 9%),
+      inset 0 0 36px rgb(0 0 0 / 38%);
+  }
+
+  .achievement-card::before {
+    position: absolute;
+    inset: 0.45rem;
+    pointer-events: none;
+    content: "";
+    border: 1px solid rgb(215 181 109 / 24%);
+    border-radius: 0.55rem;
+  }
+
+  .achievement-card::after {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    content: "";
+    background:
+      radial-gradient(circle at 0 0, rgb(0 0 0 / 45%), transparent 7rem),
+      radial-gradient(circle at 100% 0, rgb(0 0 0 / 38%), transparent 7rem),
+      radial-gradient(circle at 50% 100%, rgb(0 0 0 / 40%), transparent 9rem);
+  }
+
+  .locked-emblem {
+    display: flex;
+    width: 3.75rem;
+    height: 3.75rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid rgb(215 181 109 / 92%);
+    border-radius: 9999px;
+    background:
+      radial-gradient(circle at 35% 25%, rgb(244 223 184 / 28%), transparent 28%),
+      radial-gradient(circle at 50% 56%, rgb(216 115 44 / 22%), transparent 46%),
+      linear-gradient(145deg, #4a301c 0%, #130908 70%);
+    color: var(--color-ember-bright);
+    box-shadow:
+      0 0 0 4px rgb(0 0 0 / 48%),
+      0 0 0 6px rgb(122 91 43 / 48%),
+      0 16px 32px rgb(0 0 0 / 58%),
+      0 0 30px rgb(216 115 44 / 24%),
+      inset 0 2px 10px rgb(244 223 184 / 20%),
+      inset 0 -10px 18px rgb(0 0 0 / 42%);
+  }
+
+  .achievement-title {
+    color: var(--color-parchment);
+    text-shadow:
+      0 2px 0 rgb(0 0 0 / 75%),
+      0 0 18px rgb(216 115 44 / 16%);
+  }
 }

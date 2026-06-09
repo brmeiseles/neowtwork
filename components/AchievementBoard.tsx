@@ -11,13 +11,15 @@ export function AchievementBoard({ achievements }: AchievementBoardProps) {
   );
 
   return (
-    <section
-      aria-label="Achievement board"
-      className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:gap-5"
-    >
-      {sortedAchievements.map((achievement) => (
-        <AchievementCard key={achievement.slug} achievement={achievement} />
-      ))}
-    </section>
+    <div className="codex-board">
+      <section
+        aria-label="Achievement board"
+        className="relative grid grid-cols-1 gap-4 md:grid-cols-2 lg:gap-5"
+      >
+        {sortedAchievements.map((achievement) => (
+          <AchievementCard key={achievement.slug} achievement={achievement} />
+        ))}
+      </section>
+    </div>
   );
 }
