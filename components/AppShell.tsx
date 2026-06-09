@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { appConfig } from "@/config/app";
+import { brandConfig } from "@/config/brand";
 
 type AppShellProps = {
   children: ReactNode;
@@ -30,7 +31,7 @@ export function AppShell({
 
         {footer ?? (
           <footer className="border-t border-brass/20 pt-4 text-xs font-bold uppercase tracking-ritual text-brass/70">
-            {appConfig.name} v{appConfig.version}
+            {brandConfig.shortName} v{appConfig.version}
           </footer>
         )}
       </div>

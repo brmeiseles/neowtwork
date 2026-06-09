@@ -1,5 +1,44 @@
 # DEVLOG.md
 
+## 2026-06-09 - Centralized App Branding
+
+### Version
+
+- `0.1.0`
+
+### Feature Summary
+
+- Added a single brand config so future app renames are easier.
+
+### What Changed
+
+- Added `config/brand.ts` for app name, short name, tagline, metadata title, metadata description, and repo name.
+- Updated homepage UI, metadata, and footer branding to read from the brand config.
+- Added a README note explaining where to rename the app later.
+
+### Why It Changed
+
+- Future renames should start in one obvious file instead of hunting through UI and metadata code.
+
+### Files Touched
+
+- `app/layout.tsx`
+- `app/page.tsx`
+- `components/AppShell.tsx`
+- `config/app.ts`
+- `config/brand.ts`
+- `README.md`
+- `DEVLOG.md`
+
+### Verification Status
+
+- Ran `npm run typecheck`.
+- Ran `npm run build`.
+
+### Commit
+
+- To be recorded after push, if available.
+
 ## 2026-06-09 - Foundation Architecture Pass
 
 ### Version

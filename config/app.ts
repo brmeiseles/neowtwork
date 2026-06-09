@@ -1,5 +1,7 @@
+import { brandConfig } from "@/config/brand";
+
 export const appConfig = {
-  name: "Neowtwork",
+  name: brandConfig.appName,
   version: "0.1.0",
-  description: "A dark fantasy achievement board for Neowtwork.",
+  description: brandConfig.metadataDescription,
 } as const;

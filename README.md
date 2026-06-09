@@ -24,3 +24,7 @@ Open [http://localhost:3000](http://localhost:3000) to view the app.
 - `npm run build` creates a production build.
 - `npm run start` serves the production build.
 - `npm run typecheck` runs TypeScript without emitting files.
+
+## Renaming the App
+
+Most visible naming lives in `config/brand.ts`. To rename the app later, update the app name, short name, tagline, metadata title, metadata description, and repo name there first.

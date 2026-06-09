@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { appConfig } from "@/config/app";
+import { brandConfig } from "@/config/brand";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: `${appConfig.name} Achievements`,
-  description: appConfig.description,
+  title: brandConfig.metadataTitle,
+  description: brandConfig.metadataDescription,
 };
 
 export default function RootLayout({
