@@ -1,5 +1,30 @@
 # DEVLOG.md
 
+## 2026-06-09 - Added Agent Soul
+
+### What Changed
+
+- Added an `Agent Soul` section to `AGENTS.md`.
+- Clarified the expected personality, tone, product principles, developer note expectations, and commit/push workflow for future Neowtwork coding agents.
+
+### Why It Changed
+
+- The project now has clearer guidance for keeping future work playful, precise, screenshotable, social, and easy for a non-engineer owner to follow.
+
+### Files Touched
+
+- `AGENTS.md`
+- `DEVLOG.md`
+
+### Verification
+
+- Ran `npm run typecheck`.
+- Typecheck completed successfully.
+
+### Commit
+
+- To be recorded after push, if available.
+
 ## 2026-06-09 - Test Codex Git Workflow
 
 ### What Changed
