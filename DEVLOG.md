@@ -1,5 +1,50 @@
 # DEVLOG.md
 
+## 2026-06-09 - Added Frontend Support Packages
+
+### Version
+
+- `0.1.1`
+
+### Feature Summary
+
+- Added shadcn/ui, lucide-react, and framer-motion support without redesigning the app.
+
+### What Changed
+
+- Installed `lucide-react`, `framer-motion`, and the minimal shadcn Button dependencies.
+- Added shadcn configuration, a shared `cn` utility, and `components/ui/button.tsx`.
+- Used a subtle lucide icon and shadcn Button treatment in the footer/version area.
+- Added a gentle framer-motion entrance and hover animation to achievement cards.
+- Bumped the app version to `0.1.1` as a PATCH support/polish checkpoint.
+
+### Why It Changed
+
+- Future UI work now has the core frontend building blocks ready while preserving the current achievement-board experience.
+
+### Files Touched
+
+- `components.json`
+- `components/AppShell.tsx`
+- `components/AchievementCard.tsx`
+- `components/ui/button.tsx`
+- `lib/utils.ts`
+- `package.json`
+- `package-lock.json`
+- `config/app.ts`
+- `AGENTS.md`
+- `VERSION.md`
+- `DEVLOG.md`
+
+### Verification Status
+
+- Ran `npm run typecheck`.
+- Ran `npm run build`.
+
+### Commit
+
+- To be recorded after push, if available.
+
 ## 2026-06-09 - Centralized App Branding
 
 ### Version

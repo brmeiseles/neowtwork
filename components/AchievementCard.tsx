@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "framer-motion";
 import type { Achievement } from "@/types/achievement";
 
 type AchievementCardProps = {
@@ -6,7 +9,13 @@ type AchievementCardProps = {
 
 export function AchievementCard({ achievement }: AchievementCardProps) {
   return (
-    <article className="group relative overflow-hidden rounded-card border border-brass/25 bg-soot/85 p-card shadow-card transition duration-200 hover:-translate-y-0.5 hover:border-ember/70 hover:bg-cardHover">
+    <motion.article
+      className="group relative overflow-hidden rounded-card border border-brass/25 bg-soot/85 p-card shadow-card transition-colors duration-200 hover:border-ember/70 hover:bg-cardHover"
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -2 }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
+    >
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brass/70 to-transparent" />
       <div className="flex items-start gap-4">
         <div
@@ -25,6 +34,6 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
           </p>
         </div>
       </div>
-    </article>
+    </motion.article>
   );
 }

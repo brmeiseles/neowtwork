@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
+import { ScrollText } from "lucide-react";
 import { appConfig } from "@/config/app";
 import { brandConfig } from "@/config/brand";
+import { Button } from "@/components/ui/button";
 
 type AppShellProps = {
   children: ReactNode;
@@ -31,7 +33,17 @@ export function AppShell({
 
         {footer ?? (
           <footer className="border-t border-brass/20 pt-4 text-xs font-bold uppercase tracking-ritual text-brass/70">
-            {brandConfig.shortName} v{appConfig.version}
+            <Button
+              asChild
+              aria-label={`${brandConfig.shortName} version ${appConfig.version}`}
+              size="version"
+              variant="version"
+            >
+              <span>
+                <ScrollText aria-hidden="true" className="size-3" />
+                {brandConfig.shortName} v{appConfig.version}
+              </span>
+            </Button>
           </footer>
         )}
       </div>
