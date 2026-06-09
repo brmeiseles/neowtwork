@@ -37,7 +37,7 @@
 
 ### Commit
 
-- To be recorded after push, if available.
+- `86552aa`
 
 ## 2026-06-09 - Foundation Architecture Pass
 
