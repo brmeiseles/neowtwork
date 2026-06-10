@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Award, Check, Copy, LockKeyhole } from "lucide-react";
+import type { KeyboardEvent } from "react";
 import { Button } from "@/components/ui/button";
 import type { Achievement } from "@/types/achievement";
 import type { AchievementCompletion } from "@/types/completion";
@@ -22,24 +23,40 @@ export function AchievementCard({
   onView,
 }: AchievementCardProps) {
   const isCompleted = Boolean(completion);
+  const actionLabel = isCompleted
+    ? `View completed achievement: ${achievement.title}`
+    : `Complete achievement: ${achievement.title}`;
+
+  function handleCardAction() {
+    if (isCompleted) {
+      onView();
+      return;
+    }
+
+    onComplete();
+  }
+
+  function handleCardKeyDown(event: KeyboardEvent<HTMLElement>) {
+    if (event.key !== "Enter" && event.key !== " ") {
+      return;
+    }
+
+    event.preventDefault();
+    handleCardAction();
+  }
 
   return (
     <motion.article
-      className={`achievement-card group ${isCompleted ? "achievement-card-completed" : ""}`}
+      aria-label={actionLabel}
+      className={`achievement-card group cursor-pointer focus:outline-none focus:ring-2 focus:ring-ember focus:ring-offset-2 focus:ring-offset-pitch ${isCompleted ? "achievement-card-completed" : ""}`}
+      role="button"
+      tabIndex={0}
       whileHover={{ y: -5, scale: 1.012 }}
       transition={{ duration: 0.2, ease: "easeOut" }}
+      onClick={handleCardAction}
+      onKeyDown={handleCardKeyDown}
     >
-      <button
-        aria-label={
-          isCompleted
-            ? `View completed achievement: ${achievement.title}`
-            : undefined
-        }
-        className="relative z-10 flex h-full w-full items-start gap-5 text-left disabled:cursor-default"
-        disabled={!isCompleted}
-        type="button"
-        onClick={isCompleted ? onView : undefined}
-      >
+      <div className="relative z-10 flex h-full w-full items-start gap-5 text-left">
         <span
           aria-hidden="true"
           className={`locked-emblem transition duration-200 group-hover:scale-110 group-hover:text-parchment ${isCompleted ? "unlocked-emblem" : ""}`}
@@ -60,10 +77,10 @@ export function AchievementCard({
             {achievement.description}
           </span>
         </span>
-      </button>
+      </div>
 
-      <div className="relative z-10 mt-5">
-        {completion ? (
+      {completion ? (
+        <div className="relative z-10 mt-5">
           <div className="grid gap-3 rounded-card border border-antiqueGold/35 bg-pitch/45 p-3 text-sm text-bone">
             <div className="flex flex-wrap items-center gap-2 text-xs font-black uppercase tracking-title text-emberBright">
               <Check className="size-4" />
@@ -82,18 +99,15 @@ export function AchievementCard({
                   event.stopPropagation();
                   onCopySeed(completion.seed);
                 }}
+                onKeyDown={(event) => event.stopPropagation()}
               >
                 <Copy className="size-4" />
                 Copy Seed
               </Button>
             </div>
           </div>
-        ) : (
-          <Button className="w-full" type="button" onClick={onComplete}>
-            Complete Achievement
-          </Button>
-        )}
-      </div>
+        </div>
+      ) : null}
     </motion.article>
   );
 }

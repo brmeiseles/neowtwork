@@ -1,5 +1,48 @@
 # DEVLOG.md
 
+## 2026-06-09 - Clickable Achievement Cards
+
+### Version
+
+- `0.2.1`
+
+### Feature Summary
+
+- Made the entire achievement card clickable for completion/viewing.
+
+### What Changed
+
+- Removed the visible Complete Achievement button from incomplete cards.
+- Made incomplete cards open the completion modal when the card itself is clicked.
+- Kept completed cards clickable for the detail modal.
+- Preserved keyboard access with Enter/Space on focused cards.
+- Kept the completed-card copy seed button working without triggering the card click.
+
+### Why It Changed
+
+- The previous Complete button was too easy to miss visually, especially near card edges. The whole card now behaves like the intended action surface.
+
+### Files Touched
+
+- `AGENTS.md`
+- `DEVLOG.md`
+- `VERSION.md`
+- `components/AchievementCard.tsx`
+- `config/app.ts`
+- `package.json`
+- `package-lock.json`
+
+### Verification Status
+
+- Ran `npm run typecheck`.
+- Ran `npm run build`.
+- Confirmed `localhost:3000` renders 12 card-level completion targets, no visible card-level Complete Achievement buttons, and the visible `Neowtwork v0.2.1` footer.
+- Tested in headless Chrome that clicking an incomplete achievement card opens the completion modal.
+
+### Commit
+
+- To be recorded after push, if available.
+
 ## 2026-06-09 - Completed Achievement State
 
 ### Version
