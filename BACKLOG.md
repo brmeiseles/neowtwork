@@ -15,10 +15,10 @@
 ## Core Completion System
 
 - Completed local/backend-ready foundation in `1.0.0`; see `DEVLOG.md` entry `2026-06-10 - Phase 1 Backend Foundation`.
-- Wire logged-in completions to Supabase persistence.
-- Upload proof screenshots to Supabase Storage.
+- Completed logged-in Supabase completion persistence and proof uploads in `1.1.0`; see `DEVLOG.md` entry `2026-06-10 - Supabase Completion Persistence`.
 - Migrate existing localStorage completions into a logged-in account.
 - Add graceful sync conflict handling if local and backend data both exist.
+- Delete old proof Storage objects when completions are deleted or proof images are replaced.
 
 ## Achievement List Updates
 

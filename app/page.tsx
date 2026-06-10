@@ -2,10 +2,13 @@ import { AchievementBoard } from "@/components/AchievementBoard";
 import { AppShell } from "@/components/AppShell";
 import { brandConfig } from "@/config/brand";
 import { achievements } from "@/data/achievements";
+import { getPublicEnv } from "@/lib/env";
 
 export const dynamic = "force-dynamic";
 
 export default function Home() {
+  const publicEnv = getPublicEnv();
+
   return (
     <AppShell>
       <div className="flex flex-col gap-5 sm:gap-6">
@@ -22,7 +25,7 @@ export default function Home() {
           </p>
         </header>
 
-        <AchievementBoard achievements={achievements} />
+        <AchievementBoard achievements={achievements} publicEnv={publicEnv} />
       </div>
     </AppShell>
   );

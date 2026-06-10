@@ -19,7 +19,7 @@ type AchievementCompletionDialogProps = {
   completion?: AchievementCompletion | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onComplete: (completion: AchievementCompletion) => void;
+  onComplete: (completion: AchievementCompletion) => Promise<boolean> | boolean;
 };
 
 function fileToDataUrl(file: File) {
@@ -144,7 +144,7 @@ export function AchievementCompletionDialog({
 
       const now = new Date().toISOString();
 
-      onComplete({
+      const didSave = await onComplete({
         id: completion?.id ?? createLocalId(),
         achievementSlug: achievement.slug,
         proofImageDataUrl: proof,
@@ -155,6 +155,11 @@ export function AchievementCompletionDialog({
         createdAt: completion?.createdAt ?? now,
         updatedAt: now,
       });
+
+      if (!didSave) {
+        throw new Error("Could not save completion. Try again.");
+      }
+
       onOpenChange(false);
     } catch (saveError) {
       setError(

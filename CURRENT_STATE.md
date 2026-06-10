@@ -2,7 +2,7 @@
 
 ## Current Version
 
-`1.0.3`
+`1.1.0`
 
 ## Architecture
 
@@ -10,10 +10,10 @@
 - `app/page.tsx` renders the homepage shell and achievement board.
 - `components/AppShell.tsx` includes the shared shell, footer, and compact auth panel area.
 - `components/AuthPanel.tsx` scaffolds Discord sign-in, sign-out, auth state, and first-login username claiming.
-- `components/AchievementBoard.tsx` owns local completion state and modal coordination.
+- `components/AchievementBoard.tsx` owns completion state, Supabase save/load coordination, localStorage fallback, and modal coordination.
 - `components/AchievementCard.tsx` renders each clickable achievement card with the best ascension badge only.
 - `components/AchievementCompletionDialog.tsx` handles local proof, optional seed, ascension, and notes capture.
-- `components/AchievementDetailDialog.tsx` displays all completions for an achievement and supports add/edit/delete/reset locally.
+- `components/AchievementDetailDialog.tsx` displays all completions for an achievement and supports add/edit/delete/reset.
 - `components/PublicAchievementBoard.tsx` renders read-only public boards.
 - `app/u/[username]/page.tsx` is the public read-only board route.
 - `app/auth/callback/route.ts` exchanges Supabase OAuth codes after Discord login.
@@ -44,11 +44,11 @@
 - The whole achievement card is clickable.
 - Incomplete cards open the Complete Achievement modal.
 - Completed cards open the completed detail modal.
-- Completion data still has a localStorage fallback.
+- Logged-in completion data saves to Supabase; logged-out completion data still uses localStorage.
 - Local completions now support multiple completions per achievement.
 - Collapsed completed cards show the highest ascension only.
 - Seed is optional and only shown in the detail modal.
-- Detail modals show all completions and local add/edit/delete controls.
+- Detail modals show all completions and add/edit/delete controls.
 - Ascension range is currently `0-10`.
 - Canonical achievement emblems come from `public/achievement-emblems/`.
 - Proof screenshots never replace achievement emblems.
@@ -74,23 +74,27 @@
 - Remote Supabase migration `202606100001_backend_foundation.sql` has been applied.
 - Remote Supabase achievement seed has inserted the current 12 achievement rows.
 - Remote `proofs` bucket exists.
+- Logged-in users load their own completions from Supabase.
+- Logged-in completion saves insert rows into `public.completions`.
+- Proof screenshots upload to Supabase Storage bucket `proofs` under the signed-in user's folder before the completion row is created.
+- Public boards at `/u/[username]` read Supabase completions in read-only mode.
+- Completion edit/delete/reset is wired for Supabase rows and still respects user ownership through RLS.
 
 ## Manual / Incomplete
 
-- Proof upload to Supabase Storage is not wired into the completion form yet.
 - Local completions are not synced/migrated to Supabase accounts yet.
+- Deleted or replaced Supabase proof screenshots are not cleaned up from Storage yet.
 - Browser-driven username form typing could not be automated in Codex because the in-app browser virtual clipboard was unavailable; the profile row was created directly in Supabase and verified through the app.
 
 ## Deployed Status
 
-- No production deployment is configured in this repo.
+- Production is deployed on Vercel for the `main` branch.
 - Local development runs with `npm run dev`, usually at `http://localhost:3000`.
 - Latest verification target is local build/typecheck plus runtime smoke checks against the live Supabase project.
 
 ## Next Recommended Priorities
 
-- Wire completion save/read to Supabase for logged-in users.
-- Wire proof uploads to the `proofs` Storage bucket.
-- Sync logged-in completions to Supabase while preserving local fallback/migration.
+- Sync existing localStorage completions into a logged-in account with clear conflict handling.
+- Clean up old proof Storage objects when completions are deleted or proof images are replaced.
 - Add friend boards after account persistence is proven.
 - Replace The King's Halo achievement once the new Regent Stars candidate is chosen.

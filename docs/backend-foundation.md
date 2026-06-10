@@ -31,9 +31,11 @@ Neowtwork's backend foundation uses Supabase for auth, database rows, and proof 
    - Production: `https://YOUR_DOMAIN/auth/callback`
 8. Confirm the `proofs` storage bucket exists and is public.
 
-## Known Incomplete Pieces
+## Current Persistence Status
 
-- The app has backend clients and schema, but production Supabase credentials are not configured in the repo.
-- The local completion flow still has a localStorage fallback while backend persistence is introduced.
-- Proof screenshot upload to Supabase Storage is designed but not yet wired into the completion form.
-- Public profile routes have a backend-ready shape and placeholder handling, but need real project credentials for full verification.
+- Logged-in users save and load completions through Supabase.
+- Proof screenshots upload to Supabase Storage bucket `proofs`.
+- Public profile routes read Supabase completions in read-only mode.
+- The local completion flow still has a localStorage fallback for logged-out users.
+- Local-to-account completion sync is intentionally not implemented yet.
+- Deleted or replaced proof screenshots are not cleaned up from Storage yet.

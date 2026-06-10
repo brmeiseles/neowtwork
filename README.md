@@ -156,12 +156,15 @@ Implemented:
 - Database schema and RLS policies.
 - Proof storage bucket design.
 - Local completion model refactored toward multiple completions.
+- Logged-in completion save/load through Supabase.
+- Proof screenshot upload to Supabase Storage bucket `proofs`.
+- Public profile completion reads from Supabase.
 
 Still manual/incomplete:
 
 - Other machines need their own `.env.local` values.
-- Supabase Storage upload is designed but not yet wired into the completion form.
 - Local completions are not yet automatically synced to Supabase.
+- Deleted or replaced proof screenshots are not cleaned up from Storage yet.
 
 ## Vercel Environment Notes
 

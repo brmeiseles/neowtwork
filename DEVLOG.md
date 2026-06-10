@@ -1,5 +1,62 @@
 # DEVLOG.md
 
+## 2026-06-10 - Supabase Completion Persistence
+
+### Version
+
+- `1.1.0`
+
+### Feature Summary
+
+- Moved logged-in achievement completions from local-only storage to Supabase persistence with proof screenshot uploads.
+
+### What Changed
+
+- Wired the private achievement board to read the signed-in user's completions from Supabase.
+- Saved new logged-in completions to `public.completions` without overwriting older completions.
+- Uploaded proof screenshots to Supabase Storage bucket `proofs` under user-specific paths.
+- Preserved localStorage completion behavior for logged-out users.
+- Kept public `/u/[username]` boards reading Supabase completions in read-only mode.
+- Preserved multiple completions per achievement, optional seeds, best-ascension collapsed cards, and proof screenshots inside detail modals only.
+- Added Supabase delete/reset support for completion rows while leaving proof Storage cleanup as a follow-up.
+- Updated continuity docs and bumped the app version to `1.1.0`.
+
+### Why It Changed
+
+- Neowtwork's core loop needs real persistence for logged-in players: complete achievement, upload proof, save ascension/seed, view later, and share the public board.
+
+### Files Touched
+
+- `AGENTS.md`
+- `BACKLOG.md`
+- `CURRENT_STATE.md`
+- `DEVLOG.md`
+- `README.md`
+- `VERSION.md`
+- `app/page.tsx`
+- `components/AchievementBoard.tsx`
+- `components/AchievementCompletionDialog.tsx`
+- `config/app.ts`
+- `docs/backend-foundation.md`
+- `package.json`
+- `package-lock.json`
+
+### Verification Status
+
+- Ran `npm run typecheck`.
+- Ran `npm run build`.
+- Ran `npm run dev` against `.env.local`.
+- Confirmed local homepage renders 12 achievement cards, shows `v1.1.0`, hides the dormant backend banner, and has no browser console errors.
+- Confirmed logged-in home can read a Supabase completion row and show the best ascension on the collapsed card.
+- Confirmed `/u/brando_prime` can read Supabase completions in read-only mode and show the best ascension on the public board.
+- Removed the temporary Supabase verification completion row after the read-path smoke test so the live board is not left with fake proof data.
+- Confirmed clean-state homepage and `/u/brando_prime` render 12 cards with no dormant banner and no browser console errors after cleanup.
+- Confirmed the logged-out localStorage fallback remains in code; full browser form-entry automation was limited by the known in-app browser text-entry issue, so manual save/upload verification in the normal browser is still recommended.
+
+### Commit
+
+- Pending push.
+
 ## 2026-06-10 - Fixed Production Supabase Env Detection
 
 ### Version
