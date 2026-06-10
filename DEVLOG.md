@@ -55,7 +55,7 @@
 
 ### Commit
 
-- To be recorded after push, if available.
+- `36c5a47`
 
 ## 2026-06-10 - Phase 1 Backend Foundation
 
