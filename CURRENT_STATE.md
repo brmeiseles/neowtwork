@@ -2,7 +2,7 @@
 
 ## Current Version
 
-`1.2.1`
+`1.2.2`
 
 ## Architecture
 
@@ -64,6 +64,7 @@
 - The homepage board header is `Slay the Spire 2 Achievements`; the app/brand name remains `Neowtwork`.
 - Friends access lives in the authenticated top-bar account block, not the main achievement board body.
 - Logged-out users do not see Friends UI.
+- The achievement board does not show a normal completion-loading banner; backend errors still render plainly if loading fails.
 
 ## Backend Status
 
@@ -93,6 +94,7 @@
 - `/u/[username]` renders owner controls only when the signed-in user is viewing their own board; other boards are read-only.
 - Auth/profile loading keeps a fixed-height intermediate panel instead of flashing the username onboarding form during session refresh.
 - Friends load only after the logged-in profile is resolved and only inside the compact dropdown, avoiding empty-state flashes in the page body.
+- Deployment-facing commit messages should include the current app version so Vercel deployments are easy to map back to `VERSION.md`.
 
 ## Manual / Incomplete
 

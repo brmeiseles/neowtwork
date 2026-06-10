@@ -507,9 +507,9 @@ export function AchievementBoard({
 
   return (
     <>
-      {isBackendLoading || backendError ? (
+      {backendError ? (
         <div className="rounded-card border border-brass/25 bg-pitch/65 px-3 py-2 text-sm font-bold text-bone shadow-card">
-          {isBackendLoading ? "Checking the codex ledger..." : backendError}
+          {backendError}
         </div>
       ) : null}
 

@@ -24,7 +24,7 @@ Work like a careful dungeon archivist, a mischievous achievement goblin, and a p
 ## Project Workflow
 
 - Current project version is tracked in `VERSION.md`.
-- Current version: `1.2.1`.
+- Current version: `1.2.2`.
 - Use semantic versioning: `MAJOR.MINOR.PATCH`.
 - Treat `PATCH` as bug fixes, polish, documentation updates, and small tweaks.
 - Treat `MINOR` as new user-facing features or meaningful feature expansions.
@@ -42,5 +42,6 @@ Work like a careful dungeon archivist, a mischievous achievement goblin, and a p
   - verification status
   - commit hash after push, if available
 - Run build or typecheck before committing when practical.
+- Include the current app version in deployment-facing commit messages so Vercel's deployment list can be matched to app versions.
 - After successful verification, commit and push changes automatically unless the user says otherwise.
 - After pushing, always summarize the checkpoint in the Codex response.

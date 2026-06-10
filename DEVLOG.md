@@ -1,5 +1,51 @@
 # DEVLOG.md
 
+## 2026-06-10 - Removed Codex Ledger Flash
+
+### Version
+
+- `1.2.2`
+
+### Feature Summary
+
+- Removed the transient achievement-board loading banner and added a workflow rule to include app versions in Vercel-facing commit messages.
+
+### What Changed
+
+- Removed the visible `Checking the codex ledger...` banner during normal completion loading.
+- Preserved plain backend error rendering if completion loading fails.
+- Added an `AGENTS.md` instruction to include the current app version in deployment-facing commit messages.
+- Bumped the app version to `1.2.2`.
+
+### Why It Changed
+
+- The normal completion-loading banner flashed between the hero and achievement board quickly enough to feel like a visual glitch.
+- Vercel deployment rows show Git commit messages, so including the app version there makes deployments easier to identify.
+
+### Files Touched
+
+- `AGENTS.md`
+- `CURRENT_STATE.md`
+- `DEVLOG.md`
+- `VERSION.md`
+- `components/AchievementBoard.tsx`
+- `config/app.ts`
+- `package.json`
+- `package-lock.json`
+
+### Verification Status
+
+- Ran `npm run typecheck`.
+- Ran `npm run build`.
+- Ran `npm run dev`.
+- Confirmed local homepage renders 12 achievement cards and `v1.2.2`.
+- Confirmed `Checking the codex ledger...` is absent during immediate page load and after the app settles.
+- Confirmed Friends remains in the top bar and no browser console errors appeared.
+
+### Commit
+
+- Pending push.
+
 ## 2026-06-10 - Stabilized Friends Top Bar
 
 ### Version
