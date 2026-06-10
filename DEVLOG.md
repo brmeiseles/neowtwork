@@ -72,7 +72,7 @@
 
 ### Commit
 
-- To be recorded after push, if available.
+- `5d5d287`
 
 ## 2026-06-09 - Immediate Polish Pass
 
