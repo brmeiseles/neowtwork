@@ -2,7 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import type { SupabaseClient, User } from "@supabase/supabase-js";
-import { ExternalLink, UserPlus, Users } from "lucide-react";
+import { UserPlus, Users } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -284,10 +284,6 @@ export function FriendsPanel({
                   ) : null}
                 </div>
               </div>
-              <span className="inline-flex shrink-0 items-center gap-1 text-[0.65rem] font-black uppercase tracking-title text-emberBright">
-                Seeds
-                <ExternalLink className="size-3.5" />
-              </span>
             </Link>
           ))}
         </div>

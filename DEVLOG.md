@@ -1,5 +1,46 @@
 # DEVLOG.md
 
+## 2026-06-10 - Friend Row Label Cleanup
+
+### Version
+
+- `1.2.5`
+
+### Feature Summary
+
+- Removed the redundant trailing `Seeds` action label from Friends dropdown rows.
+
+### What Changed
+
+- Friend rows remain full-card clickable links.
+- Removed the right-side `Seeds` text and external-link icon from each friend row.
+- Bumped the app version to `1.2.5`.
+
+### Why It Changed
+
+- Once the whole friend card became clickable, the extra row action label created visual noise and made the dropdown feel busier than needed.
+
+### Files Touched
+
+- `AGENTS.md`
+- `CURRENT_STATE.md`
+- `DEVLOG.md`
+- `VERSION.md`
+- `components/FriendsPanel.tsx`
+- `config/app.ts`
+- `package.json`
+- `package-lock.json`
+
+### Verification Status
+
+- Ran `npm run typecheck`.
+- Ran `npm run build`.
+- Confirmed source no longer renders `Seeds` or the external-link icon inside friend rows.
+
+### Commit
+
+- Pending push.
+
 ## 2026-06-10 - Account Friends Polish
 
 ### Version

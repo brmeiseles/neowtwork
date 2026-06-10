@@ -2,7 +2,7 @@
 
 ## Current Version
 
-`1.2.4`
+`1.2.5`
 
 ## Architecture
 
@@ -97,7 +97,7 @@
 - Friend rows link to `/u/[username]`.
 - Logged-in users have a top-bar `My Board` link back to their own `/u/[username]` board.
 - Friends dropdown closes on outside click.
-- Friend rows are full-card links instead of using a separate `Board` button.
+- Friend rows are full-card links with no trailing action label.
 - `/u/[username]` renders owner controls only when the signed-in user is viewing their own board; other boards are read-only.
 - Auth/profile loading keeps a fixed-height intermediate panel instead of flashing the username onboarding form during session refresh.
 - Friends load only after the logged-in profile is resolved and only inside the compact dropdown, avoiding empty-state flashes in the page body.
