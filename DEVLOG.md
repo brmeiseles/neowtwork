@@ -1,5 +1,48 @@
 # DEVLOG.md
 
+## 2026-06-10 - Friend Add Copy Cleanup
+
+### Version
+
+- `1.3.3`
+
+### Feature Summary
+
+- Cleaned up the Friends flyout add-friend copy after the Discord identity simplification.
+
+### What Changed
+
+- Changed `Add Guildmate` back to `Add Friend`.
+- Changed the add button back to `Add Friend`.
+- Removed the helper text under the friend search field.
+- Kept Discord display-name identity behavior and board-slug lookup logic unchanged.
+- Bumped the app version to `1.3.3`.
+
+### Why It Changed
+
+- The previous copy over-explained the temporary slug behavior and made the Friends flyout feel heavier than needed.
+
+### Files Touched
+
+- `AGENTS.md`
+- `CURRENT_STATE.md`
+- `DEVLOG.md`
+- `VERSION.md`
+- `components/FriendsPanel.tsx`
+- `config/app.ts`
+- `package.json`
+- `package-lock.json`
+
+### Verification Status
+
+- Ran `npm run typecheck`.
+- Ran `npm run build`.
+- Confirmed current Friends flyout source shows `Add Friend` and no longer renders the helper text.
+
+### Commit
+
+- Pending push.
+
 ## 2026-06-10 - Discord Identity Simplification
 
 ### Version

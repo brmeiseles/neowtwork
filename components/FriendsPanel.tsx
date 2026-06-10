@@ -228,7 +228,7 @@ export function FriendsPanel({
     <div className="grid gap-3" aria-label="Friends">
       <form className="grid gap-2" onSubmit={handleAddFriend}>
         <label className="grid gap-1 text-xs font-bold uppercase tracking-title text-brass">
-          Add Guildmate
+          Add Friend
           <div className="grid gap-2 sm:grid-cols-[1fr_auto]">
             <input
               className="h-10 min-w-0 rounded-card border border-brass/25 bg-pitch/70 px-3 text-sm normal-case tracking-normal text-parchment outline-none placeholder:text-bone/50 focus:border-ember"
@@ -241,12 +241,9 @@ export function FriendsPanel({
             />
             <Button disabled={isSaving} size="sm" type="submit">
               <UserPlus className="size-4" />
-              {isSaving ? "Adding..." : "Add Guildmate"}
+              {isSaving ? "Adding..." : "Add Friend"}
             </Button>
           </div>
-          <span className="text-[0.68rem] font-semibold normal-case tracking-normal text-bone/75">
-            Use the slug from their board link for now.
-          </span>
         </label>
       </form>
 
