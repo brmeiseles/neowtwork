@@ -58,16 +58,17 @@ export function AchievementCard({
           aria-hidden="true"
           className={`locked-emblem transition duration-200 group-hover:scale-105 group-hover:text-parchment ${isCompleted ? "unlocked-emblem" : ""}`}
         >
-          <span className="emblem-crop">
-            <img
-              alt=""
-              className={`achievement-emblem-image ${isCompleted ? "achievement-emblem-unlocked" : "achievement-emblem-locked"}`}
-              src={achievement.emblemSrc}
-            />
-          </span>
-          {!isCompleted ? (
+          {isCompleted ? (
+            <span className="emblem-crop">
+              <img
+                alt=""
+                className={`achievement-emblem-image achievement-emblem-unlocked achievement-emblem-${achievement.slug}`}
+                src={achievement.emblemSrc}
+              />
+            </span>
+          ) : (
             <LockKeyhole className="absolute size-5 text-emberBright drop-shadow-[0_2px_0_rgba(0,0,0,0.85)]" />
-          ) : null}
+          )}
         </span>
 
         <span className="min-w-0 flex-1 pb-7">

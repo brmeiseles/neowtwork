@@ -24,7 +24,7 @@ export function AppShell({
 
   return (
     <div className="min-h-screen px-shell-x py-shell-y sm:px-6 lg:px-10">
-      <div className="mx-auto flex min-h-[calc(100vh-3rem)] w-full max-w-shell flex-col gap-6">
+      <div className="mx-auto flex min-h-[calc(100vh-2rem)] w-full max-w-shell flex-col gap-4">
         {hasTopBar ? (
           <header className="flex items-center justify-between gap-4 border-b border-brass/20 pb-4">
             <div>{navigation}</div>

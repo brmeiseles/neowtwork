@@ -186,4 +186,4 @@ Do not log or paste the actual key value.
 
 ## Renaming The App
 
-Most visible naming lives in `config/brand.ts`. To rename the app later, update the app name, short name, tagline, metadata title, metadata description, and repo name there first.
+Most visible naming lives in `config/brand.ts`. To rename the app later, update the app name, short name, board title, tagline, metadata title, metadata description, and repo name there first.

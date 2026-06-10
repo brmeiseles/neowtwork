@@ -516,7 +516,7 @@ export function AchievementBoard({
       <div className="codex-board">
         <section
           aria-label="Achievement board"
-          className="relative grid grid-cols-1 gap-3 md:grid-cols-2 lg:gap-4"
+          className="relative grid grid-cols-1 gap-2.5 md:grid-cols-2 lg:gap-3"
         >
           {sortedAchievements.map((achievement) => (
             <AchievementCard

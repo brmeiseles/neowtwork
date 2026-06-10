@@ -2,7 +2,7 @@
 
 ## Current Version
 
-`1.1.0`
+`1.1.1`
 
 ## Architecture
 
@@ -51,11 +51,15 @@
 - Detail modals show all completions and add/edit/delete controls.
 - Ascension range is currently `0-10`.
 - Canonical achievement emblems come from `public/achievement-emblems/`.
+- Locked achievements intentionally do not render canonical emblem art; they show an empty dark circular frame with a lock.
+- Completed achievements render canonical emblem art inside the circular frame with contained, centered cropping.
 - Proof screenshots never replace achievement emblems.
 - Proof screenshots appear only in completion/detail UI.
 - Completed cards should not expand in size; prestige comes from border glow, emblem treatment, and subtle styling.
 - The current board style favors denser collectible-codex spacing over roomy SaaS spacing.
 - Kreon is the primary app font via `next/font/google`.
+- Completion proof entry supports file upload and clipboard paste only; image URL entry was removed to keep the flow cleaner.
+- The homepage board header is `Slay the Spire 2 Achievements`; the app/brand name remains `Neowtwork`.
 
 ## Backend Status
 
@@ -91,6 +95,7 @@
 - Production is deployed on Vercel for the `main` branch.
 - Local development runs with `npm run dev`, usually at `http://localhost:3000`.
 - Latest verification target is local build/typecheck plus runtime smoke checks against the live Supabase project.
+- Production spacing is driven by the committed source CSS in `app/globals.css`, shared layout spacing in `components/AppShell.tsx`, and Tailwind tokens in `lib/design-system.ts`.
 
 ## Next Recommended Priorities
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, type ClipboardEvent, type FormEvent } from "react";
-import { ImagePlus, LinkIcon, Upload } from "lucide-react";
+import { ImagePlus, Upload } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -32,22 +32,6 @@ function fileToDataUrl(file: File) {
   });
 }
 
-async function imageUrlToDataUrl(url: string) {
-  const response = await fetch(url);
-
-  if (!response.ok) {
-    throw new Error("Could not download proof image from that URL.");
-  }
-
-  const blob = await response.blob();
-
-  if (!blob.type.startsWith("image/")) {
-    throw new Error("That URL did not return an image.");
-  }
-
-  return fileToDataUrl(new File([blob], "proof-image", { type: blob.type }));
-}
-
 function createLocalId() {
   return globalThis.crypto?.randomUUID?.() ?? `local-${Date.now()}`;
 }
@@ -60,7 +44,6 @@ export function AchievementCompletionDialog({
   onComplete,
 }: AchievementCompletionDialogProps) {
   const [proofImageDataUrl, setProofImageDataUrl] = useState("");
-  const [proofUrl, setProofUrl] = useState("");
   const [seed, setSeed] = useState("");
   const [ascensionLevel, setAscensionLevel] = useState("0");
   const [notes, setNotes] = useState("");
@@ -71,7 +54,6 @@ export function AchievementCompletionDialog({
   useEffect(() => {
     if (!open) {
       setProofImageDataUrl("");
-      setProofUrl("");
       setSeed("");
       setAscensionLevel("0");
       setNotes("");
@@ -81,7 +63,6 @@ export function AchievementCompletionDialog({
     }
 
     setProofImageDataUrl(completion?.proofImageDataUrl ?? "");
-    setProofUrl("");
     setSeed(completion?.seed ?? "");
     setAscensionLevel(String(completion?.ascensionLevel ?? 0));
     setNotes(completion?.notes ?? "");
@@ -125,13 +106,11 @@ export function AchievementCompletionDialog({
     setIsSaving(true);
 
     try {
-      const proof =
-        proofImageDataUrl ||
-        (proofUrl.trim() ? await imageUrlToDataUrl(proofUrl.trim()) : "");
+      const proof = proofImageDataUrl;
       const parsedAscension = Number(ascensionLevel);
 
       if (!proof) {
-        throw new Error("Add proof by uploading, pasting, or providing an image URL.");
+        throw new Error("Add proof by uploading or pasting an image.");
       }
 
       if (
@@ -199,7 +178,7 @@ export function AchievementCompletionDialog({
               ) : (
                 <span className="flex flex-col items-center gap-2">
                   <ImagePlus className="size-8 text-emberBright" />
-                  Upload an image, paste one here, or provide an image URL.
+                  Upload an image or paste one here.
                 </span>
               )}
             </span>
@@ -214,20 +193,6 @@ export function AchievementCompletionDialog({
                 <Upload className="size-4" />
                 Choose proof image
               </span>
-            </span>
-          </label>
-
-          <label className="grid gap-2 text-sm font-bold uppercase tracking-title text-brass">
-            Proof image URL
-            <span className="flex items-center gap-2 rounded-card border border-brass/25 bg-pitch/60 px-3">
-              <LinkIcon className="size-4 text-emberBright" />
-              <input
-                className="h-11 min-w-0 flex-1 bg-transparent text-base normal-case tracking-normal text-parchment outline-none placeholder:text-bone/50"
-                placeholder="https://..."
-                type="url"
-                value={proofUrl}
-                onChange={(event) => setProofUrl(event.target.value)}
-              />
             </span>
           </label>
 

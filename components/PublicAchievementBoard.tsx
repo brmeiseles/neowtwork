@@ -1,5 +1,6 @@
 import type { Achievement } from "@/types/achievement";
 import type { AchievementCompletion } from "@/types/completion";
+import { LockKeyhole } from "lucide-react";
 
 type PublicAchievementBoardProps = {
   achievements: Achievement[];
@@ -28,7 +29,7 @@ export function PublicAchievementBoard({
     <div className="codex-board">
       <section
         aria-label="Public achievement board"
-        className="relative grid grid-cols-1 gap-3 md:grid-cols-2 lg:gap-4"
+        className="relative grid grid-cols-1 gap-2.5 md:grid-cols-2 lg:gap-3"
       >
         {sortedAchievements.map((achievement) => {
           const bestCompletion = getBestCompletion(
@@ -46,13 +47,17 @@ export function PublicAchievementBoard({
                   aria-hidden="true"
                   className={`locked-emblem ${isCompleted ? "unlocked-emblem" : ""}`}
                 >
-                  <span className="emblem-crop">
-                    <img
-                      alt=""
-                      className={`achievement-emblem-image ${isCompleted ? "achievement-emblem-unlocked" : "achievement-emblem-locked"}`}
-                      src={achievement.emblemSrc}
-                    />
-                  </span>
+                  {isCompleted ? (
+                    <span className="emblem-crop">
+                      <img
+                        alt=""
+                        className={`achievement-emblem-image achievement-emblem-unlocked achievement-emblem-${achievement.slug}`}
+                        src={achievement.emblemSrc}
+                      />
+                    </span>
+                  ) : (
+                    <LockKeyhole className="absolute size-5 text-emberBright drop-shadow-[0_2px_0_rgba(0,0,0,0.85)]" />
+                  )}
                 </span>
 
                 <span className="min-w-0 flex-1 pb-7">

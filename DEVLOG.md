@@ -1,5 +1,67 @@
 # DEVLOG.md
 
+## 2026-06-10 - Badge And Completion Form Polish
+
+### Version
+
+- `1.1.1`
+
+### Feature Summary
+
+- Cleaned up locked/completed badge visuals, tightened board spacing at the source, and simplified proof entry to upload/paste only.
+
+### What Changed
+
+- Locked achievement cards no longer render the canonical achievement emblem behind the lock.
+- Locked badges now show only the circular frame, dark empty interior, and lock icon.
+- Completed badges render canonical emblem art with contained circular cropping and per-emblem positioning where useful.
+- Tightened the app shell, hero, board, card, and grid spacing through the existing source CSS/tokens instead of adding duplicate overrides.
+- Removed the proof image URL option from the completion form.
+- Changed the homepage board header to `Slay the Spire 2 Achievements` while keeping the app name as `Neowtwork`.
+- Kept proof screenshots separate from canonical achievement emblems.
+- Bumped the app version to `1.1.1`.
+
+### Why It Changed
+
+- The board needed clearer locked-vs-completed visual language, less roomy production spacing, and a cleaner completion form for the core proof-upload loop.
+
+### Files Touched
+
+- `AGENTS.md`
+- `CURRENT_STATE.md`
+- `DEVLOG.md`
+- `VERSION.md`
+- `app/globals.css`
+- `app/page.tsx`
+- `app/u/[username]/page.tsx`
+- `components/AchievementBoard.tsx`
+- `components/AchievementCard.tsx`
+- `components/AchievementCompletionDialog.tsx`
+- `components/AchievementDetailDialog.tsx`
+- `components/AppShell.tsx`
+- `components/PublicAchievementBoard.tsx`
+- `config/app.ts`
+- `config/brand.ts`
+- `lib/design-system.ts`
+- `package.json`
+- `package-lock.json`
+
+### Verification Status
+
+- Ran `npm run typecheck`.
+- Ran `npm run build`.
+- Ran `npm run dev`.
+- Confirmed local homepage shows `Slay the Spire 2 Achievements`, renders 12 cards, shows `v1.1.1`, and has no browser console errors.
+- Confirmed locked badges render a circular frame and lock icon without mounting the canonical emblem image.
+- Confirmed completed badges render canonical emblem art, no lock icon, `object-fit: contain`, and circular masking.
+- Confirmed tightened source spacing is present locally through computed board/card padding and card min-height.
+- Confirmed completion modal no longer shows the proof image URL field or `https://` URL placeholder, while upload/paste proof copy remains.
+- Checked the live Vercel HTML before the patch and confirmed production was serving the current app/CSS bundle; the spacing fix was made by strengthening the existing source CSS/tokens and will apply through the next deployment.
+
+### Commit
+
+- Pending push.
+
 ## 2026-06-10 - Supabase Completion Persistence
 
 ### Version

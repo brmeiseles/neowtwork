@@ -83,7 +83,7 @@ export function AchievementDetailDialog({
                 <span className="emblem-crop">
                   <img
                     alt=""
-                    className="achievement-emblem-image achievement-emblem-unlocked"
+                    className={`achievement-emblem-image achievement-emblem-unlocked achievement-emblem-${achievement.slug}`}
                     src={achievement.emblemSrc}
                   />
                 </span>

@@ -83,7 +83,7 @@ export default async function PublicProfilePage({
   if (!hasSupabaseEnv()) {
     return (
       <AppShell>
-        <div className="flex flex-col gap-5 sm:gap-6">
+        <div className="flex flex-col gap-4 sm:gap-5">
           <header className="codex-hero">
             <p className="mb-2 text-[0.7rem] font-black uppercase tracking-ritual text-emberBright">
               Public Board
@@ -141,7 +141,7 @@ export default async function PublicProfilePage({
 
   return (
     <AppShell>
-      <div className="flex flex-col gap-5 sm:gap-6">
+      <div className="flex flex-col gap-4 sm:gap-5">
         <header className="codex-hero">
           <p className="mb-2 text-[0.7rem] font-black uppercase tracking-ritual text-emberBright">
             Public Board
