@@ -30,11 +30,8 @@
 ## Backend / Accounts
 
 - Completed Phase 1 Supabase/Discord foundation in `1.0.0`; see `DEVLOG.md` entry `2026-06-10 - Phase 1 Backend Foundation`.
-- Configure real Supabase project env vars.
-- Configure Discord OAuth in Discord and Supabase.
-- Run migrations and seed SQL.
-- Verify real Discord login flow.
-- Verify first-login username claiming against live Supabase.
+- Completed Supabase project env/migration/seed and Discord OAuth/profile verification in `1.0.2`; see `DEVLOG.md` entry `2026-06-10 - Connected And Verified Supabase Auth`.
+- Verify first-login username claiming through the UI once browser text entry is available outside Codex automation.
 - Avoid email/password system initially unless needed.
 - Migrate localStorage completions to logged-in user account if possible.
 

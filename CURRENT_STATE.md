@@ -2,7 +2,7 @@
 
 ## Current Version
 
-`1.0.0`
+`1.0.2`
 
 ## Architecture
 
@@ -60,32 +60,34 @@
 
 - Supabase clients and env scaffolding are implemented.
 - Required env vars are `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
-- Missing env is handled gracefully with a dormant backend message.
+- Local `.env.local` is configured for Supabase project `kdeslyohpjicuczgfnny`.
+- Missing env is still handled gracefully with a dormant backend message.
 - Discord OAuth UI and callback route are scaffolded.
+- Discord OAuth has been verified against the live Supabase project.
 - First-login username onboarding is scaffolded with lowercase URL-safe usernames.
+- Live profile `@brando_prime` exists for the first authenticated user.
 - Public read-only route `/u/[username]` exists.
 - Database schema and RLS policies are documented as SQL migrations.
 - Proof Storage bucket design uses bucket `proofs`.
+- Remote Supabase migration `202606100001_backend_foundation.sql` has been applied.
+- Remote Supabase achievement seed has inserted the current 12 achievement rows.
+- Remote `proofs` bucket exists.
 
 ## Manual / Incomplete
 
-- Brandon still needs to create the Supabase project and add real env vars.
-- Brandon still needs to configure Discord OAuth in Discord and Supabase.
-- Migrations and seed SQL need to be run in Supabase.
 - Proof upload to Supabase Storage is not wired into the completion form yet.
 - Local completions are not synced/migrated to Supabase accounts yet.
-- Full Discord auth verification is blocked until external credentials exist.
+- Browser-driven username form typing could not be automated in Codex because the in-app browser virtual clipboard was unavailable; the profile row was created directly in Supabase and verified through the app.
 
 ## Deployed Status
 
 - No production deployment is configured in this repo.
 - Local development runs with `npm run dev`, usually at `http://localhost:3000`.
-- Latest verification target is local build/typecheck plus runtime smoke checks without real Supabase credentials.
+- Latest verification target is local build/typecheck plus runtime smoke checks against the live Supabase project.
 
 ## Next Recommended Priorities
 
-- Create/configure Supabase and Discord OAuth using `README.md`.
-- Verify real Discord sign-in and username claiming.
+- Wire completion save/read to Supabase for logged-in users.
 - Wire proof uploads to the `proofs` Storage bucket.
 - Sync logged-in completions to Supabase while preserving local fallback/migration.
 - Add friend boards after account persistence is proven.

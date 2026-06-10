@@ -1,5 +1,62 @@
 # DEVLOG.md
 
+## 2026-06-10 - Connected And Verified Supabase Auth
+
+### Version
+
+- `1.0.2`
+
+### Feature Summary
+
+- Connected Neowtwork to the live Supabase project and verified Discord OAuth through the first public profile.
+
+### What Changed
+
+- Added local-only `.env.local` values for the Supabase project URL and publishable key.
+- Applied `202606100001_backend_foundation.sql` to remote Supabase project `kdeslyohpjicuczgfnny`.
+- Ran `supabase/seed.sql` against the remote database to insert the 12 achievement rows.
+- Verified the remote `proofs` Storage bucket exists.
+- Verified Discord OAuth created the first Supabase auth user.
+- Created and verified the first live public profile at `@brando_prime`.
+- Updated version and continuity docs to reflect the live Supabase/auth checkpoint.
+
+### Why It Changed
+
+- The backend foundation moved from code-only scaffolding to a live Supabase project with schema, policies, storage bucket, achievement data, Discord auth, and a public profile in place.
+
+### Files Touched
+
+- `AGENTS.md`
+- `BACKLOG.md`
+- `CURRENT_STATE.md`
+- `DEVLOG.md`
+- `VERSION.md`
+- `.gitignore`
+- `config/app.ts`
+- `package.json`
+- `package-lock.json`
+
+### Verification Status
+
+- Applied the remote Supabase migration successfully.
+- Seeded 12 remote achievement rows.
+- Queried remote counts after setup: 12 achievements, 0 profiles, 0 completions, 0 friends, 1 `proofs` bucket.
+- Ran `npm run dev` with `.env.local`; homepage shows `Sign in with Discord`, hides the dormant backend message, renders 12 achievement cards, and has no browser console errors.
+- Confirmed `/u/test-slayer` now uses live Supabase and returns not found because no profile exists yet.
+- Verified Discord OAuth login creates a Supabase auth user.
+- Created `@brando_prime` profile in Supabase after Codex browser text entry was blocked by unavailable virtual clipboard.
+- Reloaded the logged-in app and confirmed it displays `@brando_prime` with no console errors.
+- Confirmed `/u/brando_prime` renders the live public board with 12 achievements and no console errors.
+- Queried remote counts after auth/profile verification: 1 auth user, 1 profile, 12 achievements, 0 completions, 0 friends.
+- Ran `npm run build`.
+- Ran `npm run typecheck`.
+- Note: an initial parallel typecheck/build attempt hit the known transient `.next/types` race while build regenerated route types; rerunning typecheck by itself passed cleanly.
+- Browser-driven first-login username form typing still needs a manual/user-browser check outside Codex automation because the in-app browser text entry path is blocked.
+
+### Commit
+
+- To be recorded after push, if available.
+
 ## 2026-06-10 - Phase 1 Backend Foundation
 
 ### Version

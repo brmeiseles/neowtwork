@@ -150,6 +150,7 @@ Implemented:
 
 - Supabase client/server setup.
 - Discord OAuth button and callback route.
+- Live Discord OAuth verified with the first Supabase auth user.
 - Username onboarding scaffold.
 - Public read-only profile route at `/u/[username]`.
 - Database schema and RLS policies.
@@ -158,8 +159,7 @@ Implemented:
 
 Still manual/incomplete:
 
-- Real Supabase credentials must be configured locally.
-- Discord OAuth must be configured in Supabase and Discord.
+- Other machines need their own `.env.local` values.
 - Supabase Storage upload is designed but not yet wired into the completion form.
 - Local completions are not yet automatically synced to Supabase.
 
