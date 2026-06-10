@@ -159,6 +159,7 @@ Implemented:
 - Logged-in completion save/load through Supabase.
 - Proof screenshot upload to Supabase Storage bucket `proofs`.
 - Public profile completion reads from Supabase.
+- Friends can be added by Neowtwork username and opened as read-only public boards.
 
 Still manual/incomplete:
 

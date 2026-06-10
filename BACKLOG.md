@@ -37,10 +37,7 @@
 
 ## Friends / Social
 
-- Add friends by Neowtwork username.
-- Require no approval for adding friends.
-- Show read-only friend boards.
-- Allow copying friend seed values.
+- Completed first Friends feature pass in `1.2.0`; see `DEVLOG.md` entry `2026-06-10 - Friends And Read-Only Boards`.
 - Support profile sharing for Discord/Reddit.
 
 ## Analytics Before Reddit

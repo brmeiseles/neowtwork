@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import type { User } from "@supabase/supabase-js";
 import { LogOut, Shield, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,8 @@ type AuthPanelProps = {
   publicEnv: PublicEnv;
 };
 
+type AuthStatus = "loading" | "profile-loading" | "ready" | "saving";
+
 export function AuthPanel({ publicEnv }: AuthPanelProps) {
   const envStatus = getPublicEnvStatus(publicEnv);
   const supabase = useMemo(
@@ -28,10 +30,13 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [username, setUsername] = useState("");
-  const [status, setStatus] = useState<"loading" | "ready" | "saving">(
-    supabase ? "loading" : "ready",
-  );
+  const [status, setStatus] = useState<AuthStatus>(supabase ? "loading" : "ready");
   const [message, setMessage] = useState("");
+  const profileRef = useRef<Profile | null>(null);
+
+  useEffect(() => {
+    profileRef.current = profile;
+  }, [profile]);
 
   useEffect(() => {
     if (!supabase) {
@@ -52,7 +57,7 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
       }
 
       setUser(session?.user ?? null);
-      setStatus("ready");
+      setStatus(session?.user ? "profile-loading" : "ready");
     }
 
     loadSession();
@@ -60,9 +65,26 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
     const {
       data: { subscription },
     } = supabaseClient.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-      setProfile(null);
-      setStatus("ready");
+      const nextUser = session?.user ?? null;
+
+      setUser((currentUser) => {
+        if (!nextUser) {
+          setProfile(null);
+          setUsername("");
+          setStatus("ready");
+          return null;
+        }
+
+        if (currentUser?.id !== nextUser.id) {
+          setProfile(null);
+          setUsername("");
+          setStatus("profile-loading");
+        } else if (!profileRef.current) {
+          setStatus("profile-loading");
+        }
+
+        return nextUser;
+      });
     });
 
     return () => {
@@ -82,6 +104,8 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
     let isMounted = true;
 
     async function loadProfile() {
+      setStatus("profile-loading");
+
       const { data, error } = await supabaseClient
         .from("profiles")
         .select("*")
@@ -94,11 +118,13 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
 
       if (error) {
         setMessage("Could not load profile yet. Check Supabase setup.");
+        setStatus("ready");
         return;
       }
 
       setProfile(data);
       setUsername(data?.username ?? "");
+      setStatus("ready");
     }
 
     loadProfile();
@@ -189,10 +215,15 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
     setMessage("Username claimed. The codex knows your name.");
   }
 
-  if (status === "loading") {
+  if (status === "loading" || status === "profile-loading") {
     return (
-      <div className="rounded-card border border-brass/25 bg-pitch/55 px-3 py-2 text-xs font-bold uppercase tracking-title text-bone">
-        Checking Discord session...
+      <div className="min-w-56 rounded-card border border-brass/25 bg-pitch/55 p-3 text-sm text-bone shadow-card">
+        <div className="flex items-center justify-between gap-3">
+          <span className="inline-flex items-center gap-2 font-bold text-parchment">
+            <UserRound className="size-4 text-emberBright" />
+            Checking Discord session...
+          </span>
+        </div>
       </div>
     );
   }

@@ -1,5 +1,74 @@
 # DEVLOG.md
 
+## 2026-06-10 - Friends And Read-Only Boards
+
+### Version
+
+- `1.2.0`
+
+### Feature Summary
+
+- Added the first Friends feature pass, read-only friend board inspection, owner/viewer board logic, auth flicker cleanup, and desktop hero title polish.
+
+### What Changed
+
+- Added a homepage Friends panel where logged-in users can add friends by Neowtwork username.
+- Added validation for self-adds, duplicate friends, invalid usernames, and unknown usernames.
+- Added friend list rows with avatar/display-name support and links to `/u/[username]`.
+- Made public/friend boards interactive for completed achievements with read-only detail modals.
+- Kept owner completion/edit/delete actions available when the signed-in user views their own `/u/[username]` board.
+- Hid owner actions when viewing someone else's board.
+- Preserved copy-seed behavior in read-only completion details when a seed exists.
+- Fixed auth-panel onboarding flicker by holding a stable profile-loading state during session/profile refresh.
+- Adjusted the homepage hero title so `Slay the Spire 2 Achievements` stays on one line at desktop sizes while remaining responsive on mobile.
+- Bumped the app version to `1.2.0`.
+
+### Why It Changed
+
+- Friends are the first social layer for the core loop: complete an achievement, upload proof, share a board, inspect friends, and steal seeds.
+
+### Files Touched
+
+- `AGENTS.md`
+- `BACKLOG.md`
+- `CURRENT_STATE.md`
+- `DEVLOG.md`
+- `README.md`
+- `VERSION.md`
+- `app/globals.css`
+- `app/page.tsx`
+- `app/u/[username]/page.tsx`
+- `components/AchievementDetailDialog.tsx`
+- `components/AuthPanel.tsx`
+- `components/FriendsPanel.tsx`
+- `components/PublicAchievementBoard.tsx`
+- `config/app.ts`
+- `package.json`
+- `package-lock.json`
+
+### Verification Status
+
+- Ran `npm run typecheck`.
+- Ran `npm run build`.
+- Ran `npm run dev`.
+- Confirmed homepage renders the Friends panel, `v1.2.0`, and the signed-in `@brando_prime` auth state with no browser console errors.
+- Confirmed empty friends state: `No friends yet. Add a username to start stealing seeds.`
+- Created a temporary Supabase `friend_smoke` profile/completion for smoke testing, then removed it after verification.
+- Confirmed add-friend validation rejects self-adds.
+- Confirmed add-friend validation rejects unknown usernames.
+- Confirmed valid username add creates a friend row and shows a `View Board` action.
+- Confirmed duplicate friend add is rejected.
+- Confirmed `/u/friend_smoke` rendered a read-only board with 12 cards, a completed achievement, proof detail modal, copyable seed, and no Add/Edit/Delete owner actions.
+- Confirmed copy seed from a friend completion wrote `FRIEND-SEED-123` to the browser clipboard.
+- Confirmed `/u/brando_prime` keeps owner actions available and uses `Your editable achievement codex.` copy.
+- Confirmed auth refresh/reload uses a stable loading state and does not flash the username onboarding state before restoring `@brando_prime`.
+- Confirmed desktop hero title stays on one line at 1280px with no overflow, while mobile remains responsive without overflow.
+- Confirmed clean state after removing temporary friend data: empty friends state restored and no test friend remained.
+
+### Commit
+
+- Pending push.
+
 ## 2026-06-10 - Badge And Completion Form Polish
 
 ### Version

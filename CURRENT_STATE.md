@@ -2,7 +2,7 @@
 
 ## Current Version
 
-`1.1.1`
+`1.2.0`
 
 ## Architecture
 
@@ -10,11 +10,13 @@
 - `app/page.tsx` renders the homepage shell and achievement board.
 - `components/AppShell.tsx` includes the shared shell, footer, and compact auth panel area.
 - `components/AuthPanel.tsx` scaffolds Discord sign-in, sign-out, auth state, and first-login username claiming.
+- `components/FriendsPanel.tsx` lets logged-in users add friends by Neowtwork username and view friend boards.
 - `components/AchievementBoard.tsx` owns completion state, Supabase save/load coordination, localStorage fallback, and modal coordination.
 - `components/AchievementCard.tsx` renders each clickable achievement card with the best ascension badge only.
 - `components/AchievementCompletionDialog.tsx` handles local proof, optional seed, ascension, and notes capture.
 - `components/AchievementDetailDialog.tsx` displays all completions for an achievement and supports add/edit/delete/reset.
 - `components/PublicAchievementBoard.tsx` renders read-only public boards.
+- `components/PublicAchievementBoard.tsx` supports read-only completed-achievement detail modals with copyable seeds.
 - `app/u/[username]/page.tsx` is the public read-only board route.
 - `app/auth/callback/route.ts` exchanges Supabase OAuth codes after Discord login.
 - `lib/supabase/client.ts` and `lib/supabase/server.ts` create browser/server Supabase clients.
@@ -83,6 +85,11 @@
 - Proof screenshots upload to Supabase Storage bucket `proofs` under the signed-in user's folder before the completion row is created.
 - Public boards at `/u/[username]` read Supabase completions in read-only mode.
 - Completion edit/delete/reset is wired for Supabase rows and still respects user ownership through RLS.
+- Friends use the existing Supabase `friends` table.
+- Users can add friends by username, cannot add themselves, and duplicate/unknown usernames are rejected.
+- Friend rows link to `/u/[username]`.
+- `/u/[username]` renders owner controls only when the signed-in user is viewing their own board; other boards are read-only.
+- Auth profile loading now keeps a stable intermediate panel instead of flashing the username onboarding form during session refresh.
 
 ## Manual / Incomplete
 
@@ -101,5 +108,5 @@
 
 - Sync existing localStorage completions into a logged-in account with clear conflict handling.
 - Clean up old proof Storage objects when completions are deleted or proof images are replaced.
-- Add friend boards after account persistence is proven.
+- Add richer profile sharing polish for Discord/Reddit.
 - Replace The King's Halo achievement once the new Regent Stars candidate is chosen.

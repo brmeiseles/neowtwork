@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation";
+import { AchievementBoard } from "@/components/AchievementBoard";
 import { AppShell } from "@/components/AppShell";
 import { PublicAchievementBoard } from "@/components/PublicAchievementBoard";
 import { achievements as localAchievements } from "@/data/achievements";
-import { hasSupabaseEnv } from "@/lib/env";
+import { getPublicEnv, hasSupabaseEnv } from "@/lib/env";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { normalizeUsername } from "@/lib/username";
 import type { Achievement } from "@/types/achievement";
@@ -138,6 +139,16 @@ export default async function PublicProfilePage({
   const boardAchievements = achievementRows?.length
     ? mapAchievementRows(achievementRows)
     : localAchievements;
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const isOwnBoard = user?.id === profile.id;
+
+  const profileDescription = isOwnBoard
+    ? "Your editable achievement codex."
+    : profile.display_name
+      ? `${profile.display_name}'s read-only achievement codex.`
+      : "Read-only achievement codex.";
 
   return (
     <AppShell>
@@ -150,15 +161,20 @@ export default async function PublicProfilePage({
             @{profile.username}
           </h1>
           <p className="mt-3 max-w-2xl text-base font-bold leading-6 text-bone">
-            {profile.display_name
-              ? `${profile.display_name}'s read-only achievement codex.`
-              : "Read-only achievement codex."}
+            {profileDescription}
           </p>
         </header>
-        <PublicAchievementBoard
-          achievements={boardAchievements}
-          completionsByAchievement={mapCompletionRows(completionRows ?? [])}
-        />
+        {isOwnBoard ? (
+          <AchievementBoard
+            achievements={boardAchievements}
+            publicEnv={getPublicEnv()}
+          />
+        ) : (
+          <PublicAchievementBoard
+            achievements={boardAchievements}
+            completionsByAchievement={mapCompletionRows(completionRows ?? [])}
+          />
+        )}
       </div>
     </AppShell>
   );

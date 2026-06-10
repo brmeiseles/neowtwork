@@ -16,16 +16,17 @@ import type { AchievementCompletion } from "@/types/completion";
 type AchievementDetailDialogProps = {
   achievement: Achievement | null;
   completions: AchievementCompletion[];
+  isReadOnly?: boolean;
   open: boolean;
-  onAddCompletion: (achievement: Achievement) => void;
+  onAddCompletion?: (achievement: Achievement) => void;
   onCopySeed: (seed: string) => void;
-  onDeleteCompletion: (achievementSlug: string, completionId: string) => void;
-  onEditCompletion: (
+  onDeleteCompletion?: (achievementSlug: string, completionId: string) => void;
+  onEditCompletion?: (
     achievement: Achievement,
     completion: AchievementCompletion,
   ) => void;
   onOpenChange: (open: boolean) => void;
-  onReset: (achievementSlug: string) => void;
+  onReset?: (achievementSlug: string) => void;
 };
 
 function formatCompletedAt(completedAt: string) {
@@ -51,6 +52,7 @@ function getBestCompletion(completions: AchievementCompletion[]) {
 export function AchievementDetailDialog({
   achievement,
   completions,
+  isReadOnly = false,
   open,
   onAddCompletion,
   onCopySeed,
@@ -98,10 +100,12 @@ export function AchievementDetailDialog({
                 </p>
               </div>
             </div>
-            <Button type="button" onClick={() => onAddCompletion(achievement)}>
-              <Plus className="size-4" />
-              Add Another
-            </Button>
+            {!isReadOnly && onAddCompletion ? (
+              <Button type="button" onClick={() => onAddCompletion(achievement)}>
+                <Plus className="size-4" />
+                Add Another
+              </Button>
+            ) : null}
           </div>
 
           <div className="grid gap-3">
@@ -148,27 +152,31 @@ export function AchievementDetailDialog({
                         Copy Seed
                       </Button>
                     ) : null}
-                    <Button
-                      size="sm"
-                      type="button"
-                      variant="ghost"
-                      onClick={() => onEditCompletion(achievement, completion)}
-                    >
-                      <Pencil className="size-4" />
-                      Edit
-                    </Button>
-                    <Button
-                      className="text-emberBright hover:bg-blood/35"
-                      size="sm"
-                      type="button"
-                      variant="ghost"
-                      onClick={() =>
-                        onDeleteCompletion(achievement.slug, completion.id)
-                      }
-                    >
-                      <Trash2 className="size-4" />
-                      Delete
-                    </Button>
+                    {!isReadOnly && onEditCompletion ? (
+                      <Button
+                        size="sm"
+                        type="button"
+                        variant="ghost"
+                        onClick={() => onEditCompletion(achievement, completion)}
+                      >
+                        <Pencil className="size-4" />
+                        Edit
+                      </Button>
+                    ) : null}
+                    {!isReadOnly && onDeleteCompletion ? (
+                      <Button
+                        className="text-emberBright hover:bg-blood/35"
+                        size="sm"
+                        type="button"
+                        variant="ghost"
+                        onClick={() =>
+                          onDeleteCompletion(achievement.slug, completion.id)
+                        }
+                      >
+                        <Trash2 className="size-4" />
+                        Delete
+                      </Button>
+                    ) : null}
                   </div>
                 </div>
 
@@ -190,15 +198,19 @@ export function AchievementDetailDialog({
           </div>
 
           <div className="flex flex-col-reverse gap-3 border-t border-brass/25 pt-4 sm:flex-row sm:justify-between">
-            <Button
-              className="border-ember/45 text-emberBright hover:bg-blood/35"
-              type="button"
-              variant="ghost"
-              onClick={() => onReset(achievement.slug)}
-            >
-              <Trash2 className="size-4" />
-              Delete All
-            </Button>
+            {!isReadOnly && onReset ? (
+              <Button
+                className="border-ember/45 text-emberBright hover:bg-blood/35"
+                type="button"
+                variant="ghost"
+                onClick={() => onReset(achievement.slug)}
+              >
+                <Trash2 className="size-4" />
+                Delete All
+              </Button>
+            ) : (
+              <span />
+            )}
             <Button type="button" onClick={() => onOpenChange(false)}>
               Close
             </Button>

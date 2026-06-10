@@ -113,6 +113,23 @@ body::after {
       inset 0 0 72px rgb(0 0 0 / 54%);
   }
 
+  .codex-panel {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgb(122 91 43 / 76%);
+    border-radius: 0.75rem;
+    padding: 0.85rem;
+    background:
+      linear-gradient(90deg, rgb(215 181 109 / 44%), transparent 30%, transparent 70%, rgb(215 181 109 / 30%)) top / 100% 1px no-repeat,
+      radial-gradient(circle at 8% 0%, rgb(242 154 69 / 14%), transparent 14rem),
+      repeating-linear-gradient(104deg, rgb(244 223 184 / 3%) 0 1px, transparent 1px 11px),
+      linear-gradient(145deg, rgb(42 33 24 / 74%), rgb(13 7 6 / 90%) 56%, rgb(35 9 13 / 78%));
+    box-shadow:
+      0 18px 44px rgb(0 0 0 / 52%),
+      inset 0 0 0 1px rgb(244 223 184 / 7%),
+      inset 0 0 34px rgb(0 0 0 / 36%);
+  }
+
   .codex-board::before,
   .codex-board::after {
     position: absolute;
