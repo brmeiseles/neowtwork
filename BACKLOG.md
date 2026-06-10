@@ -33,9 +33,10 @@
 
 - Completed Phase 1 Supabase/Discord foundation in `1.0.0`; see `DEVLOG.md` entry `2026-06-10 - Phase 1 Backend Foundation`.
 - Completed Supabase project env/migration/seed and Discord OAuth/profile verification in `1.0.2`; see `DEVLOG.md` entry `2026-06-10 - Connected And Verified Supabase Auth`.
-- Verify first-login username claiming through the UI once browser text entry is available outside Codex automation.
-- Review replacing manual username onboarding with Discord-derived profile slugs.
+- Completed new-user Discord-derived slug creation in `1.3.2`; see `DEVLOG.md` entry `2026-06-10 - Discord Identity Simplification`.
+- Backfill existing manually chosen profile slugs to Discord-derived slugs only with redirect support.
 - Explore Discord display-name based friend lookup while preserving stable public profile URLs.
+- Preserve redirects from existing public board URLs if slugs are regenerated.
 - Avoid email/password system initially unless needed.
 - Migrate localStorage completions to logged-in user account if possible.
 
@@ -43,6 +44,10 @@
 
 - Completed first Friends feature pass in `1.2.0`; see `DEVLOG.md` entry `2026-06-10 - Friends And Read-Only Boards`.
 - Explore Discord friend discovery or Discord-linked friend suggestions.
+- Add exact-match Discord display-name lookup only after duplicate-name handling is clear.
+- Add share/invite link flow before attempting Discord friend-list import.
+- Investigate Discord Social SDK / `relationships.read` access requirements before any Discord friend-list integration.
+- Avoid Discord friend-list import unless scopes, user consent, and approval requirements are clear.
 - Support profile sharing for Discord/Reddit.
 
 ## Analytics Before Reddit

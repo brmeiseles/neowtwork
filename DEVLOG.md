@@ -1,5 +1,63 @@
 # DEVLOG.md
 
+## 2026-06-10 - Discord Identity Simplification
+
+### Version
+
+- `1.3.2`
+
+### Feature Summary
+
+- Simplified visible identity around Discord names and removed manual username onboarding for new users.
+
+### What Changed
+
+- Friend cards now show one primary identity: Discord display name when available, otherwise the public slug fallback.
+- The account panel now shows Discord display name instead of the public slug.
+- Public board context plaques already prefer Discord display name and continue using the slug only for routing.
+- Removed the manual first-login username claim form.
+- New profiles are automatically created from Discord auth metadata.
+- `profiles.username` is now generated as a URL-safe slug from Discord identity for new users.
+- Existing users keep their current slugs until a redirect-safe migration exists.
+- Friend add/search copy now says `Add Guildmate` and asks for the board-link slug instead of `friend_username`.
+- Documented Discord friend discovery direction: basic Discord profile info is available now; friend-list import should wait for Social SDK / `relationships.read` scope and approval clarity; invite links are the safer first step.
+- Bumped the app version to `1.3.2`.
+
+### Why It Changed
+
+- Discord is already the login identity, so asking users to maintain a second visible Neowtwork username created unnecessary friction and duplicate identity UI.
+
+### Files Touched
+
+- `AGENTS.md`
+- `BACKLOG.md`
+- `CURRENT_STATE.md`
+- `DEVLOG.md`
+- `VERSION.md`
+- `components/AuthPanel.tsx`
+- `components/BoardContextPlaque.tsx`
+- `components/FriendsPanel.tsx`
+- `config/app.ts`
+- `lib/profile-display.ts`
+- `lib/username.ts`
+- `package.json`
+- `package-lock.json`
+
+### Verification Status
+
+- Ran `npm run typecheck`.
+- Ran `npm run build`.
+- Ran `npm run dev -- -p 3001`.
+- Confirmed the local homepage renders `v1.3.2`, the app hero, and no manual public board slug claim form.
+- Confirmed `/u/brando_prime` renders `v1.3.2`, board context, and no manual public board slug claim form.
+- Confirmed Friends UI source shows one visible name per friend row using Discord display name fallback behavior.
+- Confirmed new profile creation source derives `profiles.username` automatically from Discord identity and preserves existing profile slugs.
+- Confirmed Discord friend-list import is documented as future work that likely needs Social SDK / `relationships.read` access and approval, while invite links remain the safer near-term direction.
+
+### Commit
+
+- Pending push.
+
 ## 2026-06-10 - Header Identity And Board UX Polish
 
 ### Version

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import { LogOut, ScrollText, Shield, UserRound, Users } from "lucide-react";
 import Link from "next/link";
@@ -10,10 +10,10 @@ import { FriendsPanel } from "@/components/FriendsPanel";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { getPublicEnvStatus, type PublicEnv } from "@/lib/env";
 import {
-  getUsernameHelpText,
-  isValidUsername,
-  normalizeUsername,
+  appendUsernameSlugSuffix,
+  createUsernameSlugFromText,
 } from "@/lib/username";
+import { getProfileDisplayName } from "@/lib/profile-display";
 import type { Database } from "@/types/database";
 
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
@@ -22,7 +22,8 @@ type AuthPanelProps = {
   publicEnv: PublicEnv;
 };
 
-type AuthStatus = "loading" | "profile-loading" | "ready" | "saving";
+type AuthStatus = "loading" | "profile-loading" | "ready";
+type UserMetadata = Record<string, unknown>;
 
 export function AuthPanel({ publicEnv }: AuthPanelProps) {
   const envStatus = getPublicEnvStatus(publicEnv);
@@ -33,7 +34,6 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
   );
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [username, setUsername] = useState("");
   const [status, setStatus] = useState<AuthStatus>(supabase ? "loading" : "ready");
   const [message, setMessage] = useState("");
   const [isFriendsOpen, setIsFriendsOpen] = useState(false);
@@ -42,6 +42,61 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
   const profileRef = useRef<Profile | null>(null);
   const ownBoardPath = profile ? `/u/${profile.username}` : "";
   const shouldShowMyBoard = Boolean(profile && pathname !== ownBoardPath);
+
+  function getMetadataString(metadata: UserMetadata, keys: string[]) {
+    for (const key of keys) {
+      const value = metadata[key];
+
+      if (typeof value === "string" && value.trim()) {
+        return value.trim();
+      }
+    }
+
+    return "";
+  }
+
+  function getDiscordDisplayName(currentUser: User) {
+    const metadata = currentUser.user_metadata as UserMetadata;
+
+    return (
+      getMetadataString(metadata, [
+        "global_name",
+        "full_name",
+        "name",
+        "preferred_username",
+        "user_name",
+        "username",
+      ]) ||
+      currentUser.email?.split("@")[0] ||
+      "Unknown Slayer"
+    );
+  }
+
+  function getDiscordSlugBase(currentUser: User) {
+    const metadata = currentUser.user_metadata as UserMetadata;
+
+    return (
+      getMetadataString(metadata, [
+        "preferred_username",
+        "user_name",
+        "username",
+        "global_name",
+        "name",
+        "full_name",
+      ]) ||
+      currentUser.email?.split("@")[0] ||
+      `player-${currentUser.id.slice(0, 8)}`
+    );
+  }
+
+  function getDiscordAvatarUrl(currentUser: User) {
+    const metadata = currentUser.user_metadata as UserMetadata;
+
+    return (
+      getMetadataString(metadata, ["avatar_url", "picture"]) ||
+      null
+    );
+  }
 
   function clearCloseFriendsTimeout() {
     if (closeFriendsTimeoutRef.current) {
@@ -126,7 +181,6 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
       setUser((currentUser) => {
         if (!nextUser) {
           setProfile(null);
-          setUsername("");
           setIsFriendsOpen(false);
           setStatus("ready");
           return null;
@@ -134,7 +188,6 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
 
         if (currentUser?.id !== nextUser.id) {
           setProfile(null);
-          setUsername("");
           setStatus("profile-loading");
           return nextUser;
         } else if (!profileRef.current) {
@@ -181,8 +234,78 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
         return;
       }
 
+      if (!data) {
+        const displayName = getDiscordDisplayName(currentUser);
+        const avatarUrl = getDiscordAvatarUrl(currentUser);
+        const slugBase = createUsernameSlugFromText(
+          getDiscordSlugBase(currentUser),
+          `player-${currentUser.id.slice(0, 8)}`,
+        );
+        const slugCandidates = [
+          slugBase,
+          appendUsernameSlugSuffix(slugBase, currentUser.id),
+          appendUsernameSlugSuffix(slugBase, `${Date.now()}`),
+        ];
+
+        for (const slugCandidate of slugCandidates) {
+          const { data: createdProfile, error: createError } =
+            await supabaseClient
+              .from("profiles")
+              .insert({
+                id: currentUser.id,
+                username: slugCandidate,
+                display_name: displayName,
+                avatar_url: avatarUrl,
+              })
+              .select("*")
+              .single();
+
+          if (!isMounted) {
+            return;
+          }
+
+          if (!createError && createdProfile) {
+            setProfile(createdProfile);
+            setStatus("ready");
+            return;
+          }
+
+          if (createError?.code !== "23505") {
+            setMessage("Could not create your Discord profile yet. Try refreshing.");
+            setStatus("ready");
+            return;
+          }
+        }
+
+        setMessage("Could not claim a Discord board slug yet. Try refreshing.");
+        setStatus("ready");
+        return;
+      }
+
+      const displayName = getDiscordDisplayName(currentUser);
+      const avatarUrl = getDiscordAvatarUrl(currentUser);
+
+      if (data.display_name !== displayName || data.avatar_url !== avatarUrl) {
+        const { data: updatedProfile } = await supabaseClient
+          .from("profiles")
+          .update({
+            display_name: displayName,
+            avatar_url: avatarUrl,
+          })
+          .eq("id", currentUser.id)
+          .select("*")
+          .single();
+
+        if (!isMounted) {
+          return;
+        }
+
+        setProfile(updatedProfile ?? data);
+        setStatus("ready");
+        return;
+      }
+
       setProfile(data);
-      setUsername(data?.username ?? "");
       setStatus("ready");
     }
 
@@ -221,58 +344,6 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
     setUser(null);
     setProfile(null);
     setIsFriendsOpen(false);
-  }
-
-  async function handleClaimUsername(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    if (!supabase || !user) {
-      return;
-    }
-
-    const currentUser = user;
-    const nextUsername = normalizeUsername(username);
-
-    if (!isValidUsername(nextUsername)) {
-      setMessage(getUsernameHelpText());
-      return;
-    }
-
-    setStatus("saving");
-    setMessage("");
-
-    const { data, error } = await supabase
-      .from("profiles")
-      .upsert(
-        {
-          id: currentUser.id,
-          username: nextUsername,
-          display_name:
-            currentUser.user_metadata.full_name ??
-            currentUser.user_metadata.name ??
-            currentUser.email ??
-            null,
-          avatar_url: currentUser.user_metadata.avatar_url ?? null,
-        },
-        { onConflict: "id" },
-      )
-      .select("*")
-      .single();
-
-    setStatus("ready");
-
-    if (error) {
-      setMessage(
-        error.code === "23505"
-          ? "That username is already claimed. Try another relic name."
-          : error.message,
-      );
-      return;
-    }
-
-    setProfile(data);
-    setUsername(data.username);
-    setMessage("Username claimed. The codex knows your name.");
   }
 
   if (status === "loading" || status === "profile-loading") {
@@ -320,7 +391,7 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <span className="inline-flex items-center gap-2 font-bold text-parchment">
           <UserRound className="size-4 text-emberBright" />
-          {profile ? `@${profile.username}` : "Choose your codex name"}
+          {profile ? getProfileDisplayName(profile) : "Preparing Discord profile..."}
         </span>
         <div className="flex items-center gap-1.5">
           {profile ? (
@@ -354,23 +425,6 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
           </Button>
         </div>
       </div>
-
-      {!profile ? (
-        <form className="grid gap-2 sm:grid-cols-[1fr_auto]" onSubmit={handleClaimUsername}>
-          <label className="grid gap-1 text-xs font-bold uppercase tracking-title text-brass">
-            Public Username
-            <input
-              className="h-10 rounded-card border border-brass/25 bg-pitch/75 px-3 text-sm normal-case tracking-normal text-parchment outline-none placeholder:text-bone/50 focus:border-ember"
-              placeholder="neow-slayer"
-              value={username}
-              onChange={(event) => setUsername(normalizeUsername(event.target.value))}
-            />
-          </label>
-          <Button className="self-end" disabled={status === "saving"} type="submit">
-            {status === "saving" ? "Claiming..." : "Claim"}
-          </Button>
-        </form>
-      ) : null}
 
       {message ? <p className="text-xs text-emberBright">{message}</p> : null}
 

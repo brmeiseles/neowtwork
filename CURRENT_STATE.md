@@ -2,7 +2,7 @@
 
 ## Current Version
 
-`1.3.1`
+`1.3.2`
 
 ## Architecture
 
@@ -11,7 +11,7 @@
 - `components/AppShell.tsx` includes the shared shell, footer, and compact auth panel area.
 - `components/AnalyticsProvider.tsx` initializes optional PostHog analytics when public env vars are present.
 - `components/AppHero.tsx` renders the global Neowtwork / Slay the Spire 2 Achievements hero identity.
-- `components/AuthPanel.tsx` scaffolds Discord sign-in, sign-out, auth state, and first-login username claiming.
+- `components/AuthPanel.tsx` scaffolds Discord sign-in, sign-out, auth state, and automatic profile creation from Discord identity.
 - `components/BoardContextPlaque.tsx` renders secondary board-owner context on public/profile boards.
 - `components/FriendsPanel.tsx` renders the compact authenticated Friends dropdown for adding friends and opening friend boards.
 - `components/AchievementBoard.tsx` owns completion state, Supabase save/load coordination, localStorage fallback, and modal coordination.
@@ -73,6 +73,9 @@
 - The global app hero stays primary on home and public board pages; viewed board owner info is secondary contextual metadata.
 - Friends access lives in the authenticated top-bar account block, not the main achievement board body.
 - Friends opens on hover/focus and still supports click plus outside-click dismissal.
+- Discord display names are the primary visible identity in the account panel, Friends rows, and board context plaque.
+- `profiles.username` is still the stable URL slug for `/u/[username]`, but new profiles now auto-generate it from Discord identity instead of asking the user to invent one.
+- Public username slugs should stay visually secondary/internal whenever possible.
 - Logged-out users do not see Friends UI.
 - The achievement board does not show a normal completion-loading banner; backend errors still render plainly if loading fails.
 - Analytics track explicit behavior events only: `achievement_viewed`, `completion_added`, `seed_copied`, `friend_added`, and `profile_viewed`.
@@ -89,9 +92,12 @@
 - Production env detection is runtime server-fed for the homepage; `app/page.tsx` is intentionally dynamic so Vercel env changes are not trapped in a stale static/client bundle.
 - Discord OAuth UI and callback route are scaffolded.
 - Discord OAuth has been verified against the live Supabase project.
-- First-login username onboarding is scaffolded with lowercase URL-safe usernames.
+- First-login username onboarding has been removed.
+- New Discord users get a profile automatically with a URL-safe slug derived from Discord identity.
 - Current username records are still required for stable `/u/[username]` public routes, friend lookup, and profile uniqueness.
-- Discord display names and avatars are stored on profiles, but Discord identity has not replaced public username slugs yet.
+- Discord display names and avatars are stored on profiles and now drive primary visible identity.
+- Current Discord OAuth user metadata supports basic profile display such as name/display name and avatar.
+- Discord friend-list discovery is not implemented; it likely requires Discord Social SDK / `relationships.read` access and approval, so lightweight invite links are the safer near-term path.
 - Live profile `@brando_prime` exists for the first authenticated user.
 - Public read-only route `/u/[username]` exists.
 - Database schema and RLS policies are documented as SQL migrations.
@@ -112,7 +118,7 @@
 - Friends dropdown closes on outside click.
 - Friend rows are full-card links with no trailing action label.
 - `/u/[username]` renders owner controls only when the signed-in user is viewing their own board; other boards are read-only.
-- Auth/profile loading keeps a fixed-height intermediate panel instead of flashing the username onboarding form during session refresh.
+- Auth/profile loading keeps a fixed-height intermediate panel instead of flashing incorrect account UI during session refresh.
 - Friends load only after the logged-in profile is resolved and only inside the compact dropdown, avoiding empty-state flashes in the page body.
 - Deployment-facing commit messages should include the current app version so Vercel deployments are easy to map back to `VERSION.md`.
 
@@ -121,7 +127,8 @@
 - Local completions are not synced/migrated to Supabase accounts yet.
 - Deleted or replaced Supabase proof screenshots are not cleaned up from Storage yet.
 - Browser-driven username form typing could not be automated in Codex because the in-app browser virtual clipboard was unavailable; the profile row was created directly in Supabase and verified through the app.
-- Recommendation: keep manual username slugs until a migration can safely derive stable slugs from Discord identity without breaking existing public board URLs.
+- Recommendation: keep existing manually chosen slugs until a migration can safely backfill Discord-derived slugs without breaking existing public board URLs.
+- Future identity migration should preserve redirects from existing `/u/[username]` routes and avoid forcing current users to rename themselves.
 - Public/global stats are not implemented yet and should eventually come from Supabase completion data rather than PostHog event counts.
 
 ## Deployed Status

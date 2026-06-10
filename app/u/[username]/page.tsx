@@ -168,6 +168,7 @@ export default async function PublicProfilePage({
         <AppHero />
         <BoardContextPlaque
           description={profileDescription}
+          displayName={profile.display_name}
           label={isOwnBoard ? "My Board" : "Public Board"}
           username={profile.username}
         />

@@ -6,11 +6,11 @@ import { UserPlus, Users } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
-  getUsernameHelpText,
   isValidUsername,
   normalizeUsername,
 } from "@/lib/username";
 import { captureAnalyticsEvent } from "@/lib/analytics";
+import { getProfileDisplayName } from "@/lib/profile-display";
 import type { Database } from "@/types/database";
 
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
@@ -34,7 +34,9 @@ type FriendsPanelProps = {
 };
 
 function sortFriends(first: Friend, second: Friend) {
-  return first.profile.username.localeCompare(second.profile.username);
+  return getProfileDisplayName(first.profile).localeCompare(
+    getProfileDisplayName(second.profile),
+  );
 }
 
 export function FriendsPanel({
@@ -143,7 +145,7 @@ export function FriendsPanel({
     setError("");
 
     if (!isValidUsername(nextUsername)) {
-      setError(getUsernameHelpText());
+      setError("Use the board-link slug from your guildmate's public board.");
       return;
     }
 
@@ -166,13 +168,13 @@ export function FriendsPanel({
       .maybeSingle();
 
     if (targetError) {
-      setError("Could not look up that username.");
+      setError("Could not look up that guildmate.");
       setIsSaving(false);
       return;
     }
 
     if (!targetProfile) {
-      setError("No Neowtwork user found with that username.");
+      setError("No guildmate found with that board slug.");
       setIsSaving(false);
       return;
     }
@@ -217,19 +219,21 @@ export function FriendsPanel({
       is_logged_in: true,
       source: "topbar",
     });
-    setMessage(`Added @${targetProfile.username}. Seeds are now legally suspicious.`);
+    setMessage(
+      `Added ${getProfileDisplayName(targetProfile)}. Seeds are now legally suspicious.`,
+    );
   }
 
   return (
     <div className="grid gap-3" aria-label="Friends">
       <form className="grid gap-2" onSubmit={handleAddFriend}>
         <label className="grid gap-1 text-xs font-bold uppercase tracking-title text-brass">
-          Add Friend
+          Add Guildmate
           <div className="grid gap-2 sm:grid-cols-[1fr_auto]">
             <input
               className="h-10 min-w-0 rounded-card border border-brass/25 bg-pitch/70 px-3 text-sm normal-case tracking-normal text-parchment outline-none placeholder:text-bone/50 focus:border-ember"
               disabled={isSaving}
-              placeholder="friend_username"
+              placeholder="discord-name-slug"
               value={username}
               onChange={(event) =>
                 setUsername(normalizeUsername(event.target.value))
@@ -237,9 +241,12 @@ export function FriendsPanel({
             />
             <Button disabled={isSaving} size="sm" type="submit">
               <UserPlus className="size-4" />
-              {isSaving ? "Adding..." : "Add"}
+              {isSaving ? "Adding..." : "Add Guildmate"}
             </Button>
           </div>
+          <span className="text-[0.68rem] font-semibold normal-case tracking-normal text-bone/75">
+            Use the slug from their board link for now.
+          </span>
         </label>
       </form>
 
@@ -280,13 +287,8 @@ export function FriendsPanel({
                 )}
                 <div className="min-w-0">
                   <p className="truncate text-xs font-black uppercase tracking-title text-parchment">
-                    @{friend.profile.username}
+                    {getProfileDisplayName(friend.profile)}
                   </p>
-                  {friend.profile.display_name ? (
-                    <p className="truncate text-xs font-semibold text-bone">
-                      {friend.profile.display_name}
-                    </p>
-                  ) : null}
                 </div>
               </div>
             </Link>
@@ -294,7 +296,7 @@ export function FriendsPanel({
         </div>
       ) : (
         <p className="min-h-12 rounded-card border border-brass/20 bg-pitch/55 px-3 py-3 text-sm font-semibold text-bone">
-          No friends yet. Add a username to start stealing seeds.
+          No friends yet. Add a guildmate to start stealing seeds.
         </p>
       )}
     </div>
