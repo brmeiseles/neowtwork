@@ -1,5 +1,62 @@
 # DEVLOG.md
 
+## 2026-06-10 - Header Identity And Board UX Polish
+
+### Version
+
+- `1.3.1`
+
+### Feature Summary
+
+- Restored Neowtwork as the primary app identity on public boards and tightened board/friends/badge UX.
+
+### What Changed
+
+- Added a shared `AppHero` for the global `Neowtwork` / `Slay the Spire 2 Achievements` / official tagline treatment.
+- Replaced the oversized public profile hero with a smaller contextual board-owner plaque.
+- Hid `My Board` when the signed-in user is already viewing their own board.
+- Added hover/focus opening for the Friends flyout while preserving click support and outside-click dismissal.
+- Simplified completed achievement badge framing so completed emblems have fewer rings and more visible art.
+- Added a backlog note to continue tuning completed badge frame/art balance after more real completions are visible.
+- Bumped the app version to `1.3.1`.
+
+### Why It Changed
+
+- The public board route was starting to feel like a profile dashboard. The app should feel like a shared community achievement codex first, with the viewed board owner as secondary context.
+
+### Files Touched
+
+- `AGENTS.md`
+- `BACKLOG.md`
+- `CURRENT_STATE.md`
+- `DEVLOG.md`
+- `VERSION.md`
+- `app/globals.css`
+- `app/page.tsx`
+- `app/u/[username]/page.tsx`
+- `components/AppHero.tsx`
+- `components/AuthPanel.tsx`
+- `components/BoardContextPlaque.tsx`
+- `config/app.ts`
+- `package.json`
+- `package-lock.json`
+
+### Verification Status
+
+- Ran `npm run typecheck`.
+- Ran `npm run build`.
+- Ran `npm run dev -- -p 3001`.
+- Confirmed the homepage renders the global `Neowtwork` / `Slay the Spire 2 Achievements` hero, official tagline, and `v1.3.1`.
+- Confirmed `/u/brando_prime` keeps the global app hero primary and renders `Viewing @brando_prime` as secondary board context instead of a giant profile hero.
+- Confirmed the public/profile board route still renders the achievement board.
+- Confirmed the same app hero, board context plaque, board, and `v1.3.1` render at a 390px mobile viewport.
+- Confirmed source behavior hides `My Board` when the current pathname already matches the signed-in user's board route.
+- Confirmed Friends opens on hover/focus while preserving click-to-open support and outside-click dismissal.
+
+### Commit
+
+- Pending push.
+
 ## 2026-06-10 - Privacy-Conscious Analytics
 
 ### Version

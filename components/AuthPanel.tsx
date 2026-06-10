@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import type { User } from "@supabase/supabase-js";
 import { LogOut, ScrollText, Shield, UserRound, Users } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { FriendsPanel } from "@/components/FriendsPanel";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
@@ -25,6 +26,7 @@ type AuthStatus = "loading" | "profile-loading" | "ready" | "saving";
 
 export function AuthPanel({ publicEnv }: AuthPanelProps) {
   const envStatus = getPublicEnvStatus(publicEnv);
+  const pathname = usePathname();
   const supabase = useMemo(
     () => createSupabaseBrowserClient(publicEnv),
     [publicEnv],
@@ -36,11 +38,39 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
   const [message, setMessage] = useState("");
   const [isFriendsOpen, setIsFriendsOpen] = useState(false);
   const accountPanelRef = useRef<HTMLDivElement | null>(null);
+  const closeFriendsTimeoutRef = useRef<number | null>(null);
   const profileRef = useRef<Profile | null>(null);
+  const ownBoardPath = profile ? `/u/${profile.username}` : "";
+  const shouldShowMyBoard = Boolean(profile && pathname !== ownBoardPath);
+
+  function clearCloseFriendsTimeout() {
+    if (closeFriendsTimeoutRef.current) {
+      window.clearTimeout(closeFriendsTimeoutRef.current);
+      closeFriendsTimeoutRef.current = null;
+    }
+  }
+
+  function openFriends() {
+    clearCloseFriendsTimeout();
+    setIsFriendsOpen(true);
+  }
+
+  function scheduleCloseFriends() {
+    clearCloseFriendsTimeout();
+    closeFriendsTimeoutRef.current = window.setTimeout(() => {
+      setIsFriendsOpen(false);
+    }, 180);
+  }
 
   useEffect(() => {
     profileRef.current = profile;
   }, [profile]);
+
+  useEffect(() => {
+    return () => {
+      clearCloseFriendsTimeout();
+    };
+  }, []);
 
   useEffect(() => {
     if (!isFriendsOpen) {
@@ -295,18 +325,23 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
         <div className="flex items-center gap-1.5">
           {profile ? (
             <>
-              <Button asChild size="sm" variant="ghost">
-                <Link href={`/u/${profile.username}`}>
-                  <ScrollText className="size-4" />
-                  My Board
-                </Link>
-              </Button>
+              {shouldShowMyBoard ? (
+                <Button asChild size="sm" variant="ghost">
+                  <Link href={ownBoardPath}>
+                    <ScrollText className="size-4" />
+                    My Board
+                  </Link>
+                </Button>
+              ) : null}
               <Button
                 aria-expanded={isFriendsOpen}
                 size="sm"
                 type="button"
                 variant="ghost"
-                onClick={() => setIsFriendsOpen((isOpen) => !isOpen)}
+                onMouseEnter={openFriends}
+                onMouseLeave={scheduleCloseFriends}
+                onFocus={openFriends}
+                onClick={openFriends}
               >
                 <Users className="size-4" />
                 Friends
@@ -340,7 +375,11 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
       {message ? <p className="text-xs text-emberBright">{message}</p> : null}
 
       {profile && isFriendsOpen ? (
-        <div className="absolute right-0 top-[calc(100%+0.5rem)] z-50 w-[min(92vw,25rem)] rounded-card border border-brass/35 bg-pitch/95 p-3 shadow-card backdrop-blur">
+        <div
+          className="absolute right-0 top-[calc(100%+0.5rem)] z-50 w-[min(92vw,25rem)] rounded-card border border-brass/35 bg-pitch/95 p-3 shadow-card backdrop-blur"
+          onMouseEnter={openFriends}
+          onMouseLeave={scheduleCloseFriends}
+        >
           <FriendsPanel
             isOpen={isFriendsOpen}
             profile={profile}

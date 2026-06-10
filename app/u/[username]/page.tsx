@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import { AchievementBoard } from "@/components/AchievementBoard";
+import { AppHero } from "@/components/AppHero";
 import { AppShell } from "@/components/AppShell";
+import { BoardContextPlaque } from "@/components/BoardContextPlaque";
 import { ProfileViewAnalytics } from "@/components/ProfileViewAnalytics";
 import { PublicAchievementBoard } from "@/components/PublicAchievementBoard";
 import { achievements as localAchievements } from "@/data/achievements";
@@ -86,18 +88,12 @@ export default async function PublicProfilePage({
     return (
       <AppShell>
         <div className="flex flex-col gap-4 sm:gap-5">
-          <header className="codex-hero">
-            <p className="mb-2 text-[0.7rem] font-black uppercase tracking-ritual text-emberBright">
-              Public Board
-            </p>
-            <h1 className="text-4xl font-black uppercase leading-none tracking-title text-parchment sm:text-6xl">
-              @{username}
-            </h1>
-            <p className="mt-3 max-w-2xl text-base font-bold leading-6 text-bone">
-              Backend env is not configured yet. This route is ready for public
-              boards once Supabase is connected.
-            </p>
-          </header>
+          <AppHero />
+          <BoardContextPlaque
+            description="Backend env is not configured yet. This route is ready for public boards once Supabase is connected."
+            label="Public Board"
+            username={username}
+          />
           <PublicAchievementBoard
             achievements={localAchievements}
             completionsByAchievement={{}}
@@ -169,17 +165,12 @@ export default async function PublicProfilePage({
         viewedProfileType={viewedProfileType}
       />
       <div className="flex flex-col gap-4 sm:gap-5">
-        <header className="codex-hero">
-          <p className="mb-2 text-[0.7rem] font-black uppercase tracking-ritual text-emberBright">
-            Public Board
-          </p>
-          <h1 className="text-4xl font-black uppercase leading-none tracking-title text-parchment sm:text-6xl">
-            @{profile.username}
-          </h1>
-          <p className="mt-3 max-w-2xl text-base font-bold leading-6 text-bone">
-            {profileDescription}
-          </p>
-        </header>
+        <AppHero />
+        <BoardContextPlaque
+          description={profileDescription}
+          label={isOwnBoard ? "My Board" : "Public Board"}
+          username={profile.username}
+        />
         {isOwnBoard ? (
           <AchievementBoard
             achievements={boardAchievements}

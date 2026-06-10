@@ -2,7 +2,7 @@
 
 ## Current Version
 
-`1.3.0`
+`1.3.1`
 
 ## Architecture
 
@@ -10,7 +10,9 @@
 - `app/page.tsx` renders the homepage shell and achievement board.
 - `components/AppShell.tsx` includes the shared shell, footer, and compact auth panel area.
 - `components/AnalyticsProvider.tsx` initializes optional PostHog analytics when public env vars are present.
+- `components/AppHero.tsx` renders the global Neowtwork / Slay the Spire 2 Achievements hero identity.
 - `components/AuthPanel.tsx` scaffolds Discord sign-in, sign-out, auth state, and first-login username claiming.
+- `components/BoardContextPlaque.tsx` renders secondary board-owner context on public/profile boards.
 - `components/FriendsPanel.tsx` renders the compact authenticated Friends dropdown for adding friends and opening friend boards.
 - `components/AchievementBoard.tsx` owns completion state, Supabase save/load coordination, localStorage fallback, and modal coordination.
 - `components/AchievementCard.tsx` renders each clickable achievement card with the best ascension badge only.
@@ -68,7 +70,9 @@
 - Completion proof entry supports file upload and clipboard paste only; image URL entry was removed to keep the flow cleaner.
 - The homepage board header is `Slay the Spire 2 Achievements`; the app/brand name remains `Neowtwork`.
 - The official homepage tagline is `Because Slay 2 deserves achievements.`
+- The global app hero stays primary on home and public board pages; viewed board owner info is secondary contextual metadata.
 - Friends access lives in the authenticated top-bar account block, not the main achievement board body.
+- Friends opens on hover/focus and still supports click plus outside-click dismissal.
 - Logged-out users do not see Friends UI.
 - The achievement board does not show a normal completion-loading banner; backend errors still render plainly if loading fails.
 - Analytics track explicit behavior events only: `achievement_viewed`, `completion_added`, `seed_copied`, `friend_added`, and `profile_viewed`.
@@ -104,6 +108,7 @@
 - Users can add friends by username, cannot add themselves, and duplicate/unknown usernames are rejected.
 - Friend rows link to `/u/[username]`.
 - Logged-in users have a top-bar `My Board` link back to their own `/u/[username]` board.
+- `My Board` is hidden while already viewing your own board.
 - Friends dropdown closes on outside click.
 - Friend rows are full-card links with no trailing action label.
 - `/u/[username]` renders owner controls only when the signed-in user is viewing their own board; other boards are read-only.
