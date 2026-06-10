@@ -55,11 +55,13 @@ export function AchievementDetailDialog({
               aria-hidden="true"
               className="locked-emblem unlocked-emblem text-parchment"
             >
-              <img
-                alt=""
-                className="achievement-emblem-unlocked size-full rounded-badge object-contain p-1"
-                src={achievement.emblemSrc}
-              />
+              <span className="emblem-crop">
+                <img
+                  alt=""
+                  className="achievement-emblem-image achievement-emblem-unlocked"
+                  src={achievement.emblemSrc}
+                />
+              </span>
             </div>
             <div className="grid gap-2">
               <p className="text-xs font-black uppercase tracking-ritual text-emberBright">

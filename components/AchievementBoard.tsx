@@ -87,7 +87,7 @@ export function AchievementBoard({ achievements }: AchievementBoardProps) {
       <div className="codex-board">
         <section
           aria-label="Achievement board"
-          className="relative grid grid-cols-1 gap-4 md:grid-cols-2 lg:gap-5"
+          className="relative grid grid-cols-1 gap-3 md:grid-cols-2 lg:gap-4"
         >
           {sortedAchievements.map((achievement) => (
             <AchievementCard
@@ -95,7 +95,6 @@ export function AchievementBoard({ achievements }: AchievementBoardProps) {
               completion={completions[achievement.slug]}
               key={achievement.slug}
               onComplete={() => setCompletionTarget(achievement)}
-              onCopySeed={handleCopySeed}
               onView={() => setDetailTarget(achievement)}
             />
           ))}

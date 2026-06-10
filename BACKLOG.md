@@ -10,14 +10,7 @@
 
 ## Immediate Polish
 
-- Remove seed from collapsed completed card.
-- Keep seed only in detail modal.
-- Make achievement emblems properly circular/cropped.
-- Tighten vertical spacing and overall density.
-- Reduce excess padding/gaps.
-- Refine completed-card metadata hierarchy.
-- Polish hover states.
-- Add favicon.
+- Completed in `0.2.4`; see `DEVLOG.md` entry `2026-06-09 - Immediate Polish Pass`.
 
 ## Core Completion System
 

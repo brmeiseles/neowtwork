@@ -1,5 +1,64 @@
 # DEVLOG.md
 
+## 2026-06-09 - Immediate Polish Pass
+
+### Version
+
+- `0.2.4`
+
+### Feature Summary
+
+- Tightened the achievement board into a denser collectible codex and cleaned up completed-card presentation.
+
+### What Changed
+
+- Reduced page, hero, board, card, and grid spacing for a more game-like information density.
+- Tightened achievement title, subtitle, divider, and description spacing while preserving readability.
+- Added circular clipping and refined framing for canonical achievement emblems.
+- Removed seed text and copy action from collapsed completed cards; seed remains in the detail modal.
+- Refined completed-card metadata to emphasize ascension without changing card size.
+- Softened hover motion while strengthening tactile border/glow feedback.
+- Added `app/icon.svg` as a circular glowing Neowtwork favicon.
+- Moved completed Immediate Polish backlog items into this devlog checkpoint and bumped the app version to `0.2.4`.
+
+### Why It Changed
+
+- The app needed to feel less like a roomy prototype and more like a tight, premium achievement codex without changing the core local completion flow.
+
+### Files Touched
+
+- `AGENTS.md`
+- `BACKLOG.md`
+- `CURRENT_STATE.md`
+- `DEVLOG.md`
+- `VERSION.md`
+- `app/globals.css`
+- `app/icon.svg`
+- `app/page.tsx`
+- `components/AchievementBoard.tsx`
+- `components/AchievementCard.tsx`
+- `components/AchievementDetailDialog.tsx`
+- `components/AppShell.tsx`
+- `config/app.ts`
+- `lib/design-system.ts`
+- `package.json`
+- `package-lock.json`
+
+### Verification Status
+
+- Ran `npm run typecheck`.
+- Ran `npm run build`.
+- Ran `npm run dev` and confirmed `localhost:3000` serves the app without runtime console errors.
+- Confirmed desktop layout renders 12 cards, 12 circular emblem clips, the `/icon.svg` favicon link, no horizontal overflow, and the visible `Neowtwork v0.2.4` footer.
+- Confirmed mobile-sized layout remains one column with no horizontal overflow.
+- Confirmed `/icon.svg` returns `200 OK` as `image/svg+xml`.
+- Captured and reviewed a local headless Chrome screenshot of the polished board.
+- Note: the in-app browser connector could not complete a typed form smoke test because its virtual clipboard was unavailable; the collapsed card seed removal is covered by typecheck/build and direct component review.
+
+### Commit
+
+- To be recorded after push, if available.
+
 ## 2026-06-09 - Added Product Backlog
 
 ### Version
