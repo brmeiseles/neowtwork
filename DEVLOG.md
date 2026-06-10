@@ -44,7 +44,11 @@
 
 ### Verification Status
 
-- Pending verification.
+- Ran `npm run typecheck`.
+- Ran `npm run build`.
+- Confirmed `localhost:3000` renders 12 achievement cards, 12 canonical emblem images, the Kreon primary font, and the visible `Neowtwork v0.2.2` footer.
+- Captured and reviewed a local screenshot of the updated board.
+- Completed a temporary achievement through the UI to confirm completed cards keep the same height, switch to full-color emblem treatment, show seed/ascension metadata, and can be reset cleanly.
 
 ### Commit
 
