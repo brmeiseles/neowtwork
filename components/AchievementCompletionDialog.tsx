@@ -1,0 +1,253 @@
+"use client";
+
+import { useEffect, useState, type ClipboardEvent, type FormEvent } from "react";
+import { ImagePlus, LinkIcon, Upload } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import type { Achievement } from "@/types/achievement";
+import type { AchievementCompletion } from "@/types/completion";
+
+type AchievementCompletionDialogProps = {
+  achievement: Achievement | null;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onComplete: (completion: AchievementCompletion) => void;
+};
+
+function fileToDataUrl(file: File) {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(new Error("Could not read proof image."));
+    reader.readAsDataURL(file);
+  });
+}
+
+async function imageUrlToDataUrl(url: string) {
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error("Could not download proof image from that URL.");
+  }
+
+  const blob = await response.blob();
+
+  if (!blob.type.startsWith("image/")) {
+    throw new Error("That URL did not return an image.");
+  }
+
+  return fileToDataUrl(new File([blob], "proof-image", { type: blob.type }));
+}
+
+export function AchievementCompletionDialog({
+  achievement,
+  open,
+  onOpenChange,
+  onComplete,
+}: AchievementCompletionDialogProps) {
+  const [proofImageDataUrl, setProofImageDataUrl] = useState("");
+  const [proofUrl, setProofUrl] = useState("");
+  const [seed, setSeed] = useState("");
+  const [ascensionLevel, setAscensionLevel] = useState("0");
+  const [error, setError] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    if (!open) {
+      setProofImageDataUrl("");
+      setProofUrl("");
+      setSeed("");
+      setAscensionLevel("0");
+      setError("");
+      setIsSaving(false);
+    }
+  }, [open]);
+
+  async function handleFile(file: File | undefined) {
+    if (!file) {
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      setError("Proof needs to be an image file.");
+      return;
+    }
+
+    setError("");
+    setProofImageDataUrl(await fileToDataUrl(file));
+  }
+
+  async function handlePaste(event: ClipboardEvent<HTMLDivElement>) {
+    const imageFile = Array.from(event.clipboardData.files).find((file) =>
+      file.type.startsWith("image/"),
+    );
+
+    if (imageFile) {
+      event.preventDefault();
+      await handleFile(imageFile);
+    }
+  }
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (!achievement) {
+      return;
+    }
+
+    setError("");
+    setIsSaving(true);
+
+    try {
+      const proof =
+        proofImageDataUrl ||
+        (proofUrl.trim() ? await imageUrlToDataUrl(proofUrl.trim()) : "");
+      const parsedAscension = Number(ascensionLevel);
+
+      if (!proof) {
+        throw new Error("Add proof by uploading, pasting, or providing an image URL.");
+      }
+
+      if (!seed.trim()) {
+        throw new Error("Add the run seed.");
+      }
+
+      if (
+        !Number.isInteger(parsedAscension) ||
+        parsedAscension < 0 ||
+        parsedAscension > 20
+      ) {
+        throw new Error("Ascension should be a whole number from 0 to 20.");
+      }
+
+      onComplete({
+        achievementSlug: achievement.slug,
+        proofImageDataUrl: proof,
+        seed: seed.trim(),
+        ascensionLevel: parsedAscension,
+        completedAt: new Date().toISOString(),
+      });
+      onOpenChange(false);
+    } catch (saveError) {
+      setError(
+        saveError instanceof Error
+          ? saveError.message
+          : "Could not save achievement proof.",
+      );
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent onPaste={handlePaste}>
+        <DialogHeader>
+          <DialogTitle>Complete Achievement</DialogTitle>
+          <DialogDescription>
+            {achievement
+              ? `Attach proof for ${achievement.title}. The badge stays canonical; screenshots live here as proof.`
+              : "Attach proof for this achievement."}
+          </DialogDescription>
+        </DialogHeader>
+
+        <form className="grid gap-5" onSubmit={handleSubmit}>
+          <label className="grid gap-2 text-sm font-bold uppercase tracking-title text-brass">
+            Proof image
+            <span className="flex min-h-44 items-center justify-center overflow-hidden rounded-card border-2 border-dashed border-brass/35 bg-pitch/55 p-3 text-center text-sm normal-case tracking-normal text-bone">
+              {proofImageDataUrl ? (
+                <img
+                  alt="Selected proof preview"
+                  className="max-h-72 rounded-card object-contain shadow-card"
+                  src={proofImageDataUrl}
+                />
+              ) : (
+                <span className="flex flex-col items-center gap-2">
+                  <ImagePlus className="size-8 text-emberBright" />
+                  Upload an image, paste one here, or provide an image URL.
+                </span>
+              )}
+            </span>
+            <span className="relative inline-flex">
+              <input
+                accept="image/*"
+                className="absolute inset-0 cursor-pointer opacity-0"
+                type="file"
+                onChange={(event) => handleFile(event.target.files?.[0])}
+              />
+              <span className="inline-flex h-10 items-center justify-center gap-2 rounded-card border border-brass/35 bg-soot px-4 text-sm text-parchment hover:border-ember/70 hover:bg-cardHover">
+                <Upload className="size-4" />
+                Choose proof image
+              </span>
+            </span>
+          </label>
+
+          <label className="grid gap-2 text-sm font-bold uppercase tracking-title text-brass">
+            Proof image URL
+            <span className="flex items-center gap-2 rounded-card border border-brass/25 bg-pitch/60 px-3">
+              <LinkIcon className="size-4 text-emberBright" />
+              <input
+                className="h-11 min-w-0 flex-1 bg-transparent text-base normal-case tracking-normal text-parchment outline-none placeholder:text-bone/50"
+                placeholder="https://..."
+                type="url"
+                value={proofUrl}
+                onChange={(event) => setProofUrl(event.target.value)}
+              />
+            </span>
+          </label>
+
+          <div className="grid gap-4 sm:grid-cols-[1fr_10rem]">
+            <label className="grid gap-2 text-sm font-bold uppercase tracking-title text-brass">
+              Seed
+              <input
+                className="h-11 rounded-card border border-brass/25 bg-pitch/60 px-3 text-base normal-case tracking-normal text-parchment outline-none placeholder:text-bone/50 focus:border-ember"
+                placeholder="Run seed"
+                value={seed}
+                onChange={(event) => setSeed(event.target.value)}
+              />
+            </label>
+
+            <label className="grid gap-2 text-sm font-bold uppercase tracking-title text-brass">
+              Ascension
+              <input
+                className="h-11 rounded-card border border-brass/25 bg-pitch/60 px-3 text-base normal-case tracking-normal text-parchment outline-none focus:border-ember"
+                max="20"
+                min="0"
+                type="number"
+                value={ascensionLevel}
+                onChange={(event) => setAscensionLevel(event.target.value)}
+              />
+            </label>
+          </div>
+
+          {error ? (
+            <p className="rounded-card border border-ember/45 bg-blood/35 p-3 text-sm font-semibold text-parchment">
+              {error}
+            </p>
+          ) : null}
+
+          <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => onOpenChange(false)}
+            >
+              Cancel
+            </Button>
+            <Button disabled={isSaving} type="submit">
+              {isSaving ? "Saving..." : "Complete Achievement"}
+            </Button>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}

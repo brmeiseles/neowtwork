@@ -1,5 +1,56 @@
 # DEVLOG.md
 
+## 2026-06-09 - Completed Achievement State
+
+### Version
+
+- `0.2.0`
+
+### Feature Summary
+
+- Added the first local-only achievement completion and proof-viewing flow.
+
+### What Changed
+
+- Added localStorage-backed achievement completion data.
+- Added a Complete Achievement modal with proof image upload, paste support, proof image URL capture, seed input, and ascension input.
+- Added completed-card states that keep achievements in place, show an unlocked canonical badge placeholder, display ascension/seed metadata, and include a copy seed action.
+- Added a completed achievement detail modal with title, description, canonical badge, proof screenshot, seed, ascension, completion timestamp, copy seed, and reset completion.
+- Added shadcn-style Dialog support and completion-specific types.
+- Bumped the app version to `0.2.0` as the first MINOR feature checkpoint.
+
+### Why It Changed
+
+- This implements the first version of the core loop: complete achievement, attach proof, keep the canonical badge, save seed metadata, and inspect the proof locally.
+
+### Files Touched
+
+- `AGENTS.md`
+- `DEVLOG.md`
+- `VERSION.md`
+- `app/globals.css`
+- `components/AchievementBoard.tsx`
+- `components/AchievementCard.tsx`
+- `components/AchievementCompletionDialog.tsx`
+- `components/AchievementDetailDialog.tsx`
+- `components/ui/dialog.tsx`
+- `config/app.ts`
+- `package.json`
+- `package-lock.json`
+- `types/completion.ts`
+
+### Verification Status
+
+- Ran `npm run typecheck`.
+- Ran `npm run build`.
+- Confirmed `localhost:3000` renders 12 achievement cards, 12 Complete Achievement actions, the codex board, and the visible `Neowtwork v0.2.0` footer.
+- Tested the completion flow locally in headless Chrome: opened the completion dialog, saved proof/seed/ascension data, viewed the completed detail modal with proof image, and reset completion successfully.
+- Note: the scripted full-flow rerun hit a Chrome DevTools Protocol reconnect issue when forcing a page reload, but the underlying completion/detail/reset behaviors were verified directly.
+
+### Commit
+
+- To be recorded after push, if available.
+
 ## 2026-06-09 - Applied Visible Game Board Styling
 
 ### Version
