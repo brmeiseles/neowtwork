@@ -14,14 +14,11 @@
 
 ## Core Completion System
 
-- Support multiple completions per achievement.
-- Card shows best ascension badge only.
-- No completion count on collapsed cards.
-- Seed is optional.
-- Detail modal shows all completions.
-- Allow adding another completion from detail modal.
-- Allow editing/deleting completions.
-- Keep proof screenshots separate from canonical emblems.
+- Completed local/backend-ready foundation in `1.0.0`; see `DEVLOG.md` entry `2026-06-10 - Phase 1 Backend Foundation`.
+- Wire logged-in completions to Supabase persistence.
+- Upload proof screenshots to Supabase Storage.
+- Migrate existing localStorage completions into a logged-in account.
+- Add graceful sync conflict handling if local and backend data both exist.
 
 ## Achievement List Updates
 
@@ -32,11 +29,13 @@
 
 ## Backend / Accounts
 
-- Add Supabase backend.
-- Prefer Discord OAuth login.
-- On first login, user chooses unique public Neowtwork username.
+- Completed Phase 1 Supabase/Discord foundation in `1.0.0`; see `DEVLOG.md` entry `2026-06-10 - Phase 1 Backend Foundation`.
+- Configure real Supabase project env vars.
+- Configure Discord OAuth in Discord and Supabase.
+- Run migrations and seed SQL.
+- Verify real Discord login flow.
+- Verify first-login username claiming against live Supabase.
 - Avoid email/password system initially unless needed.
-- Add public read-only profile URLs at `/u/[username]`.
 - Migrate localStorage completions to logged-in user account if possible.
 
 ## Friends / Social

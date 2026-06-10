@@ -2,18 +2,28 @@
 
 ## Current Version
 
-`0.2.4`
+`1.0.0`
 
 ## Architecture
 
 - Next.js app router project using TypeScript and Tailwind CSS.
 - `app/page.tsx` renders the homepage shell and achievement board.
+- `components/AppShell.tsx` includes the shared shell, footer, and compact auth panel area.
+- `components/AuthPanel.tsx` scaffolds Discord sign-in, sign-out, auth state, and first-login username claiming.
 - `components/AchievementBoard.tsx` owns local completion state and modal coordination.
-- `components/AchievementCard.tsx` renders each clickable achievement card.
-- `components/AchievementCompletionDialog.tsx` handles local proof, seed, and ascension capture.
-- `components/AchievementDetailDialog.tsx` displays completed achievement proof and reset controls.
-- `data/achievements.ts` contains achievement content and canonical emblem paths.
-- `public/achievement-emblems/` contains cropped canonical emblem assets from the provided achievement screenshot.
+- `components/AchievementCard.tsx` renders each clickable achievement card with the best ascension badge only.
+- `components/AchievementCompletionDialog.tsx` handles local proof, optional seed, ascension, and notes capture.
+- `components/AchievementDetailDialog.tsx` displays all completions for an achievement and supports add/edit/delete/reset locally.
+- `components/PublicAchievementBoard.tsx` renders read-only public boards.
+- `app/u/[username]/page.tsx` is the public read-only board route.
+- `app/auth/callback/route.ts` exchanges Supabase OAuth codes after Discord login.
+- `lib/supabase/client.ts` and `lib/supabase/server.ts` create browser/server Supabase clients.
+- `lib/env.ts` centralizes public env handling and safe missing-env checks.
+- `types/database.ts` holds the current Supabase table types.
+- `supabase/migrations/202606100001_backend_foundation.sql` defines database tables, RLS policies, and the `proofs` bucket.
+- `supabase/seed.sql` seeds the current 12 achievements into Supabase.
+- `data/achievements.ts` remains the local editable source for the current achievement list.
+- `public/achievement-emblems/` contains cropped canonical emblem assets.
 - `app/icon.svg` provides the App Router favicon as a circular glowing `N` relic.
 - `lib/design-system.ts` and `app/globals.css` hold the dark fantasy visual system.
 
@@ -24,6 +34,8 @@
 - `tailwindcss`, `postcss`, `autoprefixer`
 - `lucide-react`
 - `framer-motion`
+- `@supabase/supabase-js`
+- `@supabase/ssr`
 - shadcn-style primitives/helpers: `@radix-ui/react-slot`, `@radix-ui/react-dialog`, `class-variance-authority`, `clsx`, `tailwind-merge`
 
 ## Current UX Decisions
@@ -31,27 +43,50 @@
 - The whole achievement card is clickable.
 - Incomplete cards open the Complete Achievement modal.
 - Completed cards open the completed detail modal.
+- Completion data still has a localStorage fallback.
+- Local completions now support multiple completions per achievement.
+- Collapsed completed cards show the highest ascension only.
+- Seed is optional and only shown in the detail modal.
+- Detail modals show all completions and local add/edit/delete controls.
+- Ascension range is currently `0-10`.
 - Canonical achievement emblems come from `public/achievement-emblems/`.
-- Locked achievements show muted/darkened emblem art with subdued lock treatment.
-- Completed achievements show full-color emblem art with brighter border/glow.
-- Achievement emblems are clipped into circular relic frames in the UI.
-- Proof screenshots never replace achievement emblems; proof images only appear in the completed detail modal.
-- Completion data is local-only and stored in `localStorage`.
+- Proof screenshots never replace achievement emblems.
+- Proof screenshots appear only in completion/detail UI.
 - Completed cards should not expand in size; prestige comes from border glow, emblem treatment, and subtle styling.
-- Collapsed completed cards show ascension status only; seed values stay in the detail modal.
 - The current board style favors denser collectible-codex spacing over roomy SaaS spacing.
 - Kreon is the primary app font via `next/font/google`.
+
+## Backend Status
+
+- Supabase clients and env scaffolding are implemented.
+- Required env vars are `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+- Missing env is handled gracefully with a dormant backend message.
+- Discord OAuth UI and callback route are scaffolded.
+- First-login username onboarding is scaffolded with lowercase URL-safe usernames.
+- Public read-only route `/u/[username]` exists.
+- Database schema and RLS policies are documented as SQL migrations.
+- Proof Storage bucket design uses bucket `proofs`.
+
+## Manual / Incomplete
+
+- Brandon still needs to create the Supabase project and add real env vars.
+- Brandon still needs to configure Discord OAuth in Discord and Supabase.
+- Migrations and seed SQL need to be run in Supabase.
+- Proof upload to Supabase Storage is not wired into the completion form yet.
+- Local completions are not synced/migrated to Supabase accounts yet.
+- Full Discord auth verification is blocked until external credentials exist.
 
 ## Deployed Status
 
 - No production deployment is configured in this repo.
 - Local development runs with `npm run dev`, usually at `http://localhost:3000`.
-- Latest verification target is local build/typecheck plus local UI smoke checks.
+- Latest verification target is local build/typecheck plus runtime smoke checks without real Supabase credentials.
 
 ## Next Recommended Priorities
 
-- Improve the proof form ergonomics and error states.
-- Add small toast/feedback for copied seeds.
-- Start the multiple-completions model when the local single-completion loop feels stable.
-- Review cropped emblem assets and regenerate if cleaner transparent cutouts are desired.
-- Keep backend/auth/friends/uploads deferred until the local proof loop feels right.
+- Create/configure Supabase and Discord OAuth using `README.md`.
+- Verify real Discord sign-in and username claiming.
+- Wire proof uploads to the `proofs` Storage bucket.
+- Sync logged-in completions to Supabase while preserving local fallback/migration.
+- Add friend boards after account persistence is proven.
+- Replace The King's Halo achievement once the new Regent Stars candidate is chosen.

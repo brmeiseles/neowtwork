@@ -16,6 +16,7 @@ import type { AchievementCompletion } from "@/types/completion";
 
 type AchievementCompletionDialogProps = {
   achievement: Achievement | null;
+  completion?: AchievementCompletion | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onComplete: (completion: AchievementCompletion) => void;
@@ -47,8 +48,13 @@ async function imageUrlToDataUrl(url: string) {
   return fileToDataUrl(new File([blob], "proof-image", { type: blob.type }));
 }
 
+function createLocalId() {
+  return globalThis.crypto?.randomUUID?.() ?? `local-${Date.now()}`;
+}
+
 export function AchievementCompletionDialog({
   achievement,
+  completion,
   open,
   onOpenChange,
   onComplete,
@@ -57,8 +63,10 @@ export function AchievementCompletionDialog({
   const [proofUrl, setProofUrl] = useState("");
   const [seed, setSeed] = useState("");
   const [ascensionLevel, setAscensionLevel] = useState("0");
+  const [notes, setNotes] = useState("");
   const [error, setError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const isEditing = Boolean(completion);
 
   useEffect(() => {
     if (!open) {
@@ -66,10 +74,20 @@ export function AchievementCompletionDialog({
       setProofUrl("");
       setSeed("");
       setAscensionLevel("0");
+      setNotes("");
       setError("");
       setIsSaving(false);
+      return;
     }
-  }, [open]);
+
+    setProofImageDataUrl(completion?.proofImageDataUrl ?? "");
+    setProofUrl("");
+    setSeed(completion?.seed ?? "");
+    setAscensionLevel(String(completion?.ascensionLevel ?? 0));
+    setNotes(completion?.notes ?? "");
+    setError("");
+    setIsSaving(false);
+  }, [completion, open]);
 
   async function handleFile(file: File | undefined) {
     if (!file) {
@@ -116,24 +134,26 @@ export function AchievementCompletionDialog({
         throw new Error("Add proof by uploading, pasting, or providing an image URL.");
       }
 
-      if (!seed.trim()) {
-        throw new Error("Add the run seed.");
-      }
-
       if (
         !Number.isInteger(parsedAscension) ||
         parsedAscension < 0 ||
-        parsedAscension > 20
+        parsedAscension > 10
       ) {
-        throw new Error("Ascension should be a whole number from 0 to 20.");
+        throw new Error("Ascension should be a whole number from 0 to 10.");
       }
 
+      const now = new Date().toISOString();
+
       onComplete({
+        id: completion?.id ?? createLocalId(),
         achievementSlug: achievement.slug,
         proofImageDataUrl: proof,
         seed: seed.trim(),
         ascensionLevel: parsedAscension,
-        completedAt: new Date().toISOString(),
+        notes: notes.trim(),
+        completedAt: completion?.completedAt ?? now,
+        createdAt: completion?.createdAt ?? now,
+        updatedAt: now,
       });
       onOpenChange(false);
     } catch (saveError) {
@@ -151,7 +171,9 @@ export function AchievementCompletionDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent onPaste={handlePaste}>
         <DialogHeader>
-          <DialogTitle>Complete Achievement</DialogTitle>
+          <DialogTitle>
+            {isEditing ? "Edit Completion" : "Complete Achievement"}
+          </DialogTitle>
           <DialogDescription>
             {achievement
               ? `Attach proof for ${achievement.title}. The badge stays canonical; screenshots live here as proof.`
@@ -206,7 +228,7 @@ export function AchievementCompletionDialog({
 
           <div className="grid gap-4 sm:grid-cols-[1fr_10rem]">
             <label className="grid gap-2 text-sm font-bold uppercase tracking-title text-brass">
-              Seed
+              Seed Optional
               <input
                 className="h-11 rounded-card border border-brass/25 bg-pitch/60 px-3 text-base normal-case tracking-normal text-parchment outline-none placeholder:text-bone/50 focus:border-ember"
                 placeholder="Run seed"
@@ -219,7 +241,7 @@ export function AchievementCompletionDialog({
               Ascension
               <input
                 className="h-11 rounded-card border border-brass/25 bg-pitch/60 px-3 text-base normal-case tracking-normal text-parchment outline-none focus:border-ember"
-                max="20"
+                max="10"
                 min="0"
                 type="number"
                 value={ascensionLevel}
@@ -227,6 +249,16 @@ export function AchievementCompletionDialog({
               />
             </label>
           </div>
+
+          <label className="grid gap-2 text-sm font-bold uppercase tracking-title text-brass">
+            Notes Optional
+            <textarea
+              className="min-h-20 rounded-card border border-brass/25 bg-pitch/60 px-3 py-2 text-base normal-case tracking-normal text-parchment outline-none placeholder:text-bone/50 focus:border-ember"
+              placeholder="Tiny run note, relic memory, or proof context"
+              value={notes}
+              onChange={(event) => setNotes(event.target.value)}
+            />
+          </label>
 
           {error ? (
             <p className="rounded-card border border-ember/45 bg-blood/35 p-3 text-sm font-semibold text-parchment">
@@ -243,7 +275,11 @@ export function AchievementCompletionDialog({
               Cancel
             </Button>
             <Button disabled={isSaving} type="submit">
-              {isSaving ? "Saving..." : "Complete Achievement"}
+              {isSaving
+                ? "Saving..."
+                : isEditing
+                  ? "Save Changes"
+                  : "Complete Achievement"}
             </Button>
           </div>
         </form>

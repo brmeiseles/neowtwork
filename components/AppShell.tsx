@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { ScrollText } from "lucide-react";
+import { AuthPanel } from "@/components/AuthPanel";
 import { appConfig } from "@/config/app";
 import { brandConfig } from "@/config/brand";
 import { Button } from "@/components/ui/button";
@@ -27,7 +28,11 @@ export function AppShell({
             <div>{navigation}</div>
             <div>{profileArea}</div>
           </header>
-        ) : null}
+        ) : (
+          <header className="flex justify-end">
+            <AuthPanel />
+          </header>
+        )}
 
         <main className="flex-1">{children}</main>
 

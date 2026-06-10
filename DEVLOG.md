@@ -1,5 +1,79 @@
 # DEVLOG.md
 
+## 2026-06-10 - Phase 1 Backend Foundation
+
+### Version
+
+- `1.0.0`
+
+### Feature Summary
+
+- Added the Supabase + Discord OAuth backend foundation, public profile scaffolding, and backend-ready completion model.
+
+### What Changed
+
+- Installed `@supabase/supabase-js` and `@supabase/ssr`.
+- Added `.env.example`, public env helpers, and reusable Supabase browser/server clients.
+- Added typed database shape for `profiles`, `achievements`, `completions`, and `friends`.
+- Added Supabase SQL migration for tables, indexes, timestamps, RLS policies, and the `proofs` storage bucket.
+- Added seed SQL for the current 12 achievements.
+- Added Discord auth UI scaffolding with sign-in, sign-out, auth state, missing-env handling, and username onboarding.
+- Added `/auth/callback` route for Supabase OAuth session exchange.
+- Added public read-only board route at `/u/[username]`.
+- Refactored local completion state to support multiple completions per achievement.
+- Updated completion UX so collapsed cards show only the best ascension, seed is optional, ascension range is `0-10`, and detail modals show all completions with local add/edit/delete controls.
+- Updated README with manual Supabase, Discord OAuth, redirect URL, migration, seed, and storage setup steps.
+- Updated `BACKLOG.md`, `CURRENT_STATE.md`, and version references for the backend milestone.
+
+### Why It Changed
+
+- Neowtwork needs persistent accounts, public boards, proof storage, and future friend/social features without rushing external credential setup or pretending auth is fully verified before Supabase exists.
+
+### Files Touched
+
+- `.env.example`
+- `AGENTS.md`
+- `BACKLOG.md`
+- `CURRENT_STATE.md`
+- `DEVLOG.md`
+- `README.md`
+- `VERSION.md`
+- `app/auth/callback/route.ts`
+- `app/u/[username]/page.tsx`
+- `components/AchievementBoard.tsx`
+- `components/AchievementCompletionDialog.tsx`
+- `components/AchievementDetailDialog.tsx`
+- `components/AppShell.tsx`
+- `components/AuthPanel.tsx`
+- `components/PublicAchievementBoard.tsx`
+- `config/app.ts`
+- `docs/backend-foundation.md`
+- `lib/env.ts`
+- `lib/supabase/client.ts`
+- `lib/supabase/server.ts`
+- `lib/username.ts`
+- `package.json`
+- `package-lock.json`
+- `supabase/migrations/202606100001_backend_foundation.sql`
+- `supabase/seed.sql`
+- `types/completion.ts`
+- `types/database.ts`
+
+### Verification Status
+
+- Ran `npm run typecheck`.
+- Ran `npm run build`.
+- Ran `npm run dev`.
+- Confirmed homepage renders 12 achievement cards, the missing-env backend dormant state, visible `Neowtwork v1.0.0`, no horizontal overflow, and no browser console errors.
+- Confirmed `/u/test-slayer` renders the public read-only board placeholder with 12 achievements, missing-env setup guidance, no horizontal overflow, and no browser console errors.
+- Confirmed `/auth/callback` responds with a safe redirect when no OAuth code is present.
+- Confirmed installed Supabase packages: `@supabase/ssr@0.12.0` and `@supabase/supabase-js@2.108.1`.
+- Full Discord OAuth, username uniqueness against live data, Supabase persistence, and Storage upload verification remain manual until Brandon creates the Supabase project, configures Discord OAuth, and adds real env vars.
+
+### Commit
+
+- To be recorded after push, if available.
+
 ## 2026-06-09 - Immediate Polish Pass
 
 ### Version
