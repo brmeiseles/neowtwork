@@ -5,10 +5,13 @@ import type { Achievement } from "@/types/achievement";
 import type { AchievementCompletion } from "@/types/completion";
 import { LockKeyhole } from "lucide-react";
 import { AchievementDetailDialog } from "@/components/AchievementDetailDialog";
+import { captureAnalyticsEvent } from "@/lib/analytics";
 
 type PublicAchievementBoardProps = {
   achievements: Achievement[];
   completionsByAchievement: Record<string, AchievementCompletion[]>;
+  isLoggedIn?: boolean;
+  source?: "profile";
 };
 
 function getBestCompletion(completions: AchievementCompletion[] | undefined) {
@@ -24,6 +27,8 @@ function getBestCompletion(completions: AchievementCompletion[] | undefined) {
 export function PublicAchievementBoard({
   achievements,
   completionsByAchievement,
+  isLoggedIn = false,
+  source = "profile",
 }: PublicAchievementBoardProps) {
   const [detailTarget, setDetailTarget] = useState<Achievement | null>(null);
   const sortedAchievements = [...achievements].sort(
@@ -33,12 +38,42 @@ export function PublicAchievementBoard({
     ? completionsByAchievement[detailTarget.slug] ?? []
     : [];
 
-  async function handleCopySeed(seed: string) {
+  function captureAchievementViewed(achievement: Achievement) {
+    captureAnalyticsEvent("achievement_viewed", {
+      achievement_id: achievement.slug,
+      achievement_name: achievement.title,
+      completion_count: completionsByAchievement[achievement.slug]?.length ?? 0,
+      is_logged_in: isLoggedIn,
+      source,
+    });
+  }
+
+  function captureSeedCopied(completion: AchievementCompletion) {
+    const achievement = sortedAchievements.find(
+      (currentAchievement) => currentAchievement.slug === completion.achievementSlug,
+    );
+
+    captureAnalyticsEvent("seed_copied", {
+      achievement_id: completion.achievementSlug,
+      achievement_name: achievement?.title,
+      ascension: completion.ascensionLevel,
+      has_proof: Boolean(completion.proofImageDataUrl),
+      has_seed: Boolean(completion.seed?.trim()),
+      is_logged_in: isLoggedIn,
+      source,
+    });
+  }
+
+  async function handleCopySeed(
+    seed: string,
+    completion: AchievementCompletion,
+  ) {
     if (!seed) {
       return;
     }
 
     await navigator.clipboard.writeText(seed);
+    captureSeedCopied(completion);
   }
 
   return (
@@ -63,6 +98,7 @@ export function PublicAchievementBoard({
               }
 
               event.preventDefault();
+              captureAchievementViewed(achievement);
               setDetailTarget(achievement);
             }
 
@@ -75,6 +111,7 @@ export function PublicAchievementBoard({
                 tabIndex={isCompleted ? 0 : undefined}
                 onClick={() => {
                   if (isCompleted) {
+                    captureAchievementViewed(achievement);
                     setDetailTarget(achievement);
                   }
                 }}

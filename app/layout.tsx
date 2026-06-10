@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Kreon } from "next/font/google";
+import { AnalyticsProvider } from "@/components/AnalyticsProvider";
 import { brandConfig } from "@/config/brand";
+import { getPublicEnv } from "@/lib/env";
 import "./globals.css";
 
 const kreon = Kreon({
@@ -19,9 +21,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const publicEnv = getPublicEnv();
+
   return (
     <html className={kreon.variable} lang="en">
-      <body className="font-body antialiased">{children}</body>
+      <body className="font-body antialiased">
+        <AnalyticsProvider publicEnv={publicEnv} />
+        {children}
+      </body>
     </html>
   );
 }

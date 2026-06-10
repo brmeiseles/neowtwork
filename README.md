@@ -17,6 +17,7 @@ complete achievement -> upload proof -> save ascension/seed -> share board -> in
 - lucide-react
 - framer-motion
 - Supabase foundation for auth, database, and proof storage
+- PostHog for privacy-conscious product analytics
 
 ## Local Setup
 
@@ -64,9 +65,14 @@ Add these to `.env.local`:
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=your-project-url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+NEXT_PUBLIC_POSTHOG_KEY=your-posthog-project-token
+NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
 ```
 
 Never commit real keys. `.env.example` shows the required names only.
+
+PostHog analytics are optional locally. Leave the PostHog values blank to
+disable analytics without breaking the app.
 
 ### 3. Run Migrations
 
@@ -174,6 +180,8 @@ The production app expects these exact variable names:
 ```bash
 NEXT_PUBLIC_SUPABASE_URL
 NEXT_PUBLIC_SUPABASE_ANON_KEY
+NEXT_PUBLIC_POSTHOG_KEY
+NEXT_PUBLIC_POSTHOG_HOST
 ```
 
 The homepage auth panel receives this public Supabase config from the server-rendered app shell. This keeps the missing-env fallback, but avoids relying only on stale client-bundle substitution when Vercel env vars change.
@@ -184,6 +192,36 @@ If production ever shows the dormant backend message again, check the non-secret
 - `Key: configured/missing`
 
 Do not log or paste the actual key value.
+
+## Analytics Setup
+
+Neowtwork uses PostHog for explicit, privacy-conscious behavior analytics.
+Analytics track product behavior, not personal data.
+
+Tracked events:
+
+- `achievement_viewed`
+- `completion_added`
+- `seed_copied`
+- `friend_added`
+- `profile_viewed`
+
+The app does not track raw seed values, proof image URLs, emails, Discord IDs,
+access tokens, or personal profile data. Broad autocapture, session replay, and
+heatmaps are disabled.
+
+To verify events in PostHog:
+
+1. Add `NEXT_PUBLIC_POSTHOG_KEY` and `NEXT_PUBLIC_POSTHOG_HOST`.
+2. Restart local dev or redeploy Vercel.
+3. Open PostHog Activity or Live Events.
+4. Trigger one tracked action in the app, such as opening an achievement detail
+   modal or copying a seed.
+5. Confirm the event appears with gameplay metadata like achievement id,
+   ascension, source, and app version.
+
+Future public/global stats should come from Supabase completion data, not
+directly from PostHog event counts.
 
 ## Renaming The App
 

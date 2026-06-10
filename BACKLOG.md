@@ -46,21 +46,18 @@
 
 ## Analytics Before Reddit
 
-- Add privacy-conscious analytics before public Reddit launch.
-- Use PostHog as the recommended tool.
-- Track behavior, not personal data.
-- Track `achievement_completed`.
-- Track `completion_added`.
-- Track `achievement_viewed`.
-- Track `seed_copied`.
-- Track `profile_viewed`.
-- Track `friend_added`.
-- Track `board_completed`.
+- Completed initial privacy-conscious PostHog analytics in `1.3.0`; see `DEVLOG.md` entry `2026-06-10 - Privacy-Conscious Analytics`.
+- Keep tracking behavior, not personal data.
+- Consider `achievement_completed` only after the first-completion semantics are clear.
+- Consider `board_completed` after the all-12 completion celebration exists.
 - Add future global stats page.
 - Show most completed achievement.
 - Show rarest achievement.
 - Show highest ascension completion.
 - Show most copied seed.
+- Show board completion count.
+- Show recent legendary clears.
+- Build public/global stats from Supabase completion data, not directly from PostHog events.
 
 ## Delight / Endgame
 

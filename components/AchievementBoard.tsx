@@ -7,6 +7,7 @@ import type { AchievementCompletion } from "@/types/completion";
 import { AchievementCard } from "@/components/AchievementCard";
 import { AchievementCompletionDialog } from "@/components/AchievementCompletionDialog";
 import { AchievementDetailDialog } from "@/components/AchievementDetailDialog";
+import { captureAnalyticsEvent } from "@/lib/analytics";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import type { PublicEnv } from "@/lib/env";
 
@@ -344,6 +345,9 @@ export function AchievementBoard({
   async function handleComplete(completion: AchievementCompletion) {
     if (!currentUser || !supabase) {
       storeLocalCompletion(completion);
+      if (!editingCompletion) {
+        captureCompletionAdded(completion);
+      }
       return true;
     }
 
@@ -404,6 +408,17 @@ export function AchievementBoard({
       }
 
       storeLocalCompletion({
+        id: data.id,
+        achievementSlug: data.achievement_id,
+        proofImageDataUrl: data.proof_image_url ?? "",
+        seed: data.seed ?? "",
+        ascensionLevel: data.ascension,
+        notes: data.notes ?? "",
+        completedAt: data.completed_at,
+        createdAt: data.created_at,
+        updatedAt: data.updated_at,
+      });
+      captureCompletionAdded({
         id: data.id,
         achievementSlug: data.achievement_id,
         proofImageDataUrl: data.proof_image_url ?? "",
@@ -493,17 +508,66 @@ export function AchievementBoard({
     setDetailTarget(null);
   }
 
-  async function handleCopySeed(seed: string) {
+  async function handleCopySeed(
+    seed: string,
+    completion: AchievementCompletion,
+  ) {
     if (!seed) {
       return;
     }
 
     await navigator.clipboard.writeText(seed);
+    captureSeedCopied(completion);
   }
 
   const detailCompletions = detailTarget
     ? completions[detailTarget.slug] ?? []
     : [];
+
+  function getAchievement(achievementSlug: string) {
+    return sortedAchievements.find(
+      (achievement) => achievement.slug === achievementSlug,
+    );
+  }
+
+  function captureAchievementViewed(achievement: Achievement, source: string) {
+    captureAnalyticsEvent("achievement_viewed", {
+      achievement_id: achievement.slug,
+      achievement_name: achievement.title,
+      completion_count: completions[achievement.slug]?.length ?? 0,
+      is_logged_in: Boolean(currentUser),
+      source,
+    });
+  }
+
+  function captureCompletionAdded(completion: AchievementCompletion) {
+    const achievement = getAchievement(completion.achievementSlug);
+
+    captureAnalyticsEvent("completion_added", {
+      achievement_id: completion.achievementSlug,
+      achievement_name: achievement?.title,
+      ascension: completion.ascensionLevel,
+      completion_count: (completions[completion.achievementSlug]?.length ?? 0) + 1,
+      has_proof: Boolean(completion.proofImageDataUrl),
+      has_seed: Boolean(completion.seed?.trim()),
+      is_logged_in: Boolean(currentUser),
+      source: currentUser ? "supabase" : "local",
+    });
+  }
+
+  function captureSeedCopied(completion: AchievementCompletion) {
+    const achievement = getAchievement(completion.achievementSlug);
+
+    captureAnalyticsEvent("seed_copied", {
+      achievement_id: completion.achievementSlug,
+      achievement_name: achievement?.title,
+      ascension: completion.ascensionLevel,
+      has_proof: Boolean(completion.proofImageDataUrl),
+      has_seed: Boolean(completion.seed?.trim()),
+      is_logged_in: Boolean(currentUser),
+      source: "modal",
+    });
+  }
 
   return (
     <>
@@ -523,8 +587,14 @@ export function AchievementBoard({
               achievement={achievement}
               completion={getBestCompletion(completions[achievement.slug])}
               key={achievement.slug}
-              onComplete={() => setCompletionTarget(achievement)}
-              onView={() => setDetailTarget(achievement)}
+              onComplete={() => {
+                captureAchievementViewed(achievement, "board");
+                setCompletionTarget(achievement);
+              }}
+              onView={() => {
+                captureAchievementViewed(achievement, "board");
+                setDetailTarget(achievement);
+              }}
             />
           ))}
         </section>
@@ -548,6 +618,7 @@ export function AchievementBoard({
         completions={detailCompletions}
         open={Boolean(detailTarget && detailCompletions.length)}
         onAddCompletion={(achievement) => {
+          captureAchievementViewed(achievement, "modal");
           setCompletionTarget(achievement);
           setEditingCompletion(null);
         }}

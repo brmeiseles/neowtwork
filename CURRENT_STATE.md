@@ -2,13 +2,14 @@
 
 ## Current Version
 
-`1.2.5`
+`1.3.0`
 
 ## Architecture
 
 - Next.js app router project using TypeScript and Tailwind CSS.
 - `app/page.tsx` renders the homepage shell and achievement board.
 - `components/AppShell.tsx` includes the shared shell, footer, and compact auth panel area.
+- `components/AnalyticsProvider.tsx` initializes optional PostHog analytics when public env vars are present.
 - `components/AuthPanel.tsx` scaffolds Discord sign-in, sign-out, auth state, and first-login username claiming.
 - `components/FriendsPanel.tsx` renders the compact authenticated Friends dropdown for adding friends and opening friend boards.
 - `components/AchievementBoard.tsx` owns completion state, Supabase save/load coordination, localStorage fallback, and modal coordination.
@@ -17,10 +18,12 @@
 - `components/AchievementDetailDialog.tsx` displays all completions for an achievement and supports add/edit/delete/reset.
 - `components/PublicAchievementBoard.tsx` renders read-only public boards.
 - `components/PublicAchievementBoard.tsx` supports read-only completed-achievement detail modals with copyable seeds.
+- `components/ProfileViewAnalytics.tsx` records privacy-conscious public profile board views.
 - `app/u/[username]/page.tsx` is the public read-only board route.
 - `app/auth/callback/route.ts` exchanges Supabase OAuth codes after Discord login.
 - `lib/supabase/client.ts` and `lib/supabase/server.ts` create browser/server Supabase clients.
 - `lib/env.ts` centralizes public env handling and safe missing-env checks.
+- `lib/analytics.ts` centralizes explicit PostHog event capture and safely no-ops when analytics env vars are missing.
 - `components/AppShell.tsx` passes server-read Supabase public env into `AuthPanel`.
 - `types/database.ts` holds the current Supabase table types.
 - `supabase/migrations/202606100001_backend_foundation.sql` defines database tables, RLS policies, and the `proofs` bucket.
@@ -40,6 +43,7 @@
 - `framer-motion`
 - `@supabase/supabase-js`
 - `@supabase/ssr`
+- `posthog-js`
 - shadcn-style primitives/helpers: `@radix-ui/react-slot`, `@radix-ui/react-dialog`, `class-variance-authority`, `clsx`, `tailwind-merge`
 
 ## Current UX Decisions
@@ -67,11 +71,15 @@
 - Friends access lives in the authenticated top-bar account block, not the main achievement board body.
 - Logged-out users do not see Friends UI.
 - The achievement board does not show a normal completion-loading banner; backend errors still render plainly if loading fails.
+- Analytics track explicit behavior events only: `achievement_viewed`, `completion_added`, `seed_copied`, `friend_added`, and `profile_viewed`.
+- Analytics do not track raw seeds, proof image URLs, emails, Discord IDs, access tokens, or personal profile data.
+- PostHog autocapture, pageview capture, pageleave capture, and session recording are disabled.
 
 ## Backend Status
 
 - Supabase clients and env scaffolding are implemented.
-- Required env vars are `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+- Required Supabase env vars are `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+- Optional PostHog env vars are `NEXT_PUBLIC_POSTHOG_KEY` and `NEXT_PUBLIC_POSTHOG_HOST`.
 - Local `.env.local` is configured for Supabase project `kdeslyohpjicuczgfnny`.
 - Missing env is still handled gracefully with a dormant backend message.
 - Production env detection is runtime server-fed for the homepage; `app/page.tsx` is intentionally dynamic so Vercel env changes are not trapped in a stale static/client bundle.
@@ -109,6 +117,7 @@
 - Deleted or replaced Supabase proof screenshots are not cleaned up from Storage yet.
 - Browser-driven username form typing could not be automated in Codex because the in-app browser virtual clipboard was unavailable; the profile row was created directly in Supabase and verified through the app.
 - Recommendation: keep manual username slugs until a migration can safely derive stable slugs from Discord identity without breaking existing public board URLs.
+- Public/global stats are not implemented yet and should eventually come from Supabase completion data rather than PostHog event counts.
 
 ## Deployed Status
 

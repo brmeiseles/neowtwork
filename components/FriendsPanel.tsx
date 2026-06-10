@@ -10,6 +10,7 @@ import {
   isValidUsername,
   normalizeUsername,
 } from "@/lib/username";
+import { captureAnalyticsEvent } from "@/lib/analytics";
 import type { Database } from "@/types/database";
 
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
@@ -212,6 +213,10 @@ export function FriendsPanel({
       ].sort(sortFriends),
     );
     setUsername("");
+    captureAnalyticsEvent("friend_added", {
+      is_logged_in: true,
+      source: "topbar",
+    });
     setMessage(`Added @${targetProfile.username}. Seeds are now legally suspicious.`);
   }
 

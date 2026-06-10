@@ -1,5 +1,70 @@
 # DEVLOG.md
 
+## 2026-06-10 - Privacy-Conscious Analytics
+
+### Version
+
+- `1.3.0`
+
+### Feature Summary
+
+- Added lightweight PostHog analytics for the pre-Reddit launch learning loop.
+
+### What Changed
+
+- Installed `posthog-js`.
+- Added optional public PostHog env vars: `NEXT_PUBLIC_POSTHOG_KEY` and `NEXT_PUBLIC_POSTHOG_HOST`.
+- Added a centralized analytics helper that safely no-ops when analytics env vars are missing.
+- Added a client analytics provider with autocapture, pageview capture, pageleave capture, and session recording disabled.
+- Tracked explicit custom events only: `achievement_viewed`, `completion_added`, `seed_copied`, `friend_added`, and `profile_viewed`.
+- Added safe gameplay/product metadata such as achievement id/name, ascension, seed/proof booleans, source, profile view type, completion count, logged-in state, and app version.
+- Avoided raw seed values, proof URLs, emails, Discord IDs, access tokens, and personal profile data.
+- Documented local/Vercel setup and PostHog verification steps.
+- Updated backlog notes for future Supabase-backed global stats.
+- Bumped the app version to `1.3.0`.
+
+### Why It Changed
+
+- Neowtwork needs enough behavioral signal before a public Reddit launch to understand what players actually use, while staying true to the project rule: track behavior, not personal data.
+
+### Files Touched
+
+- `.env.example`
+- `AGENTS.md`
+- `BACKLOG.md`
+- `CURRENT_STATE.md`
+- `DEVLOG.md`
+- `README.md`
+- `VERSION.md`
+- `app/layout.tsx`
+- `app/u/[username]/page.tsx`
+- `components/AchievementBoard.tsx`
+- `components/AchievementDetailDialog.tsx`
+- `components/AnalyticsProvider.tsx`
+- `components/FriendsPanel.tsx`
+- `components/ProfileViewAnalytics.tsx`
+- `components/PublicAchievementBoard.tsx`
+- `config/app.ts`
+- `lib/analytics.ts`
+- `lib/env.ts`
+- `package.json`
+- `package-lock.json`
+
+### Verification Status
+
+- Ran `npm run typecheck`.
+- Ran `npm run build`.
+- Ran `npm run dev -- -p 3001`.
+- Confirmed the local homepage renders `v1.3.0`, the Slay the Spire 2 achievement board, the official tagline, and achievement cards with PostHog env enabled.
+- Confirmed opening `Basic Training` opens the completion modal, exercising the `achievement_viewed` event path.
+- Confirmed tracked source code sends only safe metadata booleans/ids/counts and does not pass raw seed values, proof image URLs, emails, Discord IDs, access tokens, or profile identifiers into analytics events.
+- Confirmed broad PostHog autocapture, pageview capture, pageleave capture, and session recording are disabled.
+- Confirmed tracked project files do not contain the provided PostHog project token.
+
+### Commit
+
+- Pending push.
+
 ## 2026-06-10 - Friend Row Label Cleanup
 
 ### Version

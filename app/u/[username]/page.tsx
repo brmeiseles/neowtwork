@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { AchievementBoard } from "@/components/AchievementBoard";
 import { AppShell } from "@/components/AppShell";
+import { ProfileViewAnalytics } from "@/components/ProfileViewAnalytics";
 import { PublicAchievementBoard } from "@/components/PublicAchievementBoard";
 import { achievements as localAchievements } from "@/data/achievements";
 import { getPublicEnv, hasSupabaseEnv } from "@/lib/env";
@@ -143,6 +144,16 @@ export default async function PublicProfilePage({
     data: { user },
   } = await supabase.auth.getUser();
   const isOwnBoard = user?.id === profile.id;
+  const { data: friendRow } =
+    user && !isOwnBoard
+      ? await supabase
+          .from("friends")
+          .select("id")
+          .eq("user_id", user.id)
+          .eq("friend_user_id", profile.id)
+          .maybeSingle()
+      : { data: null };
+  const viewedProfileType = isOwnBoard ? "own" : friendRow ? "friend" : "public";
 
   const profileDescription = isOwnBoard
     ? "Your editable achievement codex."
@@ -152,6 +163,11 @@ export default async function PublicProfilePage({
 
   return (
     <AppShell>
+      <ProfileViewAnalytics
+        completionCount={completionRows?.length ?? 0}
+        isLoggedIn={Boolean(user)}
+        viewedProfileType={viewedProfileType}
+      />
       <div className="flex flex-col gap-4 sm:gap-5">
         <header className="codex-hero">
           <p className="mb-2 text-[0.7rem] font-black uppercase tracking-ritual text-emberBright">
@@ -173,6 +189,7 @@ export default async function PublicProfilePage({
           <PublicAchievementBoard
             achievements={boardAchievements}
             completionsByAchievement={mapCompletionRows(completionRows ?? [])}
+            isLoggedIn={Boolean(user)}
           />
         )}
       </div>

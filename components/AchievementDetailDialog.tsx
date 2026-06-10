@@ -19,7 +19,7 @@ type AchievementDetailDialogProps = {
   isReadOnly?: boolean;
   open: boolean;
   onAddCompletion?: (achievement: Achievement) => void;
-  onCopySeed: (seed: string) => void;
+  onCopySeed: (seed: string, completion: AchievementCompletion) => void;
   onDeleteCompletion?: (achievementSlug: string, completionId: string) => void;
   onEditCompletion?: (
     achievement: Achievement,
@@ -146,7 +146,9 @@ export function AchievementDetailDialog({
                       <Button
                         size="sm"
                         type="button"
-                        onClick={() => onCopySeed(completion.seed ?? "")}
+                        onClick={() =>
+                          onCopySeed(completion.seed ?? "", completion)
+                        }
                       >
                         <Copy className="size-4" />
                         Copy Seed
