@@ -1,5 +1,58 @@
 # DEVLOG.md
 
+## 2026-06-10 - Fixed Production Supabase Env Detection
+
+### Version
+
+- `1.0.3`
+
+### Feature Summary
+
+- Fixed production Supabase detection so Vercel runtime env can clear the dormant backend banner.
+
+### What Changed
+
+- Changed `AuthPanel` to receive Supabase public env from the server-rendered app shell.
+- Kept the exact expected variable names: `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+- Forced the homepage to render dynamically so Vercel reads runtime env instead of relying on a stale static/client bundle.
+- Added safe boolean-only dormant diagnostics: URL configured/missing and key configured/missing.
+- Documented Vercel env troubleshooting in `README.md`.
+- Bumped the app version to `1.0.3` as a PATCH production-auth fix.
+
+### Why It Changed
+
+- Production kept showing the dormant backend banner even after Vercel env vars were added. The app's previous client-side env check depended on build-time `NEXT_PUBLIC_*` substitution, which can stay stale if a production deployment was built without those values or served from a cached/static bundle.
+
+### Files Touched
+
+- `AGENTS.md`
+- `CURRENT_STATE.md`
+- `DEVLOG.md`
+- `README.md`
+- `VERSION.md`
+- `app/page.tsx`
+- `components/AppShell.tsx`
+- `components/AuthPanel.tsx`
+- `config/app.ts`
+- `lib/env.ts`
+- `lib/supabase/client.ts`
+- `package.json`
+- `package-lock.json`
+
+### Verification Status
+
+- Ran `npm run typecheck`.
+- Ran `npm run build`.
+- Confirmed build output marks `/` as dynamic, so the homepage reads server runtime env instead of being statically frozen.
+- Ran `npm run dev` with `.env.local`.
+- Confirmed local homepage no longer shows the dormant banner, shows `@brando_prime`/`Sign out` from the live Supabase session, renders 12 cards, shows `v1.0.3`, and has no browser console errors.
+- Confirmed missing-env fallback remains in code and now reports only non-secret boolean-style diagnostics.
+- Production should clear the dormant banner after this push/redeploy if Vercel has `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` set for the deployed environment.
+
+### Commit
+
+- To be recorded after push, if available.
+
 ## 2026-06-10 - Connected And Verified Supabase Auth
 
 ### Version

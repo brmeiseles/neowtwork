@@ -2,7 +2,7 @@
 
 ## Current Version
 
-`1.0.2`
+`1.0.3`
 
 ## Architecture
 
@@ -19,6 +19,7 @@
 - `app/auth/callback/route.ts` exchanges Supabase OAuth codes after Discord login.
 - `lib/supabase/client.ts` and `lib/supabase/server.ts` create browser/server Supabase clients.
 - `lib/env.ts` centralizes public env handling and safe missing-env checks.
+- `components/AppShell.tsx` passes server-read Supabase public env into `AuthPanel`.
 - `types/database.ts` holds the current Supabase table types.
 - `supabase/migrations/202606100001_backend_foundation.sql` defines database tables, RLS policies, and the `proofs` bucket.
 - `supabase/seed.sql` seeds the current 12 achievements into Supabase.
@@ -62,6 +63,7 @@
 - Required env vars are `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
 - Local `.env.local` is configured for Supabase project `kdeslyohpjicuczgfnny`.
 - Missing env is still handled gracefully with a dormant backend message.
+- Production env detection is runtime server-fed for the homepage; `app/page.tsx` is intentionally dynamic so Vercel env changes are not trapped in a stale static/client bundle.
 - Discord OAuth UI and callback route are scaffolded.
 - Discord OAuth has been verified against the live Supabase project.
 - First-login username onboarding is scaffolded with lowercase URL-safe usernames.

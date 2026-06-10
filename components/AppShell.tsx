@@ -4,6 +4,7 @@ import { AuthPanel } from "@/components/AuthPanel";
 import { appConfig } from "@/config/app";
 import { brandConfig } from "@/config/brand";
 import { Button } from "@/components/ui/button";
+import { getPublicEnv } from "@/lib/env";
 
 type AppShellProps = {
   children: ReactNode;
@@ -19,6 +20,7 @@ export function AppShell({
   footer,
 }: AppShellProps) {
   const hasTopBar = Boolean(navigation || profileArea);
+  const publicEnv = getPublicEnv();
 
   return (
     <div className="min-h-screen px-shell-x py-shell-y sm:px-6 lg:px-10">
@@ -30,7 +32,7 @@ export function AppShell({
           </header>
         ) : (
           <header className="flex justify-end">
-            <AuthPanel />
+            <AuthPanel publicEnv={publicEnv} />
           </header>
         )}
 

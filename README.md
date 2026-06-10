@@ -163,6 +163,24 @@ Still manual/incomplete:
 - Supabase Storage upload is designed but not yet wired into the completion form.
 - Local completions are not yet automatically synced to Supabase.
 
+## Vercel Environment Notes
+
+The production app expects these exact variable names:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY
+```
+
+The homepage auth panel receives this public Supabase config from the server-rendered app shell. This keeps the missing-env fallback, but avoids relying only on stale client-bundle substitution when Vercel env vars change.
+
+If production ever shows the dormant backend message again, check the non-secret diagnostic text in that banner:
+
+- `URL: configured/missing`
+- `Key: configured/missing`
+
+Do not log or paste the actual key value.
+
 ## Renaming The App
 
 Most visible naming lives in `config/brand.ts`. To rename the app later, update the app name, short name, tagline, metadata title, metadata description, and repo name there first.

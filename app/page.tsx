@@ -3,6 +3,8 @@ import { AppShell } from "@/components/AppShell";
 import { brandConfig } from "@/config/brand";
 import { achievements } from "@/data/achievements";
 
+export const dynamic = "force-dynamic";
+
 export default function Home() {
   return (
     <AppShell>

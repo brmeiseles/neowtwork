@@ -13,3 +13,11 @@ export function getPublicEnv(): PublicEnv {
 export function hasSupabaseEnv(env = getPublicEnv()) {
   return Boolean(env.supabaseUrl && env.supabaseAnonKey);
 }
+
+export function getPublicEnvStatus(env = getPublicEnv()) {
+  return {
+    hasSupabaseUrl: Boolean(env.supabaseUrl),
+    hasSupabaseAnonKey: Boolean(env.supabaseAnonKey),
+    isSupabaseConfigured: hasSupabaseEnv(env),
+  };
+}

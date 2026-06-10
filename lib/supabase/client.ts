@@ -3,13 +3,14 @@
 import { createBrowserClient } from "@supabase/ssr";
 import { getPublicEnv, hasSupabaseEnv } from "@/lib/env";
 import type { Database } from "@/types/database";
+import type { PublicEnv } from "@/lib/env";
 
 export function isSupabaseConfigured() {
   return hasSupabaseEnv();
 }
 
-export function createSupabaseBrowserClient() {
-  const env = getPublicEnv();
+export function createSupabaseBrowserClient(publicEnv?: PublicEnv) {
+  const env = publicEnv ?? getPublicEnv();
 
   if (!hasSupabaseEnv(env)) {
     return null;

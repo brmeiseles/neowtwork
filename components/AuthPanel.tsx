@@ -5,6 +5,7 @@ import type { User } from "@supabase/supabase-js";
 import { LogOut, Shield, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { getPublicEnvStatus, type PublicEnv } from "@/lib/env";
 import {
   getUsernameHelpText,
   isValidUsername,
@@ -14,8 +15,16 @@ import type { Database } from "@/types/database";
 
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 
-export function AuthPanel() {
-  const supabase = useMemo(() => createSupabaseBrowserClient(), []);
+type AuthPanelProps = {
+  publicEnv: PublicEnv;
+};
+
+export function AuthPanel({ publicEnv }: AuthPanelProps) {
+  const envStatus = getPublicEnvStatus(publicEnv);
+  const supabase = useMemo(
+    () => createSupabaseBrowserClient(publicEnv),
+    [publicEnv],
+  );
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [username, setUsername] = useState("");
@@ -192,6 +201,10 @@ export function AuthPanel() {
     return (
       <div className="max-w-md rounded-card border border-brass/25 bg-pitch/55 px-3 py-2 text-xs font-bold uppercase tracking-title text-brass">
         Backend dormant: add Supabase env vars to enable Discord login.
+        <span className="mt-1 block text-bone/70">
+          URL: {envStatus.hasSupabaseUrl ? "configured" : "missing"} · Key:{" "}
+          {envStatus.hasSupabaseAnonKey ? "configured" : "missing"}
+        </span>
       </div>
     );
   }
