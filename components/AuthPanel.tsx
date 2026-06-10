@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import type { User } from "@supabase/supabase-js";
-import { LogOut, Shield, UserRound, Users } from "lucide-react";
+import { LogOut, ScrollText, Shield, UserRound, Users } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { FriendsPanel } from "@/components/FriendsPanel";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
@@ -34,11 +35,34 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
   const [status, setStatus] = useState<AuthStatus>(supabase ? "loading" : "ready");
   const [message, setMessage] = useState("");
   const [isFriendsOpen, setIsFriendsOpen] = useState(false);
+  const accountPanelRef = useRef<HTMLDivElement | null>(null);
   const profileRef = useRef<Profile | null>(null);
 
   useEffect(() => {
     profileRef.current = profile;
   }, [profile]);
+
+  useEffect(() => {
+    if (!isFriendsOpen) {
+      return;
+    }
+
+    function handlePointerDown(event: Event) {
+      if (
+        accountPanelRef.current &&
+        event.target instanceof Node &&
+        !accountPanelRef.current.contains(event.target)
+      ) {
+        setIsFriendsOpen(false);
+      }
+    }
+
+    document.addEventListener("pointerdown", handlePointerDown, true);
+
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown, true);
+    };
+  }, [isFriendsOpen]);
 
   useEffect(() => {
     if (!supabase) {
@@ -82,6 +106,7 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
           setProfile(null);
           setUsername("");
           setStatus("profile-loading");
+          return nextUser;
         } else if (!profileRef.current) {
           setStatus("profile-loading");
           return nextUser;
@@ -258,7 +283,10 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
   }
 
   return (
-    <div className="relative grid min-h-[4.25rem] min-w-72 gap-2 rounded-card border border-brass/25 bg-pitch/55 p-3 text-sm text-bone shadow-card">
+    <div
+      className="relative grid min-h-[4.25rem] min-w-72 gap-2 rounded-card border border-brass/25 bg-pitch/55 p-3 text-sm text-bone shadow-card"
+      ref={accountPanelRef}
+    >
       <div className="flex flex-wrap items-center justify-between gap-3">
         <span className="inline-flex items-center gap-2 font-bold text-parchment">
           <UserRound className="size-4 text-emberBright" />
@@ -266,16 +294,24 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
         </span>
         <div className="flex items-center gap-1.5">
           {profile ? (
-            <Button
-              aria-expanded={isFriendsOpen}
-              size="sm"
-              type="button"
-              variant="ghost"
-              onClick={() => setIsFriendsOpen((isOpen) => !isOpen)}
-            >
-              <Users className="size-4" />
-              Friends
-            </Button>
+            <>
+              <Button asChild size="sm" variant="ghost">
+                <Link href={`/u/${profile.username}`}>
+                  <ScrollText className="size-4" />
+                  My Board
+                </Link>
+              </Button>
+              <Button
+                aria-expanded={isFriendsOpen}
+                size="sm"
+                type="button"
+                variant="ghost"
+                onClick={() => setIsFriendsOpen((isOpen) => !isOpen)}
+              >
+                <Users className="size-4" />
+                Friends
+              </Button>
+            </>
           ) : null}
           <Button size="sm" type="button" variant="ghost" onClick={handleSignOut}>
             <LogOut className="size-4" />

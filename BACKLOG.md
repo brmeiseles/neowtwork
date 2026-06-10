@@ -33,12 +33,15 @@
 - Completed Phase 1 Supabase/Discord foundation in `1.0.0`; see `DEVLOG.md` entry `2026-06-10 - Phase 1 Backend Foundation`.
 - Completed Supabase project env/migration/seed and Discord OAuth/profile verification in `1.0.2`; see `DEVLOG.md` entry `2026-06-10 - Connected And Verified Supabase Auth`.
 - Verify first-login username claiming through the UI once browser text entry is available outside Codex automation.
+- Review replacing manual username onboarding with Discord-derived profile slugs.
+- Explore Discord display-name based friend lookup while preserving stable public profile URLs.
 - Avoid email/password system initially unless needed.
 - Migrate localStorage completions to logged-in user account if possible.
 
 ## Friends / Social
 
 - Completed first Friends feature pass in `1.2.0`; see `DEVLOG.md` entry `2026-06-10 - Friends And Read-Only Boards`.
+- Explore Discord friend discovery or Discord-linked friend suggestions.
 - Support profile sharing for Discord/Reddit.
 
 ## Analytics Before Reddit

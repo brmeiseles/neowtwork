@@ -1,5 +1,59 @@
 # DEVLOG.md
 
+## 2026-06-10 - Account Friends Polish
+
+### Version
+
+- `1.2.4`
+
+### Feature Summary
+
+- Polished the account/Friends UX, added a My Board return path, updated the official tagline, and documented the Discord identity recommendation.
+
+### What Changed
+
+- Replaced the homepage tagline with `Because Slay 2 deserves achievements.`
+- Added a top-bar `My Board` action for logged-in users.
+- Added outside-click dismissal for the Friends dropdown.
+- Removed the separate `Board` button from friend rows.
+- Made each friend row a full-card link to that friend's board with hover/focus states.
+- Preserved keyboard accessibility through normal link behavior.
+- Reviewed username/Discord identity assumptions and documented why manual username slugs should stay for now.
+- Added backlog items for Discord-derived profile slugs, Discord display-name lookup, and future Discord friend discovery.
+- Bumped the app version to `1.2.4`.
+
+### Why It Changed
+
+- Friend navigation should feel like account/guild functionality, and users need a clear way back to their own codex when inspecting someone else's board. The tagline also needed to state the app's player-made reason for existing instead of sounding like product copy.
+
+### Files Touched
+
+- `AGENTS.md`
+- `BACKLOG.md`
+- `CURRENT_STATE.md`
+- `DEVLOG.md`
+- `VERSION.md`
+- `components/AuthPanel.tsx`
+- `components/FriendsPanel.tsx`
+- `config/app.ts`
+- `config/brand.ts`
+- `package.json`
+- `package-lock.json`
+
+### Verification Status
+
+- Ran `npm run typecheck`.
+- Ran `npm run build`.
+- Ran `npm run dev -- -p 3001`.
+- Confirmed the local homepage renders the updated `Because Slay 2 deserves achievements.` tagline, the `Slay the Spire 2 Achievements` title, 12 achievement cards, and `v1.2.4`.
+- Confirmed the old `Track impossible runs. Share proof. Steal seeds.` tagline is absent from the rendered homepage.
+- Confirmed source behavior for authenticated Friends: `My Board` links to the signed-in user's `/u/[username]` board, Friends is only shown for resolved profiles, the dropdown closes on outside pointer clicks, and friend rows are full-card links with no separate `Board` button.
+- Confirmed username/Discord identity review: public username slugs remain required for stable routes and friend lookup; Discord display identity remains profile metadata until a safe slug migration is designed.
+
+### Commit
+
+- Pending push.
+
 ## 2026-06-10 - Rebuilt Achievement Badges
 
 ### Version

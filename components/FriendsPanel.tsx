@@ -256,8 +256,9 @@ export function FriendsPanel({
       ) : friends.length ? (
         <div className="grid max-h-72 gap-2 overflow-y-auto pr-1">
           {friends.map((friend) => (
-            <div
-              className="flex items-center justify-between gap-3 rounded-card border border-brass/25 bg-soot/65 p-2.5 shadow-card"
+            <Link
+              className="flex items-center justify-between gap-3 rounded-card border border-brass/25 bg-soot/65 p-2.5 text-left shadow-card transition hover:border-ember/70 hover:bg-cardHover focus:outline-none focus:ring-2 focus:ring-ember focus:ring-offset-2 focus:ring-offset-pitch"
+              href={`/u/${friend.profile.username}`}
               key={friend.id}
             >
               <div className="flex min-w-0 items-center gap-2">
@@ -283,13 +284,11 @@ export function FriendsPanel({
                   ) : null}
                 </div>
               </div>
-              <Button asChild size="sm" type="button">
-                <Link href={`/u/${friend.profile.username}`}>
-                  <ExternalLink className="size-4" />
-                  Board
-                </Link>
-              </Button>
-            </div>
+              <span className="inline-flex shrink-0 items-center gap-1 text-[0.65rem] font-black uppercase tracking-title text-emberBright">
+                Seeds
+                <ExternalLink className="size-3.5" />
+              </span>
+            </Link>
           ))}
         </div>
       ) : (

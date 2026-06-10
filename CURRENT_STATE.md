@@ -2,7 +2,7 @@
 
 ## Current Version
 
-`1.2.3`
+`1.2.4`
 
 ## Architecture
 
@@ -63,6 +63,7 @@
 - Kreon is the primary app font via `next/font/google`.
 - Completion proof entry supports file upload and clipboard paste only; image URL entry was removed to keep the flow cleaner.
 - The homepage board header is `Slay the Spire 2 Achievements`; the app/brand name remains `Neowtwork`.
+- The official homepage tagline is `Because Slay 2 deserves achievements.`
 - Friends access lives in the authenticated top-bar account block, not the main achievement board body.
 - Logged-out users do not see Friends UI.
 - The achievement board does not show a normal completion-loading banner; backend errors still render plainly if loading fails.
@@ -77,6 +78,8 @@
 - Discord OAuth UI and callback route are scaffolded.
 - Discord OAuth has been verified against the live Supabase project.
 - First-login username onboarding is scaffolded with lowercase URL-safe usernames.
+- Current username records are still required for stable `/u/[username]` public routes, friend lookup, and profile uniqueness.
+- Discord display names and avatars are stored on profiles, but Discord identity has not replaced public username slugs yet.
 - Live profile `@brando_prime` exists for the first authenticated user.
 - Public read-only route `/u/[username]` exists.
 - Database schema and RLS policies are documented as SQL migrations.
@@ -92,6 +95,9 @@
 - Friends use the existing Supabase `friends` table.
 - Users can add friends by username, cannot add themselves, and duplicate/unknown usernames are rejected.
 - Friend rows link to `/u/[username]`.
+- Logged-in users have a top-bar `My Board` link back to their own `/u/[username]` board.
+- Friends dropdown closes on outside click.
+- Friend rows are full-card links instead of using a separate `Board` button.
 - `/u/[username]` renders owner controls only when the signed-in user is viewing their own board; other boards are read-only.
 - Auth/profile loading keeps a fixed-height intermediate panel instead of flashing the username onboarding form during session refresh.
 - Friends load only after the logged-in profile is resolved and only inside the compact dropdown, avoiding empty-state flashes in the page body.
@@ -102,6 +108,7 @@
 - Local completions are not synced/migrated to Supabase accounts yet.
 - Deleted or replaced Supabase proof screenshots are not cleaned up from Storage yet.
 - Browser-driven username form typing could not be automated in Codex because the in-app browser virtual clipboard was unavailable; the profile row was created directly in Supabase and verified through the app.
+- Recommendation: keep manual username slugs until a migration can safely derive stable slugs from Discord identity without breaking existing public board URLs.
 
 ## Deployed Status
 
