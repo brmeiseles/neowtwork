@@ -20,8 +20,8 @@ export const designSystem = {
   },
   typography: {
     fontFamily: {
-      display: ["var(--font-geist-sans)", "ui-sans-serif", "system-ui"],
-      body: ["var(--font-geist-sans)", "ui-sans-serif", "system-ui"],
+      display: ["var(--font-kreon)", "ui-serif", "Georgia", "serif"],
+      body: ["var(--font-kreon)", "ui-serif", "Georgia", "serif"],
     },
     letterSpacing: {
       ritual: "0.34em",

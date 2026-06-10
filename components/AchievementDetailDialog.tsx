@@ -1,6 +1,6 @@
 "use client";
 
-import { Award, Copy, RotateCcw } from "lucide-react";
+import { Copy, RotateCcw } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -53,9 +53,13 @@ export function AchievementDetailDialog({
           <div className="flex flex-col gap-4 rounded-card border border-antiqueGold/35 bg-pitch/45 p-4 sm:flex-row sm:items-center">
             <div
               aria-hidden="true"
-              className="locked-emblem text-parchment"
+              className="locked-emblem unlocked-emblem text-parchment"
             >
-              <Award className="size-8 drop-shadow-[0_2px_0_rgba(0,0,0,0.8)]" />
+              <img
+                alt=""
+                className="achievement-emblem-unlocked size-full rounded-badge object-contain p-1"
+                src={achievement.emblemSrc}
+              />
             </div>
             <div className="grid gap-2">
               <p className="text-xs font-black uppercase tracking-ritual text-emberBright">

@@ -1,5 +1,55 @@
 # DEVLOG.md
 
+## 2026-06-09 - Kreon Typography And Canonical Emblems
+
+### Version
+
+- `0.2.2`
+
+### Feature Summary
+
+- Added Kreon typography, canonical achievement emblem assets, and a continuity handoff file.
+
+### What Changed
+
+- Added Kreon from Google Fonts through `next/font/google` and made it the primary app font.
+- Cropped the provided achievement screenshot into canonical emblem assets under `public/achievement-emblems/`.
+- Added `emblemSrc` to achievement data and rendered canonical emblems on cards and detail modals.
+- Locked achievements now show muted/darkened emblem art; completed achievements show full-color emblem art with brighter styling.
+- Kept proof screenshots only inside the completed achievement detail modal.
+- Added `CURRENT_STATE.md` for future session continuity.
+- Bumped the app version to `0.2.2` as a PATCH polish/continuity checkpoint.
+
+### Why It Changed
+
+- The project needed stronger visual identity, canonical badge artwork, and a clear handoff document for the next work session.
+
+### Files Touched
+
+- `AGENTS.md`
+- `CURRENT_STATE.md`
+- `DEVLOG.md`
+- `VERSION.md`
+- `app/globals.css`
+- `app/layout.tsx`
+- `components/AchievementCard.tsx`
+- `components/AchievementDetailDialog.tsx`
+- `config/app.ts`
+- `data/achievements.ts`
+- `lib/design-system.ts`
+- `package.json`
+- `package-lock.json`
+- `public/achievement-emblems/*`
+- `types/achievement.ts`
+
+### Verification Status
+
+- Pending verification.
+
+### Commit
+
+- To be recorded after push, if available.
+
 ## 2026-06-09 - Clickable Achievement Cards
 
 ### Version

@@ -13,6 +13,7 @@ export type Achievement = {
   sortOrder: number;
   title: string;
   description: string;
+  emblemSrc: string;
   rarity?: AchievementRarity;
   category?: AchievementCategory;
 };

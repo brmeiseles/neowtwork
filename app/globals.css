@@ -35,7 +35,7 @@ body {
     repeating-linear-gradient(108deg, rgb(244 223 184 / 2.7%) 0 1px, transparent 1px 13px),
     linear-gradient(135deg, #030201 0%, var(--color-pitch) 24%, #120807 52%, #23090d 100%);
   color: var(--color-parchment);
-  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-kreon), ui-serif, Georgia, serif;
 }
 
 body::before {
@@ -192,6 +192,7 @@ body::after {
   }
 
   .locked-emblem {
+    position: relative;
     display: flex;
     width: 3.75rem;
     height: 3.75rem;
@@ -212,6 +213,16 @@ body::after {
       0 0 30px rgb(216 115 44 / 24%),
       inset 0 2px 10px rgb(244 223 184 / 20%),
       inset 0 -10px 18px rgb(0 0 0 / 42%);
+  }
+
+  .achievement-emblem-locked {
+    filter: grayscale(78%) sepia(20%) brightness(42%) contrast(115%);
+    opacity: 0.74;
+  }
+
+  .achievement-emblem-unlocked {
+    filter: saturate(118%) brightness(108%) contrast(108%);
+    opacity: 1;
   }
 
   .unlocked-emblem {
