@@ -2,8 +2,9 @@
 
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import type { User } from "@supabase/supabase-js";
-import { LogOut, Shield, UserRound } from "lucide-react";
+import { LogOut, Shield, UserRound, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { FriendsPanel } from "@/components/FriendsPanel";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { getPublicEnvStatus, type PublicEnv } from "@/lib/env";
 import {
@@ -32,6 +33,7 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
   const [username, setUsername] = useState("");
   const [status, setStatus] = useState<AuthStatus>(supabase ? "loading" : "ready");
   const [message, setMessage] = useState("");
+  const [isFriendsOpen, setIsFriendsOpen] = useState(false);
   const profileRef = useRef<Profile | null>(null);
 
   useEffect(() => {
@@ -71,6 +73,7 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
         if (!nextUser) {
           setProfile(null);
           setUsername("");
+          setIsFriendsOpen(false);
           setStatus("ready");
           return null;
         }
@@ -81,9 +84,10 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
           setStatus("profile-loading");
         } else if (!profileRef.current) {
           setStatus("profile-loading");
+          return nextUser;
         }
 
-        return nextUser;
+        return currentUser;
       });
     });
 
@@ -161,6 +165,7 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
     await supabase.auth.signOut();
     setUser(null);
     setProfile(null);
+    setIsFriendsOpen(false);
   }
 
   async function handleClaimUsername(event: FormEvent<HTMLFormElement>) {
@@ -217,7 +222,7 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
 
   if (status === "loading" || status === "profile-loading") {
     return (
-      <div className="min-w-56 rounded-card border border-brass/25 bg-pitch/55 p-3 text-sm text-bone shadow-card">
+      <div className="min-h-[4.25rem] min-w-72 rounded-card border border-brass/25 bg-pitch/55 p-3 text-sm text-bone shadow-card">
         <div className="flex items-center justify-between gap-3">
           <span className="inline-flex items-center gap-2 font-bold text-parchment">
             <UserRound className="size-4 text-emberBright" />
@@ -253,16 +258,30 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
   }
 
   return (
-    <div className="grid gap-2 rounded-card border border-brass/25 bg-pitch/55 p-3 text-sm text-bone shadow-card">
+    <div className="relative grid min-h-[4.25rem] min-w-72 gap-2 rounded-card border border-brass/25 bg-pitch/55 p-3 text-sm text-bone shadow-card">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <span className="inline-flex items-center gap-2 font-bold text-parchment">
           <UserRound className="size-4 text-emberBright" />
           {profile ? `@${profile.username}` : "Choose your codex name"}
         </span>
-        <Button size="sm" type="button" variant="ghost" onClick={handleSignOut}>
-          <LogOut className="size-4" />
-          Sign out
-        </Button>
+        <div className="flex items-center gap-1.5">
+          {profile ? (
+            <Button
+              aria-expanded={isFriendsOpen}
+              size="sm"
+              type="button"
+              variant="ghost"
+              onClick={() => setIsFriendsOpen((isOpen) => !isOpen)}
+            >
+              <Users className="size-4" />
+              Friends
+            </Button>
+          ) : null}
+          <Button size="sm" type="button" variant="ghost" onClick={handleSignOut}>
+            <LogOut className="size-4" />
+            Sign out
+          </Button>
+        </div>
       </div>
 
       {!profile ? (
@@ -283,6 +302,17 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
       ) : null}
 
       {message ? <p className="text-xs text-emberBright">{message}</p> : null}
+
+      {profile && isFriendsOpen ? (
+        <div className="absolute right-0 top-[calc(100%+0.5rem)] z-50 w-[min(92vw,25rem)] rounded-card border border-brass/35 bg-pitch/95 p-3 shadow-card backdrop-blur">
+          <FriendsPanel
+            isOpen={isFriendsOpen}
+            profile={profile}
+            supabase={supabase}
+            user={user}
+          />
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -1,6 +1,5 @@
 import { AchievementBoard } from "@/components/AchievementBoard";
 import { AppShell } from "@/components/AppShell";
-import { FriendsPanel } from "@/components/FriendsPanel";
 import { brandConfig } from "@/config/brand";
 import { achievements } from "@/data/achievements";
 import { getPublicEnv } from "@/lib/env";
@@ -25,8 +24,6 @@ export default function Home() {
             {brandConfig.tagline}
           </p>
         </header>
-
-        <FriendsPanel publicEnv={publicEnv} />
 
         <AchievementBoard achievements={achievements} publicEnv={publicEnv} />
       </div>

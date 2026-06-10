@@ -1,5 +1,62 @@
 # DEVLOG.md
 
+## 2026-06-10 - Stabilized Friends Top Bar
+
+### Version
+
+- `1.2.1`
+
+### Feature Summary
+
+- Moved Friends into the authenticated top bar and tightened auth/friends loading states to prevent flicker and page jumps.
+
+### What Changed
+
+- Removed the Friends/Seed Thieves panel from the homepage body.
+- Added a small `Friends` button to the authenticated account block near username/sign out.
+- Rendered add-friend and friends list UI in a compact dropdown.
+- Mounted Friends only after the signed-in user and profile are fully resolved.
+- Refactored Friends to use the already-resolved auth/profile state instead of running its own separate auth session fetch.
+- Kept logged-out users from seeing Friends UI.
+- Made the auth loading state fixed-height and prevented same-user session refreshes from clearing the profile.
+- Preserved the achievement board as the primary page content.
+
+### Why It Changed
+
+- Friends are account/navigation functionality, not achievement board content. The previous page-body panel also had its own loading lifecycle, which could flash empty/loading states separately from auth.
+
+### Files Touched
+
+- `AGENTS.md`
+- `CURRENT_STATE.md`
+- `DEVLOG.md`
+- `VERSION.md`
+- `app/page.tsx`
+- `components/AuthPanel.tsx`
+- `components/FriendsPanel.tsx`
+- `config/app.ts`
+- `package.json`
+- `package-lock.json`
+
+### Verification Status
+
+- Ran `npm run typecheck`.
+- Ran `npm run build`.
+- Ran `npm run dev`.
+- Confirmed the homepage no longer renders the Friends/Seed Thieves panel in the main body.
+- Confirmed the signed-in top bar shows a small `Friends` button next to `@brando_prime` and `Sign out`.
+- Confirmed the immediate auth refresh state shows a stable `Checking Discord session...` panel with no `Choose your codex name` flash.
+- Confirmed the settled auth refresh state restores `@brando_prime` and `Friends` with no onboarding flash.
+- Confirmed opening the Friends dropdown shows `Checking the friend ledger...` before the empty state, avoiding an empty-state flash before friend data loads.
+- Confirmed the achievement board top position did not move when opening the Friends dropdown or after auth refresh settled.
+- Confirmed the compact Friends dropdown fits in a 390px mobile viewport without horizontal overflow.
+- Confirmed logged-out Friends UI is guarded in code by the resolved authenticated profile; the dropdown is only mounted when `profile` exists.
+- Confirmed no browser console errors during local smoke checks.
+
+### Commit
+
+- Pending push.
+
 ## 2026-06-10 - Friends And Read-Only Boards
 
 ### Version

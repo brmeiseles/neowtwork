@@ -2,7 +2,7 @@
 
 ## Current Version
 
-`1.2.0`
+`1.2.1`
 
 ## Architecture
 
@@ -10,7 +10,7 @@
 - `app/page.tsx` renders the homepage shell and achievement board.
 - `components/AppShell.tsx` includes the shared shell, footer, and compact auth panel area.
 - `components/AuthPanel.tsx` scaffolds Discord sign-in, sign-out, auth state, and first-login username claiming.
-- `components/FriendsPanel.tsx` lets logged-in users add friends by Neowtwork username and view friend boards.
+- `components/FriendsPanel.tsx` renders the compact authenticated Friends dropdown for adding friends and opening friend boards.
 - `components/AchievementBoard.tsx` owns completion state, Supabase save/load coordination, localStorage fallback, and modal coordination.
 - `components/AchievementCard.tsx` renders each clickable achievement card with the best ascension badge only.
 - `components/AchievementCompletionDialog.tsx` handles local proof, optional seed, ascension, and notes capture.
@@ -62,6 +62,8 @@
 - Kreon is the primary app font via `next/font/google`.
 - Completion proof entry supports file upload and clipboard paste only; image URL entry was removed to keep the flow cleaner.
 - The homepage board header is `Slay the Spire 2 Achievements`; the app/brand name remains `Neowtwork`.
+- Friends access lives in the authenticated top-bar account block, not the main achievement board body.
+- Logged-out users do not see Friends UI.
 
 ## Backend Status
 
@@ -89,7 +91,8 @@
 - Users can add friends by username, cannot add themselves, and duplicate/unknown usernames are rejected.
 - Friend rows link to `/u/[username]`.
 - `/u/[username]` renders owner controls only when the signed-in user is viewing their own board; other boards are read-only.
-- Auth profile loading now keeps a stable intermediate panel instead of flashing the username onboarding form during session refresh.
+- Auth/profile loading keeps a fixed-height intermediate panel instead of flashing the username onboarding form during session refresh.
+- Friends load only after the logged-in profile is resolved and only inside the compact dropdown, avoiding empty-state flashes in the page body.
 
 ## Manual / Incomplete
 
