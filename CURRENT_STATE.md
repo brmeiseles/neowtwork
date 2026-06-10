@@ -2,7 +2,7 @@
 
 ## Current Version
 
-`1.2.2`
+`1.2.3`
 
 ## Architecture
 
@@ -26,7 +26,8 @@
 - `supabase/migrations/202606100001_backend_foundation.sql` defines database tables, RLS policies, and the `proofs` bucket.
 - `supabase/seed.sql` seeds the current 12 achievements into Supabase.
 - `data/achievements.ts` remains the local editable source for the current achievement list.
-- `public/achievement-emblems/` contains cropped canonical emblem assets.
+- `public/achievement-emblems/` contains purpose-built generated 512x512 PNG medal assets.
+- `scripts/generate-achievement-emblems.mjs` is the source generator for all 12 canonical badge assets.
 - `app/icon.svg` provides the App Router favicon as a circular glowing `N` relic.
 - `lib/design-system.ts` and `app/globals.css` hold the dark fantasy visual system.
 
@@ -52,9 +53,9 @@
 - Seed is optional and only shown in the detail modal.
 - Detail modals show all completions and add/edit/delete controls.
 - Ascension range is currently `0-10`.
-- Canonical achievement emblems come from `public/achievement-emblems/`.
+- Canonical achievement emblems come from generated square PNG medals in `public/achievement-emblems/`.
 - Locked achievements intentionally do not render canonical emblem art; they show an empty dark circular frame with a lock.
-- Completed achievements render canonical emblem art inside the circular frame with contained, centered cropping.
+- Completed achievements render canonical emblem art inside the circular frame with a shared centered `object-fit: contain` treatment and no per-badge crop hacks.
 - Proof screenshots never replace achievement emblems.
 - Proof screenshots appear only in completion/detail UI.
 - Completed cards should not expand in size; prestige comes from border glow, emblem treatment, and subtle styling.

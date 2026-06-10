@@ -266,7 +266,7 @@ body::after {
     border-radius: 9999px;
     object-fit: contain;
     object-position: center;
-    transform: scale(1.04);
+    transform: scale(1);
     transition:
       filter 180ms ease,
       opacity 180ms ease,
@@ -274,33 +274,12 @@ body::after {
   }
 
   .achievement-card:hover .achievement-emblem-image {
-    transform: scale(1.08);
+    transform: scale(1.04);
   }
 
   .achievement-emblem-unlocked {
     filter: saturate(118%) brightness(108%) contrast(108%);
     opacity: 1;
-  }
-
-  .achievement-emblem-basic-training,
-  .achievement-emblem-junkyard-detonation {
-    object-position: 54% 50%;
-  }
-
-  .achievement-emblem-this-feels-personal,
-  .achievement-emblem-mutually-assured-destruction {
-    object-position: 50% 48%;
-  }
-
-  .achievement-emblem-terms-and-conditions-apply,
-  .achievement-emblem-embrace-the-darkness {
-    object-position: 50% 50%;
-    transform: scale(1);
-  }
-
-  .achievement-card:hover .achievement-emblem-terms-and-conditions-apply,
-  .achievement-card:hover .achievement-emblem-embrace-the-darkness {
-    transform: scale(1.04);
   }
 
   .unlocked-emblem {

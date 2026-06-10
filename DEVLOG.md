@@ -1,5 +1,71 @@
 # DEVLOG.md
 
+## 2026-06-10 - Rebuilt Achievement Badges
+
+### Version
+
+- `1.2.3`
+
+### Feature Summary
+
+- Replaced all 12 screenshot-cropped achievement badges with purpose-built generated medal assets.
+
+### What Changed
+
+- Added `scripts/generate-achievement-emblems.mjs` as the maintainable source for all badge artwork.
+- Regenerated all 12 files in `public/achievement-emblems/` as square `512x512` PNG medals.
+- Preserved the same core badge themes: sword, vulnerable skull, energy ring, shield, zero coin, void, mask, crown, doom skull, cannon, prism shards, and merchant takeover.
+- Removed old crop-specific CSS positioning hacks.
+- Kept locked badges as intentional empty locked frames and completed badges as earned guild medals.
+- Bumped the app version to `1.2.3`.
+
+### Why It Changed
+
+- The old badge files were screenshot crops with inconsistent aspect ratio, centering, scale, and padding. The new assets are designed for the existing circular card/detail badge system instead of being patched into it.
+
+### Files Touched
+
+- `AGENTS.md`
+- `BACKLOG.md`
+- `CURRENT_STATE.md`
+- `DEVLOG.md`
+- `VERSION.md`
+- `app/globals.css`
+- `config/app.ts`
+- `package.json`
+- `package-lock.json`
+- `public/achievement-emblems/basic-training.png`
+- `public/achievement-emblems/embrace-the-darkness.png`
+- `public/achievement-emblems/hostile-takeover.png`
+- `public/achievement-emblems/intern-economy.png`
+- `public/achievement-emblems/junkyard-detonation.png`
+- `public/achievement-emblems/mutually-assured-destruction.png`
+- `public/achievement-emblems/prismatic-strike.png`
+- `public/achievement-emblems/shadow-government.png`
+- `public/achievement-emblems/terms-and-conditions-apply.png`
+- `public/achievement-emblems/the-kings-halo.png`
+- `public/achievement-emblems/this-feels-personal.png`
+- `public/achievement-emblems/walk-it-off.png`
+- `scripts/generate-achievement-emblems.mjs`
+
+### Verification Status
+
+- Ran `node scripts/generate-achievement-emblems.mjs`.
+- Confirmed all 12 files in `public/achievement-emblems/` are `512x512` PNG assets.
+- Reviewed a generated contact sheet for visual consistency, centering, scale, and padding.
+- Ran `npm run typecheck`.
+- Ran `npm run build`.
+- Ran `npm run dev`.
+- Confirmed local homepage renders 12 achievement cards and `v1.2.3`.
+- Confirmed locked cards do not mount emblem images.
+- Confirmed completed cards use centered `object-fit: contain` emblem rendering with no per-badge positioning hacks.
+- Confirmed completed achievement detail modal opens and renders the new emblem asset with the shared centered treatment.
+- Confirmed no browser console errors during local smoke checks.
+
+### Commit
+
+- Pending push.
+
 ## 2026-06-10 - Removed Codex Ledger Flash
 
 ### Version

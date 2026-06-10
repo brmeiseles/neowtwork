@@ -11,6 +11,7 @@
 ## Immediate Polish
 
 - Completed in `0.2.4`; see `DEVLOG.md` entry `2026-06-09 - Immediate Polish Pass`.
+- Completed bespoke generated badge asset pass in `1.2.3`; see `DEVLOG.md` entry `2026-06-10 - Rebuilt Achievement Badges`.
 
 ## Core Completion System
 
