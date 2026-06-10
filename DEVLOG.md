@@ -1,5 +1,45 @@
 # DEVLOG.md
 
+## 2026-06-09 - Added Product Backlog
+
+### Version
+
+- `0.2.3`
+
+### Feature Summary
+
+- Added a lightweight AI-native product backlog for future Neowtwork planning.
+
+### What Changed
+
+- Created `BACKLOG.md` with rules for maintaining backlog items over time.
+- Organized future work into immediate polish, completion system, achievement list, backend/accounts, friends/social, analytics, delight/endgame, and icebox sections.
+- Bumped the app version to `0.2.3` as a PATCH documentation/planning checkpoint.
+
+### Why It Changed
+
+- The project needed a clear place to preserve next-step product decisions and keep future Codex sessions aligned.
+
+### Files Touched
+
+- `AGENTS.md`
+- `BACKLOG.md`
+- `DEVLOG.md`
+- `VERSION.md`
+- `config/app.ts`
+- `package.json`
+- `package-lock.json`
+
+### Verification Status
+
+- Ran `npm run build`.
+- Ran `npm run typecheck`.
+- Note: an initial parallel typecheck/build attempt hit a transient `.next/types` race while build regenerated route types; rerunning typecheck by itself passed cleanly.
+
+### Commit
+
+- To be recorded after push, if available.
+
 ## 2026-06-09 - Kreon Typography And Canonical Emblems
 
 ### Version

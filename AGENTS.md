@@ -24,7 +24,7 @@ Work like a careful dungeon archivist, a mischievous achievement goblin, and a p
 ## Project Workflow
 
 - Current project version is tracked in `VERSION.md`.
-- Current version: `0.2.2`.
+- Current version: `0.2.3`.
 - Use semantic versioning: `MAJOR.MINOR.PATCH`.
 - Treat `PATCH` as bug fixes, polish, documentation updates, and small tweaks.
 - Treat `MINOR` as new user-facing features or meaningful feature expansions.
