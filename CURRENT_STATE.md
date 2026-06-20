@@ -2,7 +2,7 @@
 
 ## Current Version
 
-`1.4.0`
+`1.4.1`
 
 ## Architecture
 
@@ -117,6 +117,7 @@
 - Public boards at `/u/[username]` read Supabase completions in read-only mode.
 - Completion edit/delete/reset is wired for Supabase rows and still respects user ownership through RLS.
 - Followers use the existing Supabase `friends` table as one-way follows: `user_id` follows `friend_user_id`.
+- The `friends` read policy must allow `auth.uid() = user_id` and `auth.uid() = friend_user_id` so users can see both boards they follow and inbound followers.
 - Users follow boards by pasting public board links; full URLs, `/u/...` paths, and raw route-key fallback are accepted.
 - Follow/add rejects self-adds, duplicate boards, invalid board links, and unknown boards.
 - The Friends dropdown shows boards you follow and people following your board.

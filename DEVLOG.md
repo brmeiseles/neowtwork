@@ -1,5 +1,45 @@
 # DEVLOG.md
 
+## 2026-06-20 - Followers Read Policy Fix
+
+### Version
+
+- `1.4.1`
+
+### Feature Summary
+
+- Fixed the Supabase policy needed for the Followers list to show inbound follows.
+
+### What Changed
+
+- Added a migration that updates the `friends` select policy to allow users to read rows where they are either the follower or the followed board.
+- Updated version tracking to `1.4.1`.
+- Documented the inbound follower read-policy requirement in `CURRENT_STATE.md`.
+
+### Why It Changed
+
+- The Followers UI was querying rows where `friend_user_id` equals the current user, but the original policy only allowed reading outgoing rows where `user_id` equals the current user.
+
+### Files Touched
+
+- `AGENTS.md`
+- `CURRENT_STATE.md`
+- `DEVLOG.md`
+- `VERSION.md`
+- `config/app.ts`
+- `package.json`
+- `package-lock.json`
+- `supabase/migrations/202606200001_followers_read_policy.sql`
+
+### Verification Status
+
+- Ran `npm run typecheck`; passed.
+- Remote Supabase policy application still needs the migration/SQL applied in Supabase because the local CLI checkout is not linked.
+
+### Commit
+
+- Pending.
+
 ## 2026-06-20 - Followers MVP
 
 ### Version
