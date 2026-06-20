@@ -24,8 +24,6 @@
 
 ## Achievement List Updates
 
-- Replace The King's Halo because the multiple Sovereign Blade interaction was patched.
-- Explore Regent Stars-based replacement.
 - Add future enemy-specific achievement after more playtesting.
 - Maintain achievement names/descriptions as editable source of truth.
 
@@ -43,9 +41,10 @@
 ## Friends / Social
 
 - Completed first Friends feature pass in `1.2.0`; see `DEVLOG.md` entry `2026-06-10 - Friends And Read-Only Boards`.
+- Completed lightweight Share Board copy flow in `1.3.5`; see `DEVLOG.md` entry `2026-06-11 - Share Board Flow`.
 - Explore Discord friend discovery or Discord-linked friend suggestions.
 - Add exact-match Discord display-name lookup only after duplicate-name handling is clear.
-- Add share/invite link flow before attempting Discord friend-list import.
+- Add richer invite/share polish before attempting Discord friend-list import.
 - Investigate Discord Social SDK / `relationships.read` access requirements before any Discord friend-list integration.
 - Avoid Discord friend-list import unless scopes, user consent, and approval requirements are clear.
 - Support profile sharing for Discord/Reddit.

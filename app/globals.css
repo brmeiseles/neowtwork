@@ -130,23 +130,6 @@ body::after {
       inset 0 0 34px rgb(0 0 0 / 36%);
   }
 
-  .board-context-plaque {
-    position: relative;
-    overflow: hidden;
-    border: 1px solid rgb(122 91 43 / 68%);
-    border-radius: 0.65rem;
-    padding: 0.65rem 0.8rem;
-    background:
-      linear-gradient(90deg, rgb(215 181 109 / 34%), transparent 28%, transparent 72%, rgb(215 181 109 / 24%)) top / 100% 1px no-repeat,
-      radial-gradient(circle at 8% 0%, rgb(242 154 69 / 12%), transparent 12rem),
-      repeating-linear-gradient(104deg, rgb(244 223 184 / 2.5%) 0 1px, transparent 1px 12px),
-      linear-gradient(145deg, rgb(35 27 20 / 66%), rgb(13 7 6 / 84%) 62%, rgb(35 9 13 / 66%));
-    box-shadow:
-      0 12px 30px rgb(0 0 0 / 42%),
-      inset 0 0 0 1px rgb(244 223 184 / 6%),
-      inset 0 0 24px rgb(0 0 0 / 32%);
-  }
-
   .codex-board::before,
   .codex-board::after {
     position: absolute;

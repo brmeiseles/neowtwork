@@ -2,7 +2,7 @@
 
 ## Current Version
 
-`1.3.3`
+`1.3.6`
 
 ## Architecture
 
@@ -12,7 +12,8 @@
 - `components/AnalyticsProvider.tsx` initializes optional PostHog analytics when public env vars are present.
 - `components/AppHero.tsx` renders the global Neowtwork / Slay the Spire 2 Achievements hero identity.
 - `components/AuthPanel.tsx` scaffolds Discord sign-in, sign-out, auth state, and automatic profile creation from Discord identity.
-- `components/BoardContextPlaque.tsx` renders secondary board-owner context on public/profile boards.
+- `components/AuthPanel.tsx` exposes compact authenticated actions for Friends, My Board, Share Board, and sign-out.
+- `components/CopyConfirmationToast.tsx` provides shared lightweight confirmation for clipboard actions.
 - `components/FriendsPanel.tsx` renders the compact authenticated Friends dropdown for adding friends and opening friend boards.
 - `components/AchievementBoard.tsx` owns completion state, Supabase save/load coordination, localStorage fallback, and modal coordination.
 - `components/AchievementCard.tsx` renders each clickable achievement card with the best ascension badge only.
@@ -71,6 +72,10 @@
 - The homepage board header is `Slay the Spire 2 Achievements`; the app/brand name remains `Neowtwork`.
 - The official homepage tagline is `Because Slay 2 deserves achievements.`
 - The global app hero stays primary on home and public board pages; viewed board owner info is secondary contextual metadata.
+- Logged-in users can copy their own public board URL from the compact account panel.
+- Public/profile boards no longer render a full-width board ownership plaque.
+- Viewing another user's board uses subtle inline context below the hero; viewing your own board avoids redundant ownership UI.
+- Copy Seed and Share Board show immediate lightweight confirmation.
 - Friends access lives in the authenticated top-bar account block, not the main achievement board body.
 - Friends opens on hover/focus and still supports click plus outside-click dismissal.
 - Discord display names are the primary visible identity in the account panel, Friends rows, and board context plaque.
@@ -78,7 +83,7 @@
 - Public username slugs should stay visually secondary/internal whenever possible.
 - Logged-out users do not see Friends UI.
 - The achievement board does not show a normal completion-loading banner; backend errors still render plainly if loading fails.
-- Analytics track explicit behavior events only: `achievement_viewed`, `completion_added`, `seed_copied`, `friend_added`, and `profile_viewed`.
+- Analytics track explicit behavior events only: `achievement_viewed`, `completion_added`, `seed_copied`, `friend_added`, `profile_viewed`, and `board_link_copied`.
 - Analytics do not track raw seeds, proof image URLs, emails, Discord IDs, access tokens, or personal profile data.
 - PostHog autocapture, pageview capture, pageleave capture, and session recording are disabled.
 
@@ -114,9 +119,10 @@
 - Users can add friends by username, cannot add themselves, and duplicate/unknown usernames are rejected.
 - Friend rows link to `/u/[username]`.
 - Logged-in users have a top-bar `My Board` link back to their own `/u/[username]` board.
-- `My Board` is hidden while already viewing your own board.
+- `My Board` is hidden while already viewing your own board, including the home `/` board and `/u/[username]`.
 - Friends dropdown closes on outside click.
 - Friend rows are full-card links with no trailing action label.
+- Share Board copies `/u/[username]` for the signed-in user's own board and tracks only safe metadata, not the copied URL or username.
 - `/u/[username]` renders owner controls only when the signed-in user is viewing their own board; other boards are read-only.
 - Auth/profile loading keeps a fixed-height intermediate panel instead of flashing incorrect account UI during session refresh.
 - Friends load only after the logged-in profile is resolved and only inside the compact dropdown, avoiding empty-state flashes in the page body.
@@ -135,6 +141,7 @@
 
 - Production is deployed on Vercel for the `main` branch.
 - Local development runs with `npm run dev`, usually at `http://localhost:3000`.
+- `npm run dev` clears generated `.next` output before starting so stale production/cache state does not wedge local dev compilation.
 - Latest verification target is local build/typecheck plus runtime smoke checks against the live Supabase project.
 - Production spacing is driven by the committed source CSS in `app/globals.css`, shared layout spacing in `components/AppShell.tsx`, and Tailwind tokens in `lib/design-system.ts`.
 
@@ -143,4 +150,3 @@
 - Sync existing localStorage completions into a logged-in account with clear conflict handling.
 - Clean up old proof Storage objects when completions are deleted or proof images are replaced.
 - Add richer profile sharing polish for Discord/Reddit.
-- Replace The King's Halo achievement once the new Regent Stars candidate is chosen.

@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import { AchievementBoard } from "@/components/AchievementBoard";
 import { AppHero } from "@/components/AppHero";
 import { AppShell } from "@/components/AppShell";
-import { BoardContextPlaque } from "@/components/BoardContextPlaque";
 import { ProfileViewAnalytics } from "@/components/ProfileViewAnalytics";
 import { PublicAchievementBoard } from "@/components/PublicAchievementBoard";
 import { achievements as localAchievements } from "@/data/achievements";
@@ -89,11 +88,9 @@ export default async function PublicProfilePage({
       <AppShell>
         <div className="flex flex-col gap-4 sm:gap-5">
           <AppHero />
-          <BoardContextPlaque
-            description="Backend env is not configured yet. This route is ready for public boards once Supabase is connected."
-            label="Public Board"
-            username={username}
-          />
+          <p className="px-1 text-xs font-black uppercase tracking-ritual text-brass/80">
+            Viewing {username} · backend dormant
+          </p>
           <PublicAchievementBoard
             achievements={localAchievements}
             completionsByAchievement={{}}
@@ -150,12 +147,7 @@ export default async function PublicProfilePage({
           .maybeSingle()
       : { data: null };
   const viewedProfileType = isOwnBoard ? "own" : friendRow ? "friend" : "public";
-
-  const profileDescription = isOwnBoard
-    ? "Your editable achievement codex."
-    : profile.display_name
-      ? `${profile.display_name}'s read-only achievement codex.`
-      : "Read-only achievement codex.";
+  const visibleBoardName = profile.display_name?.trim() || profile.username;
 
   return (
     <AppShell>
@@ -166,12 +158,11 @@ export default async function PublicProfilePage({
       />
       <div className="flex flex-col gap-4 sm:gap-5">
         <AppHero />
-        <BoardContextPlaque
-          description={profileDescription}
-          displayName={profile.display_name}
-          label={isOwnBoard ? "My Board" : "Public Board"}
-          username={profile.username}
-        />
+        {!isOwnBoard ? (
+          <p className="px-1 text-xs font-black uppercase tracking-ritual text-brass/80">
+            Viewing {visibleBoardName}&apos;s board
+          </p>
+        ) : null}
         {isOwnBoard ? (
           <AchievementBoard
             achievements={boardAchievements}

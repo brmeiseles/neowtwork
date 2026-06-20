@@ -9,7 +9,8 @@ type AnalyticsEventName =
   | "completion_added"
   | "seed_copied"
   | "friend_added"
-  | "profile_viewed";
+  | "profile_viewed"
+  | "board_link_copied";
 
 type AnalyticsProperties = Record<
   string,

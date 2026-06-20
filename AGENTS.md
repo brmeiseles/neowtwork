@@ -21,10 +21,21 @@ Work like a careful dungeon archivist, a mischievous achievement goblin, and a p
 - Keep the app easy to understand for a non-engineer owner.
 - Explain changes in plain English.
 
+## Collaboration Agreement
+
+- Assume the owner is still learning Codex's capabilities and limitations; explain what Codex can and cannot do before taking broad action.
+- Chat or brainstorming means no code changes, no file edits, no server work, and no workaround artifacts unless the owner explicitly asks for implementation.
+- Planning means no code changes; outline options, tradeoffs, risks, and recommended next steps only.
+- Prototype requests require one clarifying pause before implementation: confirm whether the owner wants an image/concept sheet, standalone mockup, local route, or production code.
+- Implementation begins only after an explicit request such as "build this", "implement this", "edit the files", or equivalent.
+- If local tooling, servers, or verification hit a blocker, report the blocker plainly and stop after one reasonable diagnostic pass unless the owner asks to keep debugging.
+- Never move experimental creative, lore, or visual-identity work into the production site until the owner explicitly approves production placement.
+- Treat tokens and iteration time as precious; prefer tight answers and small, reversible steps.
+
 ## Project Workflow
 
 - Current project version is tracked in `VERSION.md`.
-- Current version: `1.3.3`.
+- Current version: `1.3.6`.
 - Use semantic versioning: `MAJOR.MINOR.PATCH`.
 - Treat `PATCH` as bug fixes, polish, documentation updates, and small tweaks.
 - Treat `MINOR` as new user-facing features or meaningful feature expansions.

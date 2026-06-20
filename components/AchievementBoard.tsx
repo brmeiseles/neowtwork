@@ -7,6 +7,10 @@ import type { AchievementCompletion } from "@/types/completion";
 import { AchievementCard } from "@/components/AchievementCard";
 import { AchievementCompletionDialog } from "@/components/AchievementCompletionDialog";
 import { AchievementDetailDialog } from "@/components/AchievementDetailDialog";
+import {
+  CopyConfirmationToast,
+  useCopyConfirmation,
+} from "@/components/CopyConfirmationToast";
 import { captureAnalyticsEvent } from "@/lib/analytics";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import type { PublicEnv } from "@/lib/env";
@@ -154,6 +158,7 @@ export function AchievementBoard({
   const [editingCompletion, setEditingCompletion] =
     useState<AchievementCompletion | null>(null);
   const [detailTarget, setDetailTarget] = useState<Achievement | null>(null);
+  const { copyMessage, showCopyConfirmation } = useCopyConfirmation();
 
   useEffect(() => {
     if (!supabase) {
@@ -517,6 +522,7 @@ export function AchievementBoard({
     }
 
     await navigator.clipboard.writeText(seed);
+    showCopyConfirmation("Seed copied.");
     captureSeedCopied(completion);
   }
 
@@ -635,6 +641,8 @@ export function AchievementBoard({
         }}
         onReset={handleReset}
       />
+
+      <CopyConfirmationToast message={copyMessage} />
     </>
   );
 }

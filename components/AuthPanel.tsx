@@ -2,11 +2,16 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { User } from "@supabase/supabase-js";
-import { LogOut, ScrollText, Shield, UserRound, Users } from "lucide-react";
+import { LogOut, ScrollText, Share2, Shield, UserRound, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import {
+  CopyConfirmationToast,
+  useCopyConfirmation,
+} from "@/components/CopyConfirmationToast";
 import { FriendsPanel } from "@/components/FriendsPanel";
+import { captureAnalyticsEvent } from "@/lib/analytics";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { getPublicEnvStatus, type PublicEnv } from "@/lib/env";
 import {
@@ -37,11 +42,17 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
   const [status, setStatus] = useState<AuthStatus>(supabase ? "loading" : "ready");
   const [message, setMessage] = useState("");
   const [isFriendsOpen, setIsFriendsOpen] = useState(false);
+  const { copyMessage, showCopyConfirmation } = useCopyConfirmation();
   const accountPanelRef = useRef<HTMLDivElement | null>(null);
   const closeFriendsTimeoutRef = useRef<number | null>(null);
   const profileRef = useRef<Profile | null>(null);
   const ownBoardPath = profile ? `/u/${profile.username}` : "";
-  const shouldShowMyBoard = Boolean(profile && pathname !== ownBoardPath);
+  const normalizedPathname =
+    pathname.length > 1 ? pathname.replace(/\/$/, "") : pathname;
+  const isOwnBoardRoute =
+    normalizedPathname === "/" ||
+    Boolean(ownBoardPath && normalizedPathname === ownBoardPath);
+  const shouldShowMyBoard = Boolean(profile && !isOwnBoardRoute);
 
   function getMetadataString(metadata: UserMetadata, keys: string[]) {
     for (const key of keys) {
@@ -346,6 +357,22 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
     setIsFriendsOpen(false);
   }
 
+  async function handleShareBoard() {
+    if (!profile) {
+      return;
+    }
+
+    const boardUrl = `${window.location.origin}/u/${profile.username}`;
+
+    await navigator.clipboard.writeText(boardUrl);
+    showCopyConfirmation("Board link copied.");
+    captureAnalyticsEvent("board_link_copied", {
+      viewed_profile_type: "own",
+      is_logged_in: true,
+      source: "account_panel",
+    });
+  }
+
   if (status === "loading" || status === "profile-loading") {
     return (
       <div className="min-h-[4.25rem] min-w-72 rounded-card border border-brass/25 bg-pitch/55 p-3 text-sm text-bone shadow-card">
@@ -405,6 +432,15 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
                 </Button>
               ) : null}
               <Button
+                size="sm"
+                type="button"
+                variant="ghost"
+                onClick={handleShareBoard}
+              >
+                <Share2 className="size-4" />
+                Share Board
+              </Button>
+              <Button
                 aria-expanded={isFriendsOpen}
                 size="sm"
                 type="button"
@@ -442,6 +478,7 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
           />
         </div>
       ) : null}
+      <CopyConfirmationToast message={copyMessage} />
     </div>
   );
 }

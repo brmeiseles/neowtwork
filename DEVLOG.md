@@ -1,5 +1,154 @@
 # DEVLOG.md
 
+## 2026-06-20 - Dev Server and My Board Cleanup
+
+### Version
+
+- `1.3.6`
+
+### Feature Summary
+
+- Fixed local dev startup reliability and removed redundant `My Board` navigation while already on the user's own board.
+
+### What Changed
+
+- Updated `npm run dev` to clear generated `.next` output before starting Next dev.
+- Treated both `/` and `/u/[username]` as own-board contexts for hiding `My Board`.
+- Preserved existing share-board, copy-toast, friends, analytics, and documentation work already in the local checkout.
+- Bumped the app version to `1.3.6`.
+
+### Why It Changed
+
+- Stale generated Next output could make dev compilation hang on the first homepage request even though production build/start was healthy.
+- The home route already represents the signed-in user's board, so showing `My Board` there was redundant navigation clutter.
+
+### Files Touched
+
+- `AGENTS.md`
+- `CURRENT_STATE.md`
+- `DEVLOG.md`
+- `VERSION.md`
+- `components/AuthPanel.tsx`
+- `config/app.ts`
+- `package.json`
+- `package-lock.json`
+
+### Verification Status
+
+- Ran `npm run typecheck`; passed.
+- Ran `npm run build`; passed.
+- Ran local production smoke test with `next start`; homepage rendered with no browser console errors.
+- Verified `npm run dev` now clears `.next`, starts Next dev, and serves the homepage locally.
+- Verified `/` hides `My Board` for a logged-in user.
+- Verified `/u/brando_prime` hides `My Board` for the logged-in owner.
+- Verified `/u/dillpicklez` shows `My Board` for a logged-in viewer on another user's board.
+
+### Commit
+
+- Pending; not pushed or deployed per owner request.
+
+## 2026-06-11 - Share Board Flow
+
+### Version
+
+- `1.3.5`
+
+### Feature Summary
+
+- Added a compact Share Board action and lightweight copy confirmations while tightening public-board context UI.
+
+### What Changed
+
+- Added `Share Board` to the authenticated account controls.
+- Share Board copies the signed-in user's public `/u/[username]` board URL.
+- Added shared copy confirmation toast behavior for clipboard actions.
+- Copy Seed now shows `Seed copied.` confirmation on editable and read-only boards.
+- Removed the full-width board ownership plaque from public/profile boards.
+- Viewing another user's board now shows a small inline context label below the hero.
+- Viewing your own board no longer repeats ownership context above the achievement grid.
+- Added the explicit `board_link_copied` analytics event with safe metadata only.
+- Documented that Discord friend discovery remains deferred behind simpler share/invite polish.
+- Bumped the app version to `1.3.5`.
+
+### Why It Changed
+
+- Sharing should support the core loop without pushing the achievement wall lower or turning public boards into profile dashboards.
+
+### Files Touched
+
+- `AGENTS.md`
+- `BACKLOG.md`
+- `CURRENT_STATE.md`
+- `DEVLOG.md`
+- `VERSION.md`
+- `app/globals.css`
+- `app/u/[username]/page.tsx`
+- `components/AchievementBoard.tsx`
+- `components/AuthPanel.tsx`
+- `components/BoardContextPlaque.tsx`
+- `components/CopyConfirmationToast.tsx`
+- `components/PublicAchievementBoard.tsx`
+- `config/app.ts`
+- `lib/analytics.ts`
+- `package.json`
+- `package-lock.json`
+
+### Verification Status
+
+- Ran `npm run typecheck`; `next typegen` completed, then `tsc --noEmit` hung with no diagnostics and was stopped.
+- Ran a focused `tsc --noEmit` over changed TypeScript/TSX files; it also hung with no diagnostics and was stopped.
+- Ran `npm run build`; `next build` emitted no progress after 90 seconds and was stopped.
+- Confirmed no stale Next/TypeScript processes were running before retrying.
+- Cleared `.next` and retried local dev startup.
+- `npm run dev -- -p 3000` also hung before binding a port and was stopped.
+- Current shell Node is `v24.16.0`; no alternate local Node 20/22 runtime was available.
+- Full production build verification is blocked by local Next/TypeScript tooling hangs in this checkout.
+
+### Commit
+
+- Pending
+
+## 2026-06-11 - Collaboration Agreement Cleanup
+
+### Version
+
+- `1.3.4`
+
+### Feature Summary
+
+- Added explicit Codex collaboration guardrails and removed the rejected experimental creative work from the codebase.
+
+### What Changed
+
+- Added a `Collaboration Agreement` section to `AGENTS.md`.
+- Documented that chat/brainstorming and planning do not imply code changes.
+- Documented that prototypes require a clarifying pause before implementation.
+- Documented that experimental creative, lore, or visual-identity work must not move into production without explicit approval.
+- Removed the rejected experimental builder route, components, styles, roadmap notes, and preview artifact from the local worktree.
+- Bumped the app version to `1.3.4`.
+
+### Why It Changed
+
+- Codex should spend owner attention and tokens more carefully, especially while the owner is still learning what Codex can and cannot safely do.
+
+### Files Touched
+
+- `AGENTS.md`
+- `CURRENT_STATE.md`
+- `DEVLOG.md`
+- `VERSION.md`
+- `config/app.ts`
+- `package.json`
+- `package-lock.json`
+
+### Verification Status
+
+- Not run; documentation cleanup only.
+
+### Commit
+
+- Pending
+
 ## 2026-06-10 - Friend Add Copy Cleanup
 
 ### Version

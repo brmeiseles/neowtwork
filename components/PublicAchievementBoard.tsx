@@ -5,6 +5,10 @@ import type { Achievement } from "@/types/achievement";
 import type { AchievementCompletion } from "@/types/completion";
 import { LockKeyhole } from "lucide-react";
 import { AchievementDetailDialog } from "@/components/AchievementDetailDialog";
+import {
+  CopyConfirmationToast,
+  useCopyConfirmation,
+} from "@/components/CopyConfirmationToast";
 import { captureAnalyticsEvent } from "@/lib/analytics";
 
 type PublicAchievementBoardProps = {
@@ -31,6 +35,7 @@ export function PublicAchievementBoard({
   source = "profile",
 }: PublicAchievementBoardProps) {
   const [detailTarget, setDetailTarget] = useState<Achievement | null>(null);
+  const { copyMessage, showCopyConfirmation } = useCopyConfirmation();
   const sortedAchievements = [...achievements].sort(
     (first, second) => first.sortOrder - second.sortOrder,
   );
@@ -73,6 +78,7 @@ export function PublicAchievementBoard({
     }
 
     await navigator.clipboard.writeText(seed);
+    showCopyConfirmation("Seed copied.");
     captureSeedCopied(completion);
   }
 
@@ -169,6 +175,7 @@ export function PublicAchievementBoard({
           }
         }}
       />
+      <CopyConfirmationToast message={copyMessage} />
     </>
   );
 }
