@@ -2,7 +2,7 @@
 
 ## Current Version
 
-`1.3.7`
+`1.3.8`
 
 ## Architecture
 
@@ -62,7 +62,7 @@
 - Ascension range is currently `0-10`.
 - Canonical achievement emblems come from generated square PNG medals in `public/achievement-emblems/`.
 - Locked achievements intentionally do not render canonical emblem art; they show an empty dark circular frame with a lock.
-- Completed achievements render canonical emblem art inside the circular frame with a shared centered `object-fit: contain` treatment and no per-badge crop hacks.
+- Completed achievements render canonical emblem art directly inside the outer circular frame with a larger, simpler crop and no extra inner decorative rings.
 - Proof screenshots never replace achievement emblems.
 - Proof screenshots appear only in completion/detail UI.
 - Completed cards should not expand in size; prestige comes from border glow, emblem treatment, and subtle styling.

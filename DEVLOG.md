@@ -1,5 +1,53 @@
 # DEVLOG.md
 
+## 2026-06-20 - Completed Badge Frame Polish
+
+### Version
+
+- `1.3.8`
+
+### Feature Summary
+
+- Simplified completed achievement badge framing so earned emblems look larger and less busy.
+
+### What Changed
+
+- Removed the completed badge crop's inner background and inset ring shadows.
+- Kept the existing outer badge frame and ember glow.
+- Scaled completed badge artwork up inside the circular frame.
+- Preserved locked badge styling and achievement data.
+- Bumped the app version to `1.3.8`.
+
+### Why It Changed
+
+- Completed badges were developing a nested bullseye effect from multiple containment rings, making the actual emblem art feel smaller than locked badges.
+
+### Files Touched
+
+- `AGENTS.md`
+- `CURRENT_STATE.md`
+- `DEVLOG.md`
+- `VERSION.md`
+- `app/globals.css`
+- `config/app.ts`
+- `package.json`
+- `package-lock.json`
+
+### Verification Status
+
+- Ran `npm run typecheck`; passed after refreshing the local `node_modules` install from `package-lock.json`.
+- Ran `npm run build`; passed.
+- Ran local production smoke test with `next start`; homepage rendered with no browser console errors.
+- Verified 5 completed badges and 7 locked badges on the current signed-in board.
+- Verified completed badge crop has no inner background or inset ring shadow.
+- Verified completed badge artwork scales up inside the outer circular frame.
+- Verified completed badge art across multiple styles: Basic Training, This Feels Personal, Embrace the Darkness, Shadow Government, and The King's Halo.
+- Verified mobile one-column layout at 390px width still renders completed badges cleanly.
+
+### Commit
+
+- Pending
+
 ## 2026-06-20 - Board Link Identity Cleanup
 
 ### Version
