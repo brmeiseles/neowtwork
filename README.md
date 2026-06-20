@@ -157,15 +157,15 @@ Implemented:
 - Supabase client/server setup.
 - Discord OAuth button and callback route.
 - Live Discord OAuth verified with the first Supabase auth user.
-- Username onboarding scaffold.
-- Public read-only profile route at `/u/[username]`.
+- Discord OAuth profile creation with Discord display identity.
+- Public read-only board route at `/u/[board]`.
 - Database schema and RLS policies.
 - Proof storage bucket design.
 - Local completion model refactored toward multiple completions.
 - Logged-in completion save/load through Supabase.
 - Proof screenshot upload to Supabase Storage bucket `proofs`.
 - Public profile completion reads from Supabase.
-- Friends can be added by Neowtwork username and opened as read-only public boards.
+- Friends can be added by pasting public board links and opened as read-only public boards.
 
 Still manual/incomplete:
 

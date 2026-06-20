@@ -1,5 +1,61 @@
 # DEVLOG.md
 
+## 2026-06-20 - Board Link Identity Cleanup
+
+### Version
+
+- `1.3.7`
+
+### Feature Summary
+
+- Removed user-facing username/slug language from the Friends flow and made board links the primary add-friend primitive.
+
+### What Changed
+
+- Updated Friends add input to accept full board URLs, relative `/u/...` paths, and raw route-key fallback.
+- Changed Friends placeholder and errors to talk about board links and friend boards instead of usernames or slugs.
+- Kept Discord display name/avatar as the visible identity in account and friend surfaces.
+- Kept `profiles.username` unchanged as the stable internal/public route key for existing `/u/...` board links.
+- Updated README, backlog, current state, and version tracking for the launch identity model.
+- Bumped the app version to `1.3.7`.
+
+### Why It Changed
+
+- Users should not need to know a second Neowtwork username before sharing with friends or Reddit.
+- Discord identity can remain visible while stable board links preserve existing routes and avoid Discord-name collision/change risk.
+
+### Files Touched
+
+- `AGENTS.md`
+- `BACKLOG.md`
+- `CURRENT_STATE.md`
+- `DEVLOG.md`
+- `README.md`
+- `VERSION.md`
+- `app/u/[username]/page.tsx`
+- `components/AuthPanel.tsx`
+- `components/FriendsPanel.tsx`
+- `config/app.ts`
+- `lib/username.ts`
+- `package.json`
+- `package-lock.json`
+
+### Verification Status
+
+- Ran `npm run typecheck`; passed.
+- Ran `npm run build`; passed.
+- Ran local production smoke test with `next start`; homepage rendered with no browser console errors.
+- Verified Friends flyout shows Discord display names and no visible username/slug copy.
+- Verified friend add accepts `/u/dillpicklez`.
+- Verified friend add accepts `https://neowtwork.vercel.app/u/dillpicklez`.
+- Verified friend add accepts raw fallback `dillpicklez`.
+- Verified duplicate, self-board, and invalid-link errors use board-link language.
+- Verified no usernames, slugs, raw board URLs, Discord IDs, or emails were added to analytics.
+
+### Commit
+
+- Pending
+
 ## 2026-06-20 - Dev Server and My Board Cleanup
 
 ### Version

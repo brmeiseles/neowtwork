@@ -89,7 +89,7 @@ export default async function PublicProfilePage({
         <div className="flex flex-col gap-4 sm:gap-5">
           <AppHero />
           <p className="px-1 text-xs font-black uppercase tracking-ritual text-brass/80">
-            Viewing {username} · backend dormant
+            Viewing public board · backend dormant
           </p>
           <PublicAchievementBoard
             achievements={localAchievements}

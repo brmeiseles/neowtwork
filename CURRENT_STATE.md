@@ -2,7 +2,7 @@
 
 ## Current Version
 
-`1.3.6`
+`1.3.7`
 
 ## Architecture
 
@@ -78,9 +78,9 @@
 - Copy Seed and Share Board show immediate lightweight confirmation.
 - Friends access lives in the authenticated top-bar account block, not the main achievement board body.
 - Friends opens on hover/focus and still supports click plus outside-click dismissal.
-- Discord display names are the primary visible identity in the account panel, Friends rows, and board context plaque.
-- `profiles.username` is still the stable URL slug for `/u/[username]`, but new profiles now auto-generate it from Discord identity instead of asking the user to invent one.
-- Public username slugs should stay visually secondary/internal whenever possible.
+- Discord display names are the only intended visible user identity in the account panel, Friends rows, and board context.
+- `profiles.username` still exists as the stable public board route key for `/u/[username]`, but it should be treated as an internal/public board slug instead of a product username.
+- Users should not need to know or type their internal board slug; Share Board and pasted board links are the launch-ready sharing primitive.
 - Logged-out users do not see Friends UI.
 - The achievement board does not show a normal completion-loading banner; backend errors still render plainly if loading fails.
 - Analytics track explicit behavior events only: `achievement_viewed`, `completion_added`, `seed_copied`, `friend_added`, `profile_viewed`, and `board_link_copied`.
@@ -99,7 +99,7 @@
 - Discord OAuth has been verified against the live Supabase project.
 - First-login username onboarding has been removed.
 - New Discord users get a profile automatically with a URL-safe slug derived from Discord identity.
-- Current username records are still required for stable `/u/[username]` public routes, friend lookup, and profile uniqueness.
+- Current `profiles.username` records are still required for stable `/u/[username]` public routes, friend lookup, and profile uniqueness, but they should not be presented as user-facing usernames.
 - Discord display names and avatars are stored on profiles and now drive primary visible identity.
 - Current Discord OAuth user metadata supports basic profile display such as name/display name and avatar.
 - Discord friend-list discovery is not implemented; it likely requires Discord Social SDK / `relationships.read` access and approval, so lightweight invite links are the safer near-term path.
@@ -116,13 +116,14 @@
 - Public boards at `/u/[username]` read Supabase completions in read-only mode.
 - Completion edit/delete/reset is wired for Supabase rows and still respects user ownership through RLS.
 - Friends use the existing Supabase `friends` table.
-- Users can add friends by username, cannot add themselves, and duplicate/unknown usernames are rejected.
+- Users add friends by pasting public board links; full URLs, `/u/...` paths, and raw route-key fallback are accepted.
+- Friend add rejects self-adds, duplicate boards, invalid board links, and unknown boards.
 - Friend rows link to `/u/[username]`.
 - Logged-in users have a top-bar `My Board` link back to their own `/u/[username]` board.
 - `My Board` is hidden while already viewing your own board, including the home `/` board and `/u/[username]`.
 - Friends dropdown closes on outside click.
 - Friend rows are full-card links with no trailing action label.
-- Share Board copies `/u/[username]` for the signed-in user's own board and tracks only safe metadata, not the copied URL or username.
+- Share Board copies `/u/[username]` for the signed-in user's own board and tracks only safe metadata, not the copied URL or route key.
 - `/u/[username]` renders owner controls only when the signed-in user is viewing their own board; other boards are read-only.
 - Auth/profile loading keeps a fixed-height intermediate panel instead of flashing incorrect account UI during session refresh.
 - Friends load only after the logged-in profile is resolved and only inside the compact dropdown, avoiding empty-state flashes in the page body.
@@ -132,7 +133,6 @@
 
 - Local completions are not synced/migrated to Supabase accounts yet.
 - Deleted or replaced Supabase proof screenshots are not cleaned up from Storage yet.
-- Browser-driven username form typing could not be automated in Codex because the in-app browser virtual clipboard was unavailable; the profile row was created directly in Supabase and verified through the app.
 - Recommendation: keep existing manually chosen slugs until a migration can safely backfill Discord-derived slugs without breaking existing public board URLs.
 - Future identity migration should preserve redirects from existing `/u/[username]` routes and avoid forcing current users to rename themselves.
 - Public/global stats are not implemented yet and should eventually come from Supabase completion data rather than PostHog event counts.

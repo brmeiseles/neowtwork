@@ -168,11 +168,24 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
 
     const supabaseClient = supabase;
     let isMounted = true;
+    let sessionSettled = false;
+    const sessionTimeout = window.setTimeout(() => {
+      if (!sessionSettled && isMounted) {
+        setUser(null);
+        setProfile(null);
+        setIsFriendsOpen(false);
+        setStatus("ready");
+        setMessage("Could not restore Discord session yet. Refresh or sign in again.");
+      }
+    }, 5000);
 
     async function loadSession() {
       const {
         data: { session },
       } = await supabaseClient.auth.getSession();
+
+      sessionSettled = true;
+      window.clearTimeout(sessionTimeout);
 
       if (!isMounted) {
         return;
@@ -212,6 +225,7 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
 
     return () => {
       isMounted = false;
+      window.clearTimeout(sessionTimeout);
       subscription.unsubscribe();
     };
   }, [supabase]);
@@ -288,7 +302,7 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
           }
         }
 
-        setMessage("Could not claim a Discord board slug yet. Try refreshing.");
+        setMessage("Could not prepare your public board link yet. Try refreshing.");
         setStatus("ready");
         return;
       }

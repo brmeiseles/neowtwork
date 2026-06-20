@@ -32,9 +32,11 @@
 - Completed Phase 1 Supabase/Discord foundation in `1.0.0`; see `DEVLOG.md` entry `2026-06-10 - Phase 1 Backend Foundation`.
 - Completed Supabase project env/migration/seed and Discord OAuth/profile verification in `1.0.2`; see `DEVLOG.md` entry `2026-06-10 - Connected And Verified Supabase Auth`.
 - Completed new-user Discord-derived slug creation in `1.3.2`; see `DEVLOG.md` entry `2026-06-10 - Discord Identity Simplification`.
+- Completed board-link based friend add and visible Discord identity cleanup in `1.3.7`; see `DEVLOG.md` entry `2026-06-20 - Board Link Identity Cleanup`.
 - Backfill existing manually chosen profile slugs to Discord-derived slugs only with redirect support.
 - Explore Discord display-name based friend lookup while preserving stable public profile URLs.
 - Preserve redirects from existing public board URLs if slugs are regenerated.
+- Consider renaming `profiles.username` to a slug field only after a migration and redirect plan exists.
 - Avoid email/password system initially unless needed.
 - Migrate localStorage completions to logged-in user account if possible.
 
@@ -42,8 +44,10 @@
 
 - Completed first Friends feature pass in `1.2.0`; see `DEVLOG.md` entry `2026-06-10 - Friends And Read-Only Boards`.
 - Completed lightweight Share Board copy flow in `1.3.5`; see `DEVLOG.md` entry `2026-06-11 - Share Board Flow`.
+- Completed board-link based friend add in `1.3.7`; users should share boards rather than exchange app usernames.
 - Explore Discord friend discovery or Discord-linked friend suggestions.
 - Add exact-match Discord display-name lookup only after duplicate-name handling is clear.
+- Add invite-link polish for Discord/Reddit sharing.
 - Add richer invite/share polish before attempting Discord friend-list import.
 - Investigate Discord Social SDK / `relationships.read` access requirements before any Discord friend-list integration.
 - Avoid Discord friend-list import unless scopes, user consent, and approval requirements are clear.

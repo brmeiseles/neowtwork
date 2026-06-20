@@ -46,7 +46,7 @@ export function FriendsPanel({
   user,
 }: FriendsPanelProps) {
   const [friends, setFriends] = useState<Friend[]>([]);
-  const [username, setUsername] = useState("");
+  const [boardLink, setBoardLink] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "ready">("idle");
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState("");
@@ -140,22 +140,22 @@ export function FriendsPanel({
   async function handleAddFriend(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const nextUsername = normalizeUsername(username);
+    const boardSlug = getBoardSlugFromInput(boardLink);
     setMessage("");
     setError("");
 
-    if (!isValidUsername(nextUsername)) {
-      setError("Use the board-link slug from your guildmate's public board.");
+    if (!boardSlug || !isValidUsername(boardSlug)) {
+      setError("Paste a valid board link.");
       return;
     }
 
-    if (nextUsername === profile.username) {
-      setError("You cannot add yourself. The mirror refuses.");
+    if (boardSlug === profile.username) {
+      setError("That is your own board.");
       return;
     }
 
-    if (friends.some((friend) => friend.profile.username === nextUsername)) {
-      setError("That friend is already in your codex.");
+    if (friends.some((friend) => friend.profile.username === boardSlug)) {
+      setError("That board is already in your friends.");
       return;
     }
 
@@ -164,23 +164,23 @@ export function FriendsPanel({
     const { data: targetProfile, error: targetError } = await supabase
       .from("profiles")
       .select("id, username, display_name, avatar_url")
-      .eq("username", nextUsername)
+      .eq("username", boardSlug)
       .maybeSingle();
 
     if (targetError) {
-      setError("Could not look up that guildmate.");
+      setError("Could not check that board yet.");
       setIsSaving(false);
       return;
     }
 
     if (!targetProfile) {
-      setError("No guildmate found with that board slug.");
+      setError("No board found for that link.");
       setIsSaving(false);
       return;
     }
 
     if (targetProfile.id === user.id) {
-      setError("You cannot add yourself. The mirror refuses.");
+      setError("That is your own board.");
       setIsSaving(false);
       return;
     }
@@ -199,7 +199,7 @@ export function FriendsPanel({
     if (insertError) {
       setError(
         insertError.code === "23505"
-          ? "That friend is already in your codex."
+          ? "That board is already in your friends."
           : "Could not add that friend yet.",
       );
       return;
@@ -214,7 +214,7 @@ export function FriendsPanel({
         },
       ].sort(sortFriends),
     );
-    setUsername("");
+    setBoardLink("");
     captureAnalyticsEvent("friend_added", {
       is_logged_in: true,
       source: "topbar",
@@ -233,11 +233,9 @@ export function FriendsPanel({
             <input
               className="h-10 min-w-0 rounded-card border border-brass/25 bg-pitch/70 px-3 text-sm normal-case tracking-normal text-parchment outline-none placeholder:text-bone/50 focus:border-ember"
               disabled={isSaving}
-              placeholder="discord-name-slug"
-              value={username}
-              onChange={(event) =>
-                setUsername(normalizeUsername(event.target.value))
-              }
+              placeholder="Paste a friend's board link"
+              value={boardLink}
+              onChange={(event) => setBoardLink(event.target.value)}
             />
             <Button disabled={isSaving} size="sm" type="submit">
               <UserPlus className="size-4" />
@@ -293,9 +291,36 @@ export function FriendsPanel({
         </div>
       ) : (
         <p className="min-h-12 rounded-card border border-brass/20 bg-pitch/55 px-3 py-3 text-sm font-semibold text-bone">
-          No friends yet. Add a guildmate to start stealing seeds.
+          No friends yet. Paste a board link to start stealing seeds.
         </p>
       )}
     </div>
   );
+}
+
+function getBoardSlugFromInput(input: string) {
+  const trimmedInput = input.trim();
+
+  if (!trimmedInput) {
+    return null;
+  }
+
+  if (!trimmedInput.includes("/") && !trimmedInput.includes(".")) {
+    return normalizeUsername(trimmedInput);
+  }
+
+  try {
+    const boardUrl = new URL(trimmedInput, window.location.origin);
+    const [routePrefix, boardSlug] = boardUrl.pathname
+      .split("/")
+      .filter(Boolean);
+
+    if (routePrefix !== "u" || !boardSlug) {
+      return null;
+    }
+
+    return normalizeUsername(decodeURIComponent(boardSlug));
+  } catch {
+    return null;
+  }
 }
