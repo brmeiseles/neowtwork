@@ -47,7 +47,7 @@
 
 ### Commit
 
-- Pending.
+- `bdfff46`
 
 ## 2026-06-20 - Followers Read Policy Fix
 
