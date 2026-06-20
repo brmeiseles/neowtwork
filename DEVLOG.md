@@ -1,5 +1,39 @@
 # DEVLOG.md
 
+## 2026-06-20 - Deployment Workflow Guardrails
+
+### Version
+
+- `1.3.8`
+
+### Feature Summary
+
+- Added generic deployment and verification workflow rules for future Codex work.
+
+### What Changed
+
+- Added a risk-based verification ladder to `AGENTS.md`.
+- Added local tooling failure limits for typegen/typecheck/build/dev issues.
+- Added deployment readiness categories for GO, yellow-but-okay, and NO-GO states.
+- Documented that Vercel's clean build can be deployment truth for low-risk changes when local tooling is flaky.
+
+### Why It Changed
+
+- Small safe changes should ship without local cache/tooling issues turning into expensive debugging spirals.
+
+### Files Touched
+
+- `AGENTS.md`
+- `DEVLOG.md`
+
+### Verification Status
+
+- Not run; documentation/process-only change per owner instruction.
+
+### Commit
+
+- Pending
+
 ## 2026-06-20 - Completed Badge Frame Polish
 
 ### Version

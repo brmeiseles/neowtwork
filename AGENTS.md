@@ -56,3 +56,86 @@ Work like a careful dungeon archivist, a mischievous achievement goblin, and a p
 - Include the current app version in deployment-facing commit messages so Vercel's deployment list can be matched to app versions.
 - After successful verification, commit and push changes automatically unless the user says otherwise.
 - After pushing, always summarize the checkpoint in the Codex response.
+
+## Deployment and Verification Workflow
+
+- Verify proportional to risk, and stop when the problem is the workshop, not the sword.
+- Small safe changes should be easy to ship.
+- Local tooling should help deployment, not become the boss fight.
+- Vercel's clean build can be treated as deployment truth for low-risk changes when local tooling is flaky.
+- Stop after one reasonable local-tooling cleanup attempt.
+- Do not let local cache or `node_modules` weirdness block easy CSS/copy fixes forever.
+
+### Risk-Based Verification Ladder
+
+1. Docs/copy only
+   - Review the diff.
+   - Browser-check only when visible copy matters.
+   - Do not run typecheck or build unless code changed.
+
+2. CSS/visual only
+   - Run a visual browser smoke for the affected area.
+   - Run typecheck only if TypeScript or JavaScript changed.
+   - Run build only before deploy or if CSS/config/build behavior changed.
+
+3. Small UI behavior
+   - Run typecheck if TypeScript or TSX changed.
+   - Run a targeted browser smoke for the changed behavior.
+   - Run build before push if local tooling is healthy; otherwise Vercel can validate.
+
+4. Normal feature
+   - Run typecheck.
+   - Run build.
+   - Browser-check the happy path.
+   - Check one edge or failure path when practical.
+   - Update docs, version, and devlog as appropriate.
+
+5. Auth/Supabase/backend
+   - Run typecheck.
+   - Run build.
+   - Run relevant auth/backend smoke checks.
+   - Verify RLS and data-safety assumptions.
+   - Do not create schema migrations without an explicit plan and approval.
+
+6. Release candidate
+   - Run typecheck.
+   - Run build.
+   - Confirm Vercel deployment status.
+   - Run live homepage smoke.
+   - Run relevant core-flow smoke.
+
+### Tooling Failure Policy
+
+- If local typegen, typecheck, build, or dev hangs, first stop stale project dev servers if needed.
+- Clear `.next` once.
+- Retry once.
+- If it still fails, stop and report the blocker.
+- Do not keep escalating.
+- Do not reinstall dependencies without explicit approval.
+- Do not upgrade packages, change Node versions, or alter build config during routine deployment.
+
+### Deployment Readiness
+
+GO:
+
+- Relevant verification passed.
+- Diff is scoped and understood.
+- Vercel build is Ready or local build passed before push.
+- Live smoke passes after deploy.
+- No known user-facing regression.
+
+Yellow but okay:
+
+- Local tooling is flaky, but Vercel clean build passes.
+- Browser automation misses one path, but manual/live smoke confirms core render.
+- A noncritical warning is documented.
+- CSS-only change passes visual check but not exhaustive QA.
+
+NO-GO:
+
+- Vercel build fails.
+- Auth/backend flow is broken.
+- Public board route is broken.
+- Completion save/view is broken after related changes.
+- Diff is broad, unknown, or includes accidental file churn.
+- Local failure may reflect app code and Vercel has not validated it.
