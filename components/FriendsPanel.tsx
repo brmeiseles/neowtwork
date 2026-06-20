@@ -5,18 +5,15 @@ import type { SupabaseClient, User } from "@supabase/supabase-js";
 import { UserPlus, Users } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  isValidUsername,
-  normalizeUsername,
-} from "@/lib/username";
 import { captureAnalyticsEvent } from "@/lib/analytics";
 import { getProfileDisplayName } from "@/lib/profile-display";
+import { isValidUsername, normalizeUsername } from "@/lib/username";
 import type { Database } from "@/types/database";
 
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 type FriendRow = Pick<
   Database["public"]["Tables"]["friends"]["Row"],
-  "id" | "friend_user_id" | "created_at"
+  "id" | "user_id" | "friend_user_id" | "created_at"
 >;
 type FriendProfile = Pick<
   Profile,
@@ -45,7 +42,8 @@ export function FriendsPanel({
   supabase,
   user,
 }: FriendsPanelProps) {
-  const [friends, setFriends] = useState<Friend[]>([]);
+  const [following, setFollowing] = useState<Friend[]>([]);
+  const [followers, setFollowers] = useState<Friend[]>([]);
   const [boardLink, setBoardLink] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "ready">("idle");
   const [isSaving, setIsSaving] = useState(false);
@@ -63,42 +61,59 @@ export function FriendsPanel({
       setStatus("loading");
       setError("");
 
-      const { data: friendRows, error: friendsError } = await supabase
-        .from("friends")
-        .select("id, friend_user_id, created_at")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
+      const [
+        { data: followingRows, error: followingError },
+        { data: followerRows, error: followersError },
+      ] = await Promise.all([
+        supabase
+          .from("friends")
+          .select("id, user_id, friend_user_id, created_at")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false }),
+        supabase
+          .from("friends")
+          .select("id, user_id, friend_user_id, created_at")
+          .eq("friend_user_id", user.id)
+          .order("created_at", { ascending: false }),
+      ]);
 
       if (!isMounted) {
         return;
       }
 
-      if (friendsError) {
-        setError("Could not load your friends yet.");
+      if (followingError || followersError) {
+        setError("Could not load the guild roster yet.");
         setStatus("ready");
         return;
       }
 
-      const rows = friendRows ?? [];
-      const friendIds = rows.map((friend) => friend.friend_user_id);
+      const followRows = followingRows ?? [];
+      const followerRosterRows = followerRows ?? [];
+      const profileIds = Array.from(
+        new Set([
+          ...followRows.map((friend) => friend.friend_user_id),
+          ...followerRosterRows.map((friend) => friend.user_id),
+        ]),
+      );
 
-      if (!friendIds.length) {
-        setFriends([]);
+      if (!profileIds.length) {
+        setFollowing([]);
+        setFollowers([]);
         setStatus("ready");
         return;
       }
 
-      const { data: profileRows, error: friendProfilesError } = await supabase
+      const { data: profileRows, error: profileError } = await supabase
         .from("profiles")
         .select("id, username, display_name, avatar_url")
-        .in("id", friendIds);
+        .in("id", profileIds);
 
       if (!isMounted) {
         return;
       }
 
-      if (friendProfilesError) {
-        setError("Could not load friend profiles yet.");
+      if (profileError) {
+        setError("Could not load board profiles yet.");
         setStatus("ready");
         return;
       }
@@ -110,8 +125,8 @@ export function FriendsPanel({
         ]),
       );
 
-      setFriends(
-        rows
+      setFollowing(
+        followRows
           .map((friendRow) => {
             const friendProfile = profilesById.get(friendRow.friend_user_id);
 
@@ -122,6 +137,23 @@ export function FriendsPanel({
             return {
               ...friendRow,
               profile: friendProfile,
+            };
+          })
+          .filter((friend): friend is Friend => Boolean(friend))
+          .sort(sortFriends),
+      );
+      setFollowers(
+        followerRosterRows
+          .map((friendRow) => {
+            const followerProfile = profilesById.get(friendRow.user_id);
+
+            if (!followerProfile) {
+              return null;
+            }
+
+            return {
+              ...friendRow,
+              profile: followerProfile,
             };
           })
           .filter((friend): friend is Friend => Boolean(friend))
@@ -154,8 +186,8 @@ export function FriendsPanel({
       return;
     }
 
-    if (friends.some((friend) => friend.profile.username === boardSlug)) {
-      setError("That board is already in your friends.");
+    if (following.some((friend) => friend.profile.username === boardSlug)) {
+      setError("Already following that board.");
       return;
     }
 
@@ -191,7 +223,7 @@ export function FriendsPanel({
         user_id: user.id,
         friend_user_id: targetProfile.id,
       })
-      .select("id, friend_user_id, created_at")
+      .select("id, user_id, friend_user_id, created_at")
       .single();
 
     setIsSaving(false);
@@ -199,13 +231,13 @@ export function FriendsPanel({
     if (insertError) {
       setError(
         insertError.code === "23505"
-          ? "That board is already in your friends."
-          : "Could not add that friend yet.",
+          ? "Already following that board."
+          : "Could not follow that board yet.",
       );
       return;
     }
 
-    setFriends((currentFriends) =>
+    setFollowing((currentFriends) =>
       [
         ...currentFriends,
         {
@@ -215,14 +247,65 @@ export function FriendsPanel({
       ].sort(sortFriends),
     );
     setBoardLink("");
-    captureAnalyticsEvent("friend_added", {
+    captureAnalyticsEvent("board_followed", {
       is_logged_in: true,
       source: "topbar",
     });
     setMessage(
-      `Added ${getProfileDisplayName(targetProfile)}. Seeds are now legally suspicious.`,
+      `Following ${getProfileDisplayName(targetProfile)}. Seeds are now legally suspicious.`,
     );
   }
+
+  async function handleFollowBack(targetProfile: FriendProfile) {
+    setMessage("");
+    setError("");
+
+    if (following.some((friend) => friend.profile.id === targetProfile.id)) {
+      setMessage(`Already following ${getProfileDisplayName(targetProfile)}.`);
+      return;
+    }
+
+    setIsSaving(true);
+
+    const { data: friendRow, error: insertError } = await supabase
+      .from("friends")
+      .insert({
+        user_id: user.id,
+        friend_user_id: targetProfile.id,
+      })
+      .select("id, user_id, friend_user_id, created_at")
+      .single();
+
+    setIsSaving(false);
+
+    if (insertError) {
+      setError(
+        insertError.code === "23505"
+          ? "Already following that board."
+          : "Could not follow back yet.",
+      );
+      return;
+    }
+
+    setFollowing((currentFriends) =>
+      [
+        ...currentFriends,
+        {
+          ...friendRow,
+          profile: targetProfile,
+        },
+      ].sort(sortFriends),
+    );
+    captureAnalyticsEvent("follow_back_clicked", {
+      is_logged_in: true,
+      source: "followers_panel",
+    });
+    setMessage(`Following back ${getProfileDisplayName(targetProfile)}.`);
+  }
+
+  const followingProfileIds = new Set(
+    following.map((friend) => friend.profile.id),
+  );
 
   return (
     <div className="grid gap-3" aria-label="Friends">
@@ -239,7 +322,7 @@ export function FriendsPanel({
             />
             <Button disabled={isSaving} size="sm" type="submit">
               <UserPlus className="size-4" />
-              {isSaving ? "Adding..." : "Add Friend"}
+              {isSaving ? "Following..." : "Add Friend"}
             </Button>
           </div>
         </label>
@@ -258,28 +341,95 @@ export function FriendsPanel({
 
       {status !== "ready" ? (
         <p className="min-h-12 rounded-card border border-brass/20 bg-pitch/55 px-3 py-3 text-sm font-semibold text-bone">
-          Checking the friend ledger...
+          Checking the guild roster...
         </p>
-      ) : friends.length ? (
-        <div className="grid max-h-72 gap-2 overflow-y-auto pr-1">
-          {friends.map((friend) => (
+      ) : (
+        <div className="grid max-h-96 gap-3 overflow-y-auto pr-1">
+          <RosterSection
+            emptyCopy="Not following any boards yet. Paste a board link to start stealing seeds."
+            roster={following}
+            title="Following"
+          />
+
+          <section className="grid gap-2">
+            <h3 className="text-xs font-black uppercase tracking-title text-antiqueGold">
+              Followers
+            </h3>
+            {followers.length ? (
+              <div className="grid gap-2">
+                {followers.map((follower) => {
+                  const isFollowingBack = followingProfileIds.has(
+                    follower.profile.id,
+                  );
+
+                  return (
+                    <div
+                      className="flex items-center justify-between gap-3 rounded-card border border-brass/25 bg-soot/65 p-2.5 text-left shadow-card"
+                      key={follower.id}
+                    >
+                      <Link
+                        className="flex min-w-0 flex-1 items-center gap-2 rounded-sm focus:outline-none focus:ring-2 focus:ring-ember"
+                        href={`/u/${follower.profile.username}`}
+                      >
+                        <ProfileAvatar profile={follower.profile} />
+                        <p className="truncate text-xs font-black uppercase tracking-title text-parchment">
+                          {getProfileDisplayName(follower.profile)}
+                        </p>
+                      </Link>
+                      {isFollowingBack ? (
+                        <span className="shrink-0 text-[0.65rem] font-black uppercase tracking-title text-brass">
+                          Following
+                        </span>
+                      ) : (
+                        <Button
+                          disabled={isSaving}
+                          size="sm"
+                          type="button"
+                          onClick={() => handleFollowBack(follower.profile)}
+                        >
+                          Follow Back
+                        </Button>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="min-h-12 rounded-card border border-brass/20 bg-pitch/55 px-3 py-3 text-sm font-semibold text-bone">
+                No followers yet. Share your board and summon the guild.
+              </p>
+            )}
+          </section>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function RosterSection({
+  emptyCopy,
+  roster,
+  title,
+}: {
+  emptyCopy: string;
+  roster: Friend[];
+  title: string;
+}) {
+  return (
+    <section className="grid gap-2">
+      <h3 className="text-xs font-black uppercase tracking-title text-antiqueGold">
+        {title}
+      </h3>
+      {roster.length ? (
+        <div className="grid gap-2">
+          {roster.map((friend) => (
             <Link
               className="flex items-center justify-between gap-3 rounded-card border border-brass/25 bg-soot/65 p-2.5 text-left shadow-card transition hover:border-ember/70 hover:bg-cardHover focus:outline-none focus:ring-2 focus:ring-ember focus:ring-offset-2 focus:ring-offset-pitch"
               href={`/u/${friend.profile.username}`}
               key={friend.id}
             >
               <div className="flex min-w-0 items-center gap-2">
-                {friend.profile.avatar_url ? (
-                  <img
-                    alt=""
-                    className="size-8 rounded-full border border-antiqueGold/40 object-cover shadow-card"
-                    src={friend.profile.avatar_url}
-                  />
-                ) : (
-                  <span className="flex size-8 items-center justify-center rounded-full border border-antiqueGold/40 bg-pitch text-emberBright shadow-card">
-                    <Users className="size-4" />
-                  </span>
-                )}
+                <ProfileAvatar profile={friend.profile} />
                 <div className="min-w-0">
                   <p className="truncate text-xs font-black uppercase tracking-title text-parchment">
                     {getProfileDisplayName(friend.profile)}
@@ -291,10 +441,24 @@ export function FriendsPanel({
         </div>
       ) : (
         <p className="min-h-12 rounded-card border border-brass/20 bg-pitch/55 px-3 py-3 text-sm font-semibold text-bone">
-          No friends yet. Paste a board link to start stealing seeds.
+          {emptyCopy}
         </p>
       )}
-    </div>
+    </section>
+  );
+}
+
+function ProfileAvatar({ profile }: { profile: FriendProfile }) {
+  return profile.avatar_url ? (
+    <img
+      alt=""
+      className="size-8 rounded-full border border-antiqueGold/40 object-cover shadow-card"
+      src={profile.avatar_url}
+    />
+  ) : (
+    <span className="flex size-8 shrink-0 items-center justify-center rounded-full border border-antiqueGold/40 bg-pitch text-emberBright shadow-card">
+      <Users className="size-4" />
+    </span>
   );
 }
 

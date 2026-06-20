@@ -445,15 +445,17 @@ export function AuthPanel({ publicEnv }: AuthPanelProps) {
                   </Link>
                 </Button>
               ) : null}
-              <Button
-                size="sm"
-                type="button"
-                variant="ghost"
-                onClick={handleShareBoard}
-              >
-                <Share2 className="size-4" />
-                Share Board
-              </Button>
+              {isOwnBoardRoute ? (
+                <Button
+                  size="sm"
+                  type="button"
+                  variant="ghost"
+                  onClick={handleShareBoard}
+                >
+                  <Share2 className="size-4" />
+                  Share Board
+                </Button>
+              ) : null}
               <Button
                 aria-expanded={isFriendsOpen}
                 size="sm"

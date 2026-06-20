@@ -45,6 +45,10 @@
 - Completed first Friends feature pass in `1.2.0`; see `DEVLOG.md` entry `2026-06-10 - Friends And Read-Only Boards`.
 - Completed lightweight Share Board copy flow in `1.3.5`; see `DEVLOG.md` entry `2026-06-11 - Share Board Flow`.
 - Completed board-link based friend add in `1.3.7`; users should share boards rather than exchange app usernames.
+- Completed launch-safe one-way follows/follow-back MVP in `1.4.0`; see `DEVLOG.md` entry `2026-06-20 - Followers MVP`.
+- Add unfollow/remove follow after launch.
+- Add follower/following counts once useful for Reddit sharing.
+- Consider renaming the `friends` table to `follows` only with a migration plan after launch.
 - Explore Discord friend discovery or Discord-linked friend suggestions.
 - Add exact-match Discord display-name lookup only after duplicate-name handling is clear.
 - Add invite-link polish for Discord/Reddit sharing.

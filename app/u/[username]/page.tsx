@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { AchievementBoard } from "@/components/AchievementBoard";
 import { AppHero } from "@/components/AppHero";
 import { AppShell } from "@/components/AppShell";
+import { FollowBoardAction } from "@/components/FollowBoardAction";
 import { ProfileViewAnalytics } from "@/components/ProfileViewAnalytics";
 import { PublicAchievementBoard } from "@/components/PublicAchievementBoard";
 import { achievements as localAchievements } from "@/data/achievements";
@@ -148,6 +149,7 @@ export default async function PublicProfilePage({
       : { data: null };
   const viewedProfileType = isOwnBoard ? "own" : friendRow ? "friend" : "public";
   const visibleBoardName = profile.display_name?.trim() || profile.username;
+  const publicEnv = getPublicEnv();
 
   return (
     <AppShell>
@@ -159,14 +161,23 @@ export default async function PublicProfilePage({
       <div className="flex flex-col gap-4 sm:gap-5">
         <AppHero />
         {!isOwnBoard ? (
-          <p className="px-1 text-xs font-black uppercase tracking-ritual text-brass/80">
-            Viewing {visibleBoardName}&apos;s board
-          </p>
+          <div className="flex flex-wrap items-center justify-between gap-3 px-1">
+            <p className="text-xs font-black uppercase tracking-ritual text-brass/80">
+              Viewing {visibleBoardName}&apos;s board
+            </p>
+            {user ? (
+              <FollowBoardAction
+                initialIsFollowing={Boolean(friendRow)}
+                publicEnv={publicEnv}
+                targetProfileId={profile.id}
+              />
+            ) : null}
+          </div>
         ) : null}
         {isOwnBoard ? (
           <AchievementBoard
             achievements={boardAchievements}
-            publicEnv={getPublicEnv()}
+            publicEnv={publicEnv}
           />
         ) : (
           <PublicAchievementBoard

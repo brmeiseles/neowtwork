@@ -2,7 +2,7 @@
 
 ## Current Version
 
-`1.3.8`
+`1.4.0`
 
 ## Architecture
 
@@ -14,7 +14,8 @@
 - `components/AuthPanel.tsx` scaffolds Discord sign-in, sign-out, auth state, and automatic profile creation from Discord identity.
 - `components/AuthPanel.tsx` exposes compact authenticated actions for Friends, My Board, Share Board, and sign-out.
 - `components/CopyConfirmationToast.tsx` provides shared lightweight confirmation for clipboard actions.
-- `components/FriendsPanel.tsx` renders the compact authenticated Friends dropdown for adding friends and opening friend boards.
+- `components/FriendsPanel.tsx` renders the compact authenticated Friends dropdown for following boards, viewing followers, and following back.
+- `components/FollowBoardAction.tsx` lets logged-in users follow another public board from that board page.
 - `components/AchievementBoard.tsx` owns completion state, Supabase save/load coordination, localStorage fallback, and modal coordination.
 - `components/AchievementCard.tsx` renders each clickable achievement card with the best ascension badge only.
 - `components/AchievementCompletionDialog.tsx` handles local proof, optional seed, ascension, and notes capture.
@@ -83,7 +84,7 @@
 - Users should not need to know or type their internal board slug; Share Board and pasted board links are the launch-ready sharing primitive.
 - Logged-out users do not see Friends UI.
 - The achievement board does not show a normal completion-loading banner; backend errors still render plainly if loading fails.
-- Analytics track explicit behavior events only: `achievement_viewed`, `completion_added`, `seed_copied`, `friend_added`, `profile_viewed`, and `board_link_copied`.
+- Analytics track explicit behavior events only: `achievement_viewed`, `completion_added`, `seed_copied`, `friend_added`, `profile_viewed`, `board_link_copied`, `board_followed`, and `follow_back_clicked`.
 - Analytics do not track raw seeds, proof image URLs, emails, Discord IDs, access tokens, or personal profile data.
 - PostHog autocapture, pageview capture, pageleave capture, and session recording are disabled.
 
@@ -115,10 +116,14 @@
 - Proof screenshots upload to Supabase Storage bucket `proofs` under the signed-in user's folder before the completion row is created.
 - Public boards at `/u/[username]` read Supabase completions in read-only mode.
 - Completion edit/delete/reset is wired for Supabase rows and still respects user ownership through RLS.
-- Friends use the existing Supabase `friends` table.
-- Users add friends by pasting public board links; full URLs, `/u/...` paths, and raw route-key fallback are accepted.
-- Friend add rejects self-adds, duplicate boards, invalid board links, and unknown boards.
-- Friend rows link to `/u/[username]`.
+- Followers use the existing Supabase `friends` table as one-way follows: `user_id` follows `friend_user_id`.
+- Users follow boards by pasting public board links; full URLs, `/u/...` paths, and raw route-key fallback are accepted.
+- Follow/add rejects self-adds, duplicate boards, invalid board links, and unknown boards.
+- The Friends dropdown shows boards you follow and people following your board.
+- Followers can be followed back from the compact dropdown.
+- Friend/follow rows link to `/u/[username]`.
+- Logged-in viewers can follow another user's board directly from the public board page.
+- Logged-in viewers do not see Follow Board while viewing their own board.
 - Logged-in users have a top-bar `My Board` link back to their own `/u/[username]` board.
 - `My Board` is hidden while already viewing your own board, including the home `/` board and `/u/[username]`.
 - Friends dropdown closes on outside click.

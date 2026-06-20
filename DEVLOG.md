@@ -1,5 +1,55 @@
 # DEVLOG.md
 
+## 2026-06-20 - Followers MVP
+
+### Version
+
+- `1.4.0`
+
+### Feature Summary
+
+- Added launch-safe one-way board following and follow-back support using the existing Friends infrastructure.
+
+### What Changed
+
+- Added a Follow Board action on public boards for logged-in viewers.
+- Reused the existing `friends` table as one-way follows without a schema migration.
+- Updated the Friends flyout to show boards the user follows and people following the user's board.
+- Added follow-back actions from the followers roster.
+- Kept Share Board visible only on the user's own board and My Board visible only when viewing someone else.
+- Added privacy-conscious `board_followed` and `follow_back_clicked` analytics events.
+- Bumped the app version to `1.4.0`.
+
+### Why It Changed
+
+- Reddit launch needs a lightweight way for people to follow a shared board and for the board owner to follow them back without adding approvals, comments, or a heavier social system.
+
+### Files Touched
+
+- `AGENTS.md`
+- `BACKLOG.md`
+- `CURRENT_STATE.md`
+- `DEVLOG.md`
+- `VERSION.md`
+- `app/u/[username]/page.tsx`
+- `components/AuthPanel.tsx`
+- `components/FollowBoardAction.tsx`
+- `components/FriendsPanel.tsx`
+- `config/app.ts`
+- `lib/analytics.ts`
+- `package.json`
+- `package-lock.json`
+
+### Verification Status
+
+- Ran `npm run typecheck`; passed.
+- Ran `npm run build`; passed.
+- Ran local production smoke with `next start`; `/` and `/u/dillpicklez` both returned `200 OK`.
+
+### Commit
+
+- Pending.
+
 ## 2026-06-20 - Deployment Workflow Guardrails
 
 ### Version
