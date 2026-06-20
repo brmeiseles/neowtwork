@@ -12,6 +12,10 @@
 
 - Completed in `0.2.4`; see `DEVLOG.md` entry `2026-06-09 - Immediate Polish Pass`.
 - Completed bespoke generated badge asset pass in `1.2.3`; see `DEVLOG.md` entry `2026-06-10 - Rebuilt Achievement Badges`.
+- Add feedback admin dashboard after launch if Supabase dashboard review becomes annoying.
+- Add feedback rate limiting if anonymous spam becomes real.
+- Add feedback email notifications if manual dashboard checks are too easy to miss.
+- Consider feedback screenshot attachments after core launch feedback proves useful.
 - Continue tuning completed badge art scale and frame weight after more real completions are visible.
 
 ## Core Completion System
@@ -57,6 +61,47 @@
 - Avoid Discord friend-list import unless scopes, user consent, and approval requirements are clear.
 - Support profile sharing for Discord/Reddit.
 
+## Social Features
+
+### Followers / Follow Back
+
+- Allow users to follow public boards.
+- Show who follows your board.
+- Make it easy to follow followers back.
+- Keep the model lightweight and one-directional initially.
+- Avoid approvals, comments, reactions, or social-network complexity.
+- Goal: support sharing boards on Reddit and community discovery.
+
+### Leaderboards
+
+- Show most achievements completed.
+- Show highest ascension completion.
+- Show rarest achievement.
+- Show most copied seed.
+- Show most followed board.
+- Add character-specific leaderboards later.
+- Keep leaderboard design aligned with the codex/guild-board aesthetic.
+
+### Comments
+
+- Add lightweight comments on public boards and/or achievement completions.
+- Consider moderation requirements before implementation.
+- Validate community demand before building.
+- Keep comments lower priority than sharing, follows, and achievement tracking.
+
+## Completion Tracking
+
+### Character Tracking
+
+- Add character field to completion submissions.
+- Store character per completion.
+- Show character in completion history/detail modal.
+- Eventually display a small character icon/badge near ascension.
+- Use character data for future stats and leaderboards.
+- Example: highest ascension by character.
+- Example: most achievements completed by character.
+- Example: achievement rarity by character.
+
 ## Analytics Before Reddit
 
 - Completed initial privacy-conscious PostHog analytics in `1.3.0`; see `DEVLOG.md` entry `2026-06-10 - Privacy-Conscious Analytics`.
@@ -81,6 +126,39 @@
 - Make all emblems glow.
 - Intensify the board.
 - Reveal a final rune.
+
+## Screenshot Intelligence
+
+### Metadata Extraction (OCR)
+
+- Reduce submission friction by extracting metadata from uploaded screenshots.
+- Extract seed automatically from uploaded screenshots.
+- Extract ascension automatically from uploaded screenshots.
+- Extract character automatically from uploaded screenshots.
+- Pre-fill completion form fields automatically.
+- Allow users to review/edit extracted values before saving.
+- Treat OCR results as suggestions, not authoritative values.
+- Require user confirmation before save.
+- Start with seed and ascension.
+- Add character detection later if needed.
+
+### Proof Validation / Achievement Verification
+
+- Assist with validating uploaded proof.
+- Analyze screenshots for achievement-specific evidence.
+- Detect likely valid completions automatically.
+- Flag suspicious or incomplete proof.
+- Provide verification assistance rather than hard rejection.
+- Start as an assistant, not an enforcement system.
+- Build achievement-specific verification rules over time.
+- Keep proof validation separate from OCR metadata extraction.
+- Example: validate achievement requirements from screenshot state.
+- Example: detect proof types such as combat screen, victory screen, deck screen, or other relevant states.
+- Eventually support achievement-specific validation workflows.
+
+### Priority Note
+
+- OCR metadata extraction is higher priority and lower risk than full achievement verification because it reduces form friction without deciding whether a completion is valid.
 
 ## Later / Icebox
 

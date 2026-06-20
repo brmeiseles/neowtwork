@@ -2,7 +2,7 @@
 
 ## Current Version
 
-`1.4.1`
+`1.5.0`
 
 ## Versioning Philosophy
 

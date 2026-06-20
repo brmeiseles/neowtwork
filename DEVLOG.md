@@ -1,5 +1,54 @@
 # DEVLOG.md
 
+## 2026-06-20 - Submit Feedback
+
+### Version
+
+- `1.5.0`
+
+### Feature Summary
+
+- Added a lightweight footer Submit Feedback dialog for launch bug reports, confusion, ideas, and praise.
+
+### What Changed
+
+- Added a compact feedback modal in the footer near the version badge.
+- Added feedback type and message fields with simple validation.
+- Added logged-in and anonymous Supabase insert support.
+- Added a private `feedback` table migration with insert-only RLS and no public select policy.
+- Added privacy-conscious `feedback_submitted` analytics after successful inserts.
+- Updated version tracking to `1.5.0`.
+
+### Why It Changed
+
+- Reddit launch needs a low-friction way for users to report bugs, confusion, ideas, and encouragement without crowding the main achievement board.
+
+### Files Touched
+
+- `AGENTS.md`
+- `BACKLOG.md`
+- `CURRENT_STATE.md`
+- `DEVLOG.md`
+- `VERSION.md`
+- `components/AppShell.tsx`
+- `components/FeedbackDialog.tsx`
+- `config/app.ts`
+- `lib/analytics.ts`
+- `package.json`
+- `package-lock.json`
+- `supabase/migrations/202606200002_feedback_table.sql`
+- `types/database.ts`
+
+### Verification Status
+
+- Ran `npm run typecheck`; passed after restoring the missing local `node_modules/.bin/next` symlink from the existing installed package.
+- Ran `npm run build`; passed.
+- Ran local production smoke with `next start`; homepage rendered the `Submit Feedback` footer trigger.
+
+### Commit
+
+- Pending.
+
 ## 2026-06-20 - Followers Read Policy Fix
 
 ### Version

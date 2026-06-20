@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { ScrollText } from "lucide-react";
 import { AuthPanel } from "@/components/AuthPanel";
+import { FeedbackDialog } from "@/components/FeedbackDialog";
 import { appConfig } from "@/config/app";
 import { brandConfig } from "@/config/brand";
 import { Button } from "@/components/ui/button";
@@ -39,7 +40,7 @@ export function AppShell({
         <main className="flex-1">{children}</main>
 
         {footer ?? (
-          <footer className="border-t border-brass/25 pt-3 text-xs font-bold uppercase tracking-ritual text-brass/75">
+          <footer className="flex flex-wrap items-center gap-2 border-t border-brass/25 pt-3 text-xs font-bold uppercase tracking-ritual text-brass/75">
             <Button
               asChild
               aria-label={`${brandConfig.shortName} version ${appConfig.version}`}
@@ -51,6 +52,7 @@ export function AppShell({
                 {brandConfig.shortName} v{appConfig.version}
               </span>
             </Button>
+            <FeedbackDialog publicEnv={publicEnv} />
           </footer>
         )}
       </div>

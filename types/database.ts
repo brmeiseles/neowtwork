@@ -107,6 +107,36 @@ export type Database = {
         };
         Relationships: [];
       };
+      feedback: {
+        Row: {
+          id: string;
+          user_id: string | null;
+          feedback_type: "bug" | "idea" | "confusion" | "praise";
+          message: string;
+          page_path: string | null;
+          app_version: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id?: string | null;
+          feedback_type: "bug" | "idea" | "confusion" | "praise";
+          message: string;
+          page_path?: string | null;
+          app_version?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string | null;
+          feedback_type?: "bug" | "idea" | "confusion" | "praise";
+          message?: string;
+          page_path?: string | null;
+          app_version?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
       profiles: {
         Row: {
           id: string;

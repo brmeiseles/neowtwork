@@ -12,7 +12,8 @@ type AnalyticsEventName =
   | "profile_viewed"
   | "board_link_copied"
   | "board_followed"
-  | "follow_back_clicked";
+  | "follow_back_clicked"
+  | "feedback_submitted";
 
 type AnalyticsProperties = Record<
   string,
