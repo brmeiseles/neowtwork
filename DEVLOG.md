@@ -38,7 +38,7 @@
 
 ### Commit
 
-- Pending.
+- `2b0c38f`
 
 ## 2026-06-20 - Followers MVP
 
